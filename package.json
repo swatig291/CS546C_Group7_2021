@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start" : "node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/swatig291/CS546C_Group7_2021/issues"
   },
-  "homepage": "https://github.com/swatig291/CS546C_Group7_2021#readme"
+  "homepage": "https://github.com/swatig291/CS546C_Group7_2021#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

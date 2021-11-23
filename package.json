@@ -1,0 +1,20 @@
+{
+  "name": "cs546c_group7_2021",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start" : "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swatig291/CS546C_Group7_2021.git"
+  },
+  "author": "G7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swatig291/CS546C_Group7_2021/issues"
+  },
+  "homepage": "https://github.com/swatig291/CS546C_Group7_2021#readme"
+}

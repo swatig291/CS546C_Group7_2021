@@ -19,5 +19,4 @@ module.exports = {
   space: getCollectionFn("space"),
   comments: getCollectionFn("comments"),
   bookings: getCollectionFn("bookings")
-
 };

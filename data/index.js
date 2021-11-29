@@ -1,13 +1,13 @@
 const spaceData = require('./space');
 const utilData = require('./util');
-const reviewData = require('./reviews');
-const commentData = require('./comment');
-const userData = require('./ user');
+// const reviewData = require('./reviews');
+// const commentData = require('./comments');
+// const userData = require('./ users');
 
 module.exports = {
     space: spaceData,
     util: utilData,
-    reviews: reviewData,
-    comment: commentData,
-    user: userData
+    // reviews: reviewData,
+    // comments: commentData,
+    // users: userData
 };

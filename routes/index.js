@@ -1,3 +1,4 @@
+
 const spaceData = require('./space');
 const data = require('../data');
 const space = data.space;

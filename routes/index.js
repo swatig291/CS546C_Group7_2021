@@ -1,4 +1,7 @@
-const spaceData = require('./space');
+const spaceRoutes = require('./space');
+const reviewRoutes = require('./review');
+const commentRoutes = require('./comment');
+const userRoutes = require('./user');
 
 const constructorMethod = (app) => {
 
@@ -10,8 +13,10 @@ const constructorMethod = (app) => {
 //         title: 'Home'
 //     });
 // });
-  app.use("/space", spaceData);
-
+  app.use("/space", spaceRoutes);
+  app.use("/review", reviewRoutes);
+  app.use("/comment", commentRoutes);
+  app.use("/user", userRoutes);
  
   app.use('*', (req, res) => {
     res.status(404).json({ error: 'Not found' });  

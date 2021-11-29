@@ -168,6 +168,14 @@ module.exports = {
         }
     
         return true;
-    }
+    },
+    async getSpaceSearch(search) {
+        if (!search) throw "Error (getSpaceSearch): Must provide search.";
+        if (typeof(search) !== "string") throw "Error (getSpaceSearch): Search must be a string.";
+        const spaceCollection = await spaces();
+        const query = new RegExp(search, "i");
+        const restaurantList = await spaceCollection.find({ $or: [ {"adress.state": {$regex: query}}, {"adress.city": {$regex: query}} ] }).toArray();
+        return restaurantList;
+    },
 
 }

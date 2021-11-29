@@ -1,15 +1,13 @@
-const spaceData = require('./space');
 
+const spaceData = require('./space');
+const data = require('../data');
+const space = data.space;
 const constructorMethod = (app) => {
 
-//   app.get('/', (req, res) => {
-//     return res.render('landing/landing', {
-//         authenticated: req.session.user ? true : false,
-//         user: req.session.user,
-//         partial: 'landing-script',
-//         title: 'Home'
-//     });
-// });
+  app.get('/', (req, res) => {
+    res.redirect('http://localhost:3000/space');
+});
+
   app.use("/space", spaceData);
 
  

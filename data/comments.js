@@ -1,17 +1,14 @@
 const mongoCollections = require('../config/mongoCollections');
 const comments = mongoCollections.comments;
+const verify = require('./util');
+const userData = require('./users');
+const spaceData = require('./space');
 let {ObjectId} = require('mongodb');
 
 module.exports = {
     async getCommentById(commentId) {
-        if (commentId === undefined || commentId === null) {
-            throw "commentId must be supplied!"
-        }
-        if (typeof commentId !== "string") {
-            throw "The type of commentId must be string!"
-        }
-        if(commentId.length !== 24){
-            throw "Invaild commentId!"
+        if (!verify.validString(commentId)){
+            throw 'Invaild commentId!'
         }
         let commentId = ObjectId(commentId);
        
@@ -25,25 +22,23 @@ module.exports = {
     },
 
     async createComment(userId, spaceId, comment, date) {
-        if (userId === undefined || userId === null || spaceId === undefined || spaceId === null
-            || comment === undefined || comment === null || date === undefined || date === null) {
-            throw "All fields need to have valid values!"
+        if (!verify.validString(userId)){
+            throw 'Invaild userId!'
         }
-        if (typeof userId !== "string" || typeof spaceId !== "string" || typeof comment !== "string" ||
-            typeof date !== "string" || userId.match(/^[ ]*$/) || spaceId.match(/^[ ]*$/) || comment.match(/^[ ]*$/) || date.match(/^[ ]*$/)) {
-            throw "Some arguments type are not vaild!"
+        if (!verify.validString(spaceId)){
+            throw 'Invaild spaceId!'
         }
-        if(uersData.get(userId) == null){
+        if (!verify.validString(comment)){
+            throw 'Invaild comment!'
+        }
+        if (!verify.validString(date)){
+            throw 'Invaild date!'
+        }
+        if(uersData.getSpaceById(userId) == null){
             throw "No user exists with that userId!"
         }
-        if(spacesData.get(spaceId) == null){
+        if(spacesData.getSpaceById(spaceId) == null){
             throw "No space exists with that spaceId!"
-        }
-        if(userId.length !== 24){
-            throw "Invaild userId!"
-        }
-        if(spaceId.length !== 24){
-            throw "Invaild spaceId!"
         }
         let userId = ObjectId(userId);
         let spaceId = ObjectId(spaceId);
@@ -93,7 +88,6 @@ module.exports = {
         }
         
         let newComment = {
-            _id:ObjectId(),
             userId: userId, 
             spaceId: spaceId, 
             comment: comment,
@@ -112,22 +106,33 @@ module.exports = {
     },
 
     async deleteComment(commentId) {
-        if (commentId === undefined || commentId === null) {
-            throw "commentId must be supplied!"
+        if (!verify.validString(commentId)){
+            throw 'Invaild commentId!'
         }
-        if (typeof commentId !== "string") {
-            throw "The type of commentId must be string!"
-        }
-        if(commentId.length !== 24){
-            throw "Invaild commentId!"
-        }
+
         let commentId = ObjectId(commentId);
         
         const commentCollection = await comments();
         const deletionInfo = await commentCollection.deleteOne({ _id: commentId });
         if (deletionInfo.deletedCount === 0){
-            throw `Could not delete comment with id of ${commentId}.`;
+            throw `Could not delete comment with id of ${commentId}！`;
         }
         return 'Successfully delete!'; 
+    },
+
+    async getAllCommentsOfSpace(spaceId) {
+        if (!verify.validString(spaceId)){
+            throw 'Invaild spaceId!'
+        }
+
+        let spaceId = ObjectId(spaceId);
+        
+        const commentCollection = await comments();
+        const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        
+        for(i = 0; i < commentList.lenght; i++) {
+            commentList[i]._id = commentList[i]._id.toString();
+        }
+        return commentList; 
     },
 }

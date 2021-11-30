@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
+const reviewData = data.reviews;
+// const commentData = data.comments;
 const verify = data.util;
 const xss = require('xss');
 
@@ -140,16 +142,17 @@ router.post('/remove/:id',async(req,res) => {
 
 });
 
-router.get("/search/:search", async (req, res) => {
+router.post("/search", async (req, res) => {
   let errors = [];
+  let search = req.body.name;
   try {
-    if (!req.params.search.trim()) {
+    if (!search.trim()) {
       res.status(400).json({ error: 'You must Supply an location  to search' });
       return;
     }
-    if (!verify.validString(req.params.search.trim()))  errors.push('loaction must be a valid string.');
-    let serachSpace = await spaceData.getSpaceSearch(req.params.search.trim());
-    res.status(200).json(serachSpace);
+    if (!verify.validString(search.trim()))  errors.push('loaction must be a valid string.');
+    let spaceList = await spaceData.getSpaceSearch(search.trim());
+    res.status(200).render('home/landing', { spaceList});
   } catch (e) {
     // Something went wrong with the server!
     console.log(e);
@@ -157,5 +160,25 @@ router.get("/search/:search", async (req, res) => {
   }  
 });
 
+router.get('/:id',async(req,res) =>{
+  if (!req.params.id) {
+		res.status(400).json({ error: 'You must Supply an ID to delete' });
+		return;
+	}
+    try{
+      let spaceDetails = await spaceData.getSpaceById(req.params.id);
+       if(spaceDetails !== null)
+       {
+         let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
+        //  let comments = await commentData.getAllCommentsOfSpace(req.params.id);
+         res.status(200).render('home/space', { spaceDetails,reviews});          
+       }else {
+        return res.status(404).send();
+      }
+    }
+    catch(e){
+      res.status(500).json({ error: e });
+    }
+});
 
     module.exports = router

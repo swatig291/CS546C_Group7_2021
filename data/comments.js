@@ -1,6 +1,8 @@
 const mongoCollections = require('../config/mongoCollections');
 const comments = mongoCollections.comments;
 const verify = require('./util');
+// const userData = require('./users');
+// const spaceData = require('./space');
 let {ObjectId} = require('mongodb');
 
 module.exports = {
@@ -8,10 +10,9 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
-        let parsedId = ObjectId(commentId);
        
         const commentCollection = await comments();
-        let comment = await commentCollection.findOne({ _id: parsedId});
+        let comment = await commentCollection.findOne({ _id: ObjectId(commentId)});
         if (comment === null){
             throw 'No comment with that id';
         }
@@ -32,12 +33,12 @@ module.exports = {
         if (!verify.validString(date)){
             throw 'Invaild date!'
         }
-        if(uersData.getSpaceById(userId) == null){
-            throw "No user exists with that userId!"
-        }
-        if(spacesData.getSpaceById(spaceId) == null){
-            throw "No space exists with that spaceId!"
-        }
+        // if(userData.getUser(userId) == null){
+        //     throw "No user exists with that userId!"
+        // }
+        // if(spaceData.getSpaceById(spaceId) == null){
+        //     throw "No space exists with that spaceId!"
+        // }
         
         if (date.length !== 10 || date[2] !== '/' || date[5] !== '/') {
             throw "date is not vaild!"
@@ -114,13 +115,27 @@ module.exports = {
         return 'Successfully delete!'; 
     },
 
-    async getAllCommentsOfReview(reviewId) {
-        if (!verify.validString(reviewId)){
-            throw 'Invaild reviewId!'
+    async getAllCommentsOfSpace(spaceId) {
+        if (!verify.validString(spaceId)){
+            throw 'Invaild spaceId!'
         }
         
         const commentCollection = await comments();
-        const commentList = await commentCollection.find({'reviewId': { $eq: reviewId}}).toArray();
+        const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        
+        for(i = 0; i < commentList.lenght; i++) {
+            commentList[i]._id = commentList[i]._id.toString();
+        }
+        return commentList; 
+    },
+
+    async getAllCommentsOfUser(userId) {
+        if (!verify.validString(userId)){
+            throw 'Invaild userId!'
+        }
+        
+        const commentCollection = await comments();
+        const commentList = await commentCollection.find({'userId': { $eq: userId}}).toArray();
         
         for(i = 0; i < commentList.lenght; i++) {
             commentList[i]._id = commentList[i]._id.toString();

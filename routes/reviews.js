@@ -4,9 +4,22 @@ const data = require("../data");
 const reviewData = data.reviews;
 
 
+// router.get("/:id", async function (req, res) {
+//     try {
+//         const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
+//         // console.log(req.params.id)
+//         res.json(reviewInfo);
+//     }
+//     catch (e) {
+//         res.status(404).json({ message: "'review' item not found!" });
+//     }
+// });
+
+
+
 router.get("/:id", async function (req, res) {
     try {
-        const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
+        const reviewInfo = await reviewData.getAllReviewsBySpaceId(req.params.id); // 
         // console.log(req.params.id)
         res.json(reviewInfo);
     }
@@ -14,6 +27,22 @@ router.get("/:id", async function (req, res) {
         res.status(404).json({ message: "'review' item not found!" });
     }
 });
+
+//get reviews by space ID
+// router.get('/space/:id', async (req, res) => {
+//     let idInfo = req.params.id;
+//     if (!idInfo) {
+//         res.status(400).json({ error: 'You must provide id to get a space' });
+//         return;
+//     }
+//     try {
+//         const spaceById = await reviewData.getAllReviewsBySpaceId(idInfo);
+//         res.json(spaceById);
+//     } catch (error) {
+//         // console.log(error);
+//         res.status(404).json({ error: 'review not found' });
+//     }
+// });
 
 router.get("/", async function (req, res) {
     try {
@@ -48,7 +77,7 @@ router.post("/", async (req, res) => { // add
         return;
     }
     if (!rating || typeof rating !== 'number' ||rating > 5 || rating < 1) {
-        res.status(400).json({ error: 'You must provide restaurant review rating,and it must be a integer number between 1-5 ' });
+        res.status(400).json({ error: 'You must provide space review rating,and it must be a integer number between 1-5 ' });
         return;
     }
     try {
@@ -70,7 +99,7 @@ router.post('/remove/:id', async (req, res) => {
         let deletereview = await reviewData.removeReview(req.params.id);
         if (deletereview) {
             res.status(200).json(deletereview);
-            // return res.redirect("/restaurants/" + req.params.restaurantId);
+            // return res.redirect("/spaces/" + req.params.spaceId);
         } else {
             return res.status(404).send();
         }

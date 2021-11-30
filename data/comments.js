@@ -1,8 +1,8 @@
 const mongoCollections = require('../config/mongoCollections');
 const comments = mongoCollections.comments;
 const verify = require('./util');
-// const userData = require('./users');
-// const spaceData = require('./space');
+const userData = require('./users');
+const spaceData = require('./space');
 let {ObjectId} = require('mongodb');
 
 module.exports = {
@@ -45,10 +45,10 @@ module.exports = {
         // }
         
 
-        if(uersData.getSpaceById(userId) == null){
+        if(userData.getUser(userId) == null){
             throw "No user exists with that userId!"
         }
-        if(spacesData.getSpaceById(spaceId) == null){
+        if(spaceData.getSpaceById(spaceId) == null){
             throw "No space exists with that spaceId!"
         }
          userId = ObjectId(userId);

@@ -60,7 +60,8 @@ router.post('/add', async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     let spaceList = await spaceData.getAllSpace();
-    res.status(200).json(spaceList);
+    res.render('home/landing', { spaceList});
+    // res.status(200).json(spaceList);
   } catch (e) {
     // Something went wrong with the server!
     console.log(e);
@@ -137,6 +138,23 @@ router.post('/remove/:id',async(req,res) => {
 		res.status(500).json({ error: e });
 	}
 
+});
+
+router.get("/search/:search", async (req, res) => {
+  let errors = [];
+  try {
+    if (!req.params.search.trim()) {
+      res.status(400).json({ error: 'You must Supply an location  to search' });
+      return;
+    }
+    if (!verify.validString(req.params.search.trim()))  errors.push('loaction must be a valid string.');
+    let serachSpace = await spaceData.getSpaceSearch(req.params.search.trim());
+    res.status(200).json(serachSpace);
+  } catch (e) {
+    // Something went wrong with the server!
+    console.log(e);
+    res.status(404).send();
+  }  
 });
 
 

@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const reviews = mongoCollections.reviews;
-const verify = require('./verify');
-const spaces = require('./spaces');
+const verify = require('./util');
+const spaces = require('./space');
 const comments = require('./comments');
 let { ObjectId } = require('mongodb');
 

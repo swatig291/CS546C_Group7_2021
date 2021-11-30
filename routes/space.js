@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
+const reviewData = data.reviews;
+// const commentData = data.comments;
 const verify = data.util;
 const xss = require('xss');
 
@@ -157,5 +159,25 @@ router.get("/search/:search", async (req, res) => {
   }  
 });
 
+router.get('/:id',async(req,res) =>{
+  if (!req.params.id) {
+		res.status(400).json({ error: 'You must Supply an ID to delete' });
+		return;
+	}
+    try{
+      let spaceDetails = await spaceData.getSpaceById(req.params.id);
+       if(spaceDetails !== null)
+       {
+         let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
+        //  let comments = await commentData.getAllCommentsOfSpace(req.params.id);
+         res.status(200).render('home/space', { spaceDetails,reviews});          
+       }else {
+        return res.status(404).send();
+      }
+    }
+    catch(e){
+      res.status(500).json({ error: e });
+    }
+});
 
     module.exports = router

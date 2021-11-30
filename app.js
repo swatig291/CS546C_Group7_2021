@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
   app.engine('handlebars', handlebarsInstance.engine);
   app.set('view engine', 'handlebars');
 
-  configureRoutes(app);
+  configRoutes(app);
 
 
   app.listen(3000, () => {

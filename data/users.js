@@ -29,7 +29,7 @@ let createUser = async function createUser(firstName, lastName, email, password,
     if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
 
     if(!verify.validNumber(ssn)) throw 'The SSN is invalid';
-    if(verify.length != 9) throw 'The SSN is invalid';
+    if(ssn.length != 9) throw 'The SSN is invalid';
 
     const userData = await users();
     let rounds = 16;

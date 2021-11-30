@@ -13,13 +13,18 @@
     </div>
   <div class="row">
        {{#each spaceList}}
-    <div class="col-sm-3">
+    <div class="col-sm-3" onClick="divFunction('{{this._id}}')">
             <div class="panel">
-                <div class="panel-heading">{{this.spaceName}}</div>
+                <div class="row">
+                <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
+                <div class="col-sm-6 rating">
+                    <p >{{this.rating}}/5</p>
+                    <p hidden class="spaceId">{{this._id}}</p>
+                    <p class="starRate">{{this.rating}}</p>
+                 <span id='stars'></span>
+                </div>
+                </div>
                  <div >${{this.price}}/Night</div>
-                  {{!-- <div class="ratings"> <span class="product-rating">{{this.rating}}</span><span>/5</span>
-                  <div class="stars"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
-                  <div class="rating-text"> <span>46 ratings & 15 reviews</span> </div> --}}
                   <div>Space Dimension: {{spaceDim.length}} * {{spaceDim.width}} * {{spaceDim.height}}</div>
              
             </div>

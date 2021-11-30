@@ -12,5 +12,12 @@
   
   .panel{
     background-color: #f2f2f2 !important;
-
   }
+  .rating{
+    float: left;
+  }
+  /* .checked {
+    color: orange;
+  } */
+
+

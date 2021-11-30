@@ -10,6 +10,9 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+
+        commentId = ObjectId(commentId);
+
        
         const commentCollection = await comments();
         let comment = await commentCollection.findOne({ _id: ObjectId(commentId)});
@@ -33,6 +36,7 @@ module.exports = {
         if (!verify.validString(date)){
             throw 'Invaild date!'
         }
+
         // if(userData.getUser(userId) == null){
         //     throw "No user exists with that userId!"
         // }
@@ -40,6 +44,16 @@ module.exports = {
         //     throw "No space exists with that spaceId!"
         // }
         
+
+        if(uersData.getSpaceById(userId) == null){
+            throw "No user exists with that userId!"
+        }
+        if(spacesData.getSpaceById(spaceId) == null){
+            throw "No space exists with that spaceId!"
+        }
+         userId = ObjectId(userId);
+        spaceId = ObjectId(spaceId);
+
         if (date.length !== 10 || date[2] !== '/' || date[5] !== '/') {
             throw "date is not vaild!"
         }
@@ -106,6 +120,9 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+
+         commentId = ObjectId(commentId);
+
         
         const commentCollection = await comments();
         const deletionInfo = await commentCollection.deleteOne({ _id: ObjectId(commentId)});
@@ -119,6 +136,9 @@ module.exports = {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+
+         spaceId = ObjectId(spaceId);
+
         
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();

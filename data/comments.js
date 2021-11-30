@@ -1,8 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const comments = mongoCollections.comments;
 const verify = require('./util');
-const userData = require('./users');
-const spaceData = require('./space');
 let {ObjectId} = require('mongodb');
 
 module.exports = {
@@ -10,10 +8,10 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
-        let commentId = ObjectId(commentId);
+        let parsedId = ObjectId(commentId);
        
         const commentCollection = await comments();
-        let comment = await commentCollection.findOne({ _id: commentId });
+        let comment = await commentCollection.findOne({ _id: parsedId});
         if (comment === null){
             throw 'No comment with that id';
         }
@@ -40,9 +38,7 @@ module.exports = {
         if(spacesData.getSpaceById(spaceId) == null){
             throw "No space exists with that spaceId!"
         }
-        let userId = ObjectId(userId);
-        let spaceId = ObjectId(spaceId);
-
+        
         if (date.length !== 10 || date[2] !== '/' || date[5] !== '/') {
             throw "date is not vaild!"
         }
@@ -86,7 +82,7 @@ module.exports = {
         if(date != currentDate){
             throw "date is not vaild!"
         }
-        
+
         let newComment = {
             userId: userId, 
             spaceId: spaceId, 
@@ -109,11 +105,9 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
-
-        let commentId = ObjectId(commentId);
         
         const commentCollection = await comments();
-        const deletionInfo = await commentCollection.deleteOne({ _id: commentId });
+        const deletionInfo = await commentCollection.deleteOne({ _id: ObjectId(commentId)});
         if (deletionInfo.deletedCount === 0){
             throw `Could not delete comment with id of ${commentId}！`;
         }
@@ -124,8 +118,6 @@ module.exports = {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
-
-        let spaceId = ObjectId(spaceId);
         
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();

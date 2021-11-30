@@ -19,11 +19,12 @@ router.post('/', async (req, res) => {
         
         let authentication = await userData.checkUser(email, password);
         if(authentication.authenticated == true) {
-            res.redirect('/');
+            req.session.email = email;
+            res.redirect('/space');
         }
-        else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error'});
+        else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){
-        res.status(400).render('users/login', {pageTitle: 'error occured', hasError: true, error: e});
+        res.status(400).render('users/login', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
     }
 })
 

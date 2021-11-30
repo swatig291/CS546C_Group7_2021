@@ -1,6 +1,7 @@
 const dbConnection = require('../config/mongoConnection');
 const data = require('../data/');
 const spaceData = data.space;
+const userData = data.users;
 
 async function main() {
     const db = await dbConnection();
@@ -39,7 +40,14 @@ async function main() {
    
     
     // Users
-    
+    // firstName, lastName, email, password, phoneNumber, ssn
+
+    const user1 = await userData.createUser('user1', 'allusers', 'user1@gmail.com', '12345slfsf', '2543525331', '123456781');
+    const user2 = await userData.createUser('user2', 'allusers', 'user2@gmail.com', '1234fskfsl', '2543525332', '123456782');
+    const user3 = await userData.createUser('user3', 'allusers', 'user3@gmail.com', '12345slfls', '2543525333', '123456783');
+    const user4 = await userData.createUser('user4', 'allusers', 'user4@gmail.com', '1234afafgg', '2543525334', '123456784');
+    const user5 = await userData.createUser('user5', 'allusers', 'user5@gmail.com', '1234afsfkf', '2543525335', '123456785');
+
     console.log('Done seeding database');
     // await db.serverConfig.close();
 }

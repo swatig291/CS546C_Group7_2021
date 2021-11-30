@@ -1,0 +1,30 @@
+{
+  "name": "cs546c_group7_2021",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "seed": "node ./task/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swatig291/CS546C_Group7_2021.git"
+  },
+  "author": "G7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swatig291/CS546C_Group7_2021/issues"
+  },
+  "homepage": "https://github.com/swatig291/CS546C_Group7_2021#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.2",
+    "express-session": "^1.17.2",
+    "handlebars": "^4.7.7",
+    "mongodb": "^4.2.0",
+    "xss": "^1.0.10"
+  }
+}

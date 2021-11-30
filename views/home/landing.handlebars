@@ -1,0 +1,35 @@
+<div class="container-fluid bg-3">  
+    <div class="row text-center">  
+    <div  class="col-md-12">
+        <form class="form-inline" action="/space/search" method="POST">
+            <div class="input-group">
+            <input type="text" name="name"class="form-control" size="50" placeholder="Enter city or state" required>
+             {{!-- <input type="text" name="name" id="marvelName" placeholder="Marvel" class="search">  --}}
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-danger">Search</button>
+            </div>
+            </div>
+        </form>
+  </div>
+    </div>
+  <div class="row">
+       {{#each spaceList}}
+    <div class="col-sm-3" onClick="divFunction('{{this._id}}')">
+            <div class="panel">
+                <div class="row">
+                <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
+                <div class="col-sm-6 rating">
+                    <p >{{this.rating}}/5</p>
+                    <p hidden class="spaceId">{{this._id}}</p>
+                    <p class="starRate">{{this.rating}}</p>
+                 <span id='stars'></span>
+                </div>
+                </div>
+                 <div >${{this.price}}/Night</div>
+                  <div>Space Dimension: {{spaceDim.length}} * {{spaceDim.width}} * {{spaceDim.height}}</div>
+             
+            </div>
+    </div>
+       {{/each}}
+  </div>
+</div>

@@ -114,13 +114,13 @@ module.exports = {
         return 'Successfully delete!'; 
     },
 
-    async getAllCommentsOfSpace(spaceId) {
-        if (!verify.validString(spaceId)){
-            throw 'Invaild spaceId!'
+    async getAllCommentsOfReview(reviewId) {
+        if (!verify.validString(reviewId)){
+            throw 'Invaild reviewId!'
         }
         
         const commentCollection = await comments();
-        const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        const commentList = await commentCollection.find({'reviewId': { $eq: reviewId}}).toArray();
         
         for(i = 0; i < commentList.lenght; i++) {
             commentList[i]._id = commentList[i]._id.toString();

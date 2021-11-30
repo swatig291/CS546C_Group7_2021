@@ -19,11 +19,11 @@ router.post('/', async (req, res) => {
         
         let authentication = await userData.createUser(firstName, lastName, email, password, phoneNumber, ssn);
         if(authentication.userInserted == true) {
-            res.redirect('/');
+            res.redirect('/space');
         }
-        else res.status(500).render('users/signup', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error'});
+        else res.status(500).render('users/signup', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){
-        res.status(400).render('users/signup', {pageTitle: 'error occured', hasError: true, error: e});
+        res.status(400).render('users/signup', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
     }
 })
 

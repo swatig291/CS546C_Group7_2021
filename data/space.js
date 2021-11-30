@@ -174,7 +174,7 @@ module.exports = {
         if (typeof(search) !== "string") throw "Error (getSpaceSearch): Search must be a string.";
         const spaceCollection = await spaces();
         const query = new RegExp(search, "i");
-        const restaurantList = await spaceCollection.find({ $or: [ {"adress.state": {$regex: query}}, {"adress.city": {$regex: query}} ] }).toArray();
+        const restaurantList = await spaceCollection.find({ $or: [ {'address.city': {$regex: query}}, {'address.state': {$regex: query}} ] }).toArray();
         return restaurantList;
     },
 

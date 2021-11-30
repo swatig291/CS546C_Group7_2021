@@ -142,16 +142,17 @@ router.post('/remove/:id',async(req,res) => {
 
 });
 
-router.get("/search/:search", async (req, res) => {
+router.post("/search", async (req, res) => {
   let errors = [];
+  let search = req.body.name;
   try {
-    if (!req.params.search.trim()) {
+    if (!search.trim()) {
       res.status(400).json({ error: 'You must Supply an location  to search' });
       return;
     }
-    if (!verify.validString(req.params.search.trim()))  errors.push('loaction must be a valid string.');
-    let serachSpace = await spaceData.getSpaceSearch(req.params.search.trim());
-    res.status(200).json(serachSpace);
+    if (!verify.validString(search.trim()))  errors.push('loaction must be a valid string.');
+    let spaceList = await spaceData.getSpaceSearch(search.trim());
+    res.status(200).render('home/landing', { spaceList});
   } catch (e) {
     // Something went wrong with the server!
     console.log(e);

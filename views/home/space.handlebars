@@ -1,1 +1,16 @@
-<p>{{spaceDetails.spaceName}}</p>
+<div class="container-fluid bg-3">  
+  <div class="row">
+      {{!-- Iterate iamges in teh following div --}}
+      {{!-- <div class="col-sm-4"></div> --}}
+      <div class="row">
+          <div class="col-sm-8">
+              <h2>{{spaceDetails.spaceName}}</h2>
+               <h4> $x{{spaceDetails.price}}/Night</h4>
+               <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
+          </div>
+          <div class="col-sm-4">
+             
+          </div>
+      </div>
+  </div>
+</div>

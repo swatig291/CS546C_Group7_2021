@@ -3,7 +3,7 @@ const utilData = require('./util');
 // const reviewData = require('./reviews');
 const commentData = require('./comments');
 const userData = require('./users');
-
+const reviewData = require('./reviews');
 // const reviewData = require('./reviews');
 
 // const reviewData = require('./review');
@@ -16,6 +16,7 @@ module.exports = {
     util: utilData,
     // reviews: reviewData,
     comments: commentData,
+    reviews: reviewData,
     users: userData
 
 };

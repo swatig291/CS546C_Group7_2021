@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const { ObjectId } = require('mongodb');
 const reviews = mongoCollections.reviews;
-// const spacesCollection = require("./spaces.js");
+const space = require("./space.js");
 
 async function getReviewById(id) {
     if (!id || typeof id !== "string")
@@ -48,6 +48,24 @@ async function addReview(spaceId, userId, content,rating) {
     return reviewCreated;
 }
 
+
+async function getAllReviewsBySpaceId(id) {
+    try {
+        var parsedId = ObjectId(id);
+    } catch (error) {
+        throw `id  must be  a valid ObjectId`;
+    }
+    const SpacesCollection = await space();
+    const reviewsList = await SpacesCollection.findOne({ _id: parsedId }, { projection: { reviews: 1, _id: 0 } });
+    if (reviewsList === null || reviewsList.reviews.length == 0) throw `no reviews for the Space _id are found`;
+    for (let i = 0; i < reviewsList.reviews.length; i++) {
+        reviewsList.reviews[i]._id = reviewsList.reviews[i]._id.toString();
+    }
+
+    return reviewsList.reviews;
+    //Return object reviews in array.
+}
+
  async function removeReview(id) {
     if (!verify.validString(id)) throw 'review id must be a valid string.';
 
@@ -76,6 +94,7 @@ module.exports = {
     getReviewById,
     addReview,
     removeReview,
-    getAllReviews
+    getAllReviews,
+    getAllReviewsBySpaceId
 }
 

@@ -4,20 +4,15 @@ const data = require("../data");
 const reviewData = data.reviews;
 
 
-// router.get("/:id", async function (req, res) {
-//     try {
-//         const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
-//         // console.log(req.params.id)
-//         res.json(reviewInfo);
-//     }
-//     catch (e) {
-//         res.status(404).json({ message: "'review' item not found!" });
-//     }
-// });
 
 
-
+//get all reviews by Space ID
 router.get("/:id", async function (req, res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     try {
         const reviewInfo = await reviewData.getAllReviewsBySpaceId(req.params.id); // 
         // console.log(req.params.id)
@@ -27,6 +22,32 @@ router.get("/:id", async function (req, res) {
         res.status(404).json({ message: "'review' item not found!" });
     }
 });
+
+
+//get review by review ID
+router.get("/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
+//get all reviews by User ID
+router.get("/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getAllReviewsByUserId(req.params.id); // 
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
 
 //get reviews by space ID
 // router.get('/space/:id', async (req, res) => {
@@ -45,6 +66,11 @@ router.get("/:id", async function (req, res) {
 // });
 
 router.get("/", async function (req, res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     try {
         const reviewList = await reviewData.getAllReviews();
         res.json(reviewList);
@@ -55,6 +81,11 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async (req, res) => { // add
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     let reviewInfo = req.body;
     if (!reviewInfo) {
         res.status(400).json({ error: 'You must provide data to create a review' });
@@ -90,6 +121,11 @@ router.post("/", async (req, res) => { // add
 });
 
 router.post('/remove/:id', async (req, res) => {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     if (!req.params.id) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;

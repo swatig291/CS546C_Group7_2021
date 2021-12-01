@@ -6,9 +6,8 @@ const verify = data.util;
 const xss = require('xss');
 
 router.post('/comment/add', async function(req, res) {
-    if(!req.session.AuthCookie)
-    {
-      res.status(401).redirect("/login")
+    if(!req.session.AuthCookie){
+        res.status(401).redirect("/login")
     }
     let errors = [];
     let userId = xss(req.body.userId);
@@ -83,11 +82,10 @@ router.post('/comment/add', async function(req, res) {
 });
 
 router.get("/comment/:id",async function(req,res) {
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/login');
-    return;
-  }
+    if(!req.session.email){
+        res.status(400).redirect('/login');
+        return;
+    }
     let errors = [];
     if(!req.params.id.trim()) {
         res.status(400).json({ error: 'You must Supply an Id' });
@@ -108,13 +106,12 @@ router.get("/comment/:id",async function(req,res) {
     }
 });
 
-router.get("/:spaceId",async function(req,res) {
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/login');
-    return;
-  }
-    let spaceId = xss(req.params.spaceId)
+router.get("/space/:id",async function(req,res) {
+    if(!req.session.email){
+        res.status(400).redirect('/login');
+        return;
+    }
+    let spaceId = xss(req.params.id)
     let errors = [];
     if (!verify.validString(spaceId)){
         errors.push('Invaild spaceId!')
@@ -131,13 +128,12 @@ router.get("/:spaceId",async function(req,res) {
     }
 });
 
-router.get("/:userId",async function(req,res) {
-    if(!req.session.email)
-    {
-      res.status(400).redirect('/login');
-      return;
+router.get("/user/:id",async function(req,res) {
+    if(!req.session.email){
+        res.status(400).redirect('/login');
+        return;
     }
-    let userId = xss(req.params.userId)
+    let userId = xss(req.params.id)
     let errors = [];
     if (!verify.validString(userId)){
         errors.push('Invaild userId!')
@@ -155,17 +151,17 @@ router.get("/:userId",async function(req,res) {
 });
 
 router.post('/delete/:commentId',async function(req,res) {
-    if(!req.session.email)
-    {
-      res.status(400).redirect('/login');
-      return;
+    if(!req.session.email){
+        res.status(400).redirect('/login');
+        return;
     }
+    let commentId = xss(req.params.commentId)
     if(!req.params.commentId) {
         res.status(400).json({ error:'You must Supply an ID!' });
         return;
     }
     try {
-        let deleteComment = await commentData.deleteComment(req.params.commentId);
+        let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
             res.status(200).json(deleteComment);
         }else {

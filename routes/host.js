@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const userData = data.users;
+const spaceData = data.space;
 
 router.get('/', async (req, res) => {
     try{
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         
         let authentication = await userData.createUser(firstName, lastName, email, password, phoneNumber, ssn);
         if(authentication.userInserted == true) {
-            res.redirect('/login');
+            res.redirect('/space');
         }
         else res.status(500).render('users/signup', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){

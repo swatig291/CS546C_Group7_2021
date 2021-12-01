@@ -15,7 +15,7 @@ const constructorMethod = (app) => {
   app.use('/signup', signUpRoute);
   app.use('/login', loginRoute);
   app.use("/space", spaceData);
-  app.use("/comment", commentData);
+  app.use("/comments", commentData);
   app.use("/reviews", reviewData);
  
   app.use('*', (req, res) => {

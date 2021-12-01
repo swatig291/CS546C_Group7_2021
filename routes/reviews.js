@@ -18,6 +18,11 @@ const reviewData = data.reviews;
 
 
 router.get("/:id", async function (req, res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     try {
         const reviewInfo = await reviewData.getAllReviewsBySpaceId(req.params.id); // 
         // console.log(req.params.id)
@@ -45,6 +50,11 @@ router.get("/:id", async function (req, res) {
 // });
 
 router.get("/", async function (req, res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     try {
         const reviewList = await reviewData.getAllReviews();
         res.json(reviewList);
@@ -55,6 +65,11 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async (req, res) => { // add
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     let reviewInfo = req.body;
     if (!reviewInfo) {
         res.status(400).json({ error: 'You must provide data to create a review' });
@@ -90,6 +105,11 @@ router.post("/", async (req, res) => { // add
 });
 
 router.post('/remove/:id', async (req, res) => {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     if (!req.params.id) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;

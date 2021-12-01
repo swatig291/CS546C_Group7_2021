@@ -47,9 +47,9 @@ app.use(session({
   
 app.get('/', (req, res,next) => {
     if (req.session.email) {
-        res.redirect('/space');
+       res.redirect('/space');
     } else {
-  next();
+      next();
     }
 })
 

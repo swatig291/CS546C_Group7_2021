@@ -135,7 +135,7 @@ let checkUser = async function checkUser(email, password){
 
     passwordAuthenticator = await bcrypt.compare(password, finder['password']);
 
-    if(passwordAuthenticator == true) return {authenticated: true};
+    if(passwordAuthenticator == true) return finder;
     else throw 'Either Email or password is invalid.';
 
 }

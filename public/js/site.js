@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
      let val= document.getElementsByClassName('starRate')
      for(let i = 0; i < val.length ; i++){
-        document.getElementById("stars").innerHTML = getStars(val[2].innerText);
+       let data =  document.getElementsByClassName("stars").innerHTML
+      
+        document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);
+           
      }
    
    

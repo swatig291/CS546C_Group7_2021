@@ -51,16 +51,16 @@ async function main() {
     
     // Commentss
     // userId, spaceId, comment, date
-    const comment1 = await commentData.createComment("619ad029ff55aec21408f9b9", "61a59108002aaa74fa8d5207", 'Is the space easy to be found?', '11/30/2021');
-    const comment2 = await commentData.createComment("619ad029ff55aec21408f2b6", "61a59108002aaa74fa8d5208", 'Is the space waterproof?', '11/30/2021');
-    const comment3 = await commentData.createComment("439ad029ff55aec36985f9b8", "61a59108002aaa74fa8d5209", 'Is the host of this space easy to communicate?', '11/30/2021');
-    const comment4 = await commentData.createComment("259ad029ff55aec21408zsr8", "61a59108002aaa74fa8d520a", 'Can I store my car here?', '11/30/2021');
+    // const comment1 = await commentData.createComment("619ad029ff55aec21408f9b9", space1._id, 'Is the space easy to be found?', '11/30/2021');
+    // const comment2 = await commentData.createComment("619ad029ff55aec21408f2b6", space2._id, 'Is the space waterproof?', '11/30/2021');
+    // const comment3 = await commentData.createComment("439ad029ff55aec36985f9b8", "61a59108002aaa74fa8d5209", 'Is the host of this space easy to communicate?', '11/30/2021');
+    // const comment4 = await commentData.createComment("259ad029ff55aec21408zsr8", "61a59108002aaa74fa8d520a", 'Can I store my car here?', '11/30/2021');
 
 
      //creat reviews
     //spaceId,userId, content,rating
-    let c1 = await reviews.addReview('619ad029ff55aec21408f9b8', "12345slfsf", "nice", 5);
-    let c2 = await reviews.addReview('619ad029ff55aec21408f9b8', "12345slfsf", "just so so", 4);
+    let c1 = await reviews.addReview(space1._id, "12345slfsf", "nice", 5);
+    let c2 = await reviews.addReview(space2._id, "12345slfsf", "just so so", 4);
     let c3 = await reviews.addReview('619ad029ff55aec21408f9b8', "12345slfls", "awesome",5);
     let c4 = await reviews.addReview('619ad029ff55aec21408f9b8', "1234afsfkf", "bad",1);
 

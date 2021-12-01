@@ -18,9 +18,9 @@ router.post('/', async (req, res) => {
         const {email, password} = cred
         
         let authentication = await userData.checkUser(email, password);
-        if(authentication.authenticated == true) {
+        if(authentication !== null) {
             req.session.email = email;
-            res.redirect('/space');
+            res.redirect('/');
         }
         else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){

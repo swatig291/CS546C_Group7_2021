@@ -6,7 +6,10 @@ const verify = data.util;
 const xss = require('xss');
 
 router.post('/comment/add', async function(req, res) {
-
+    if(!req.session.AuthCookie)
+    {
+      res.status(401).redirect("/login")
+    }
     let errors = [];
     let userId = xss(req.body.userId);
     let spaceId = xss(req.body.spaceId);
@@ -80,6 +83,11 @@ router.post('/comment/add', async function(req, res) {
 });
 
 router.get("/comment/:id",async function(req,res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     let errors = [];
     if(!req.params.id.trim()) {
         res.status(400).json({ error: 'You must Supply an Id' });
@@ -101,6 +109,11 @@ router.get("/comment/:id",async function(req,res) {
 });
 
 router.get("/:spaceId",async function(req,res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
     let spaceId = xss(req.params.spaceId)
     let errors = [];
     if (!verify.validString(spaceId)){
@@ -119,6 +132,11 @@ router.get("/:spaceId",async function(req,res) {
 });
 
 router.get("/:userId",async function(req,res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     let userId = xss(req.params.userId)
     let errors = [];
     if (!verify.validString(userId)){
@@ -137,6 +155,11 @@ router.get("/:userId",async function(req,res) {
 });
 
 router.post('/delete/:commentId',async function(req,res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
     if(!req.params.commentId) {
         res.status(400).json({ error:'You must Supply an ID!' });
         return;

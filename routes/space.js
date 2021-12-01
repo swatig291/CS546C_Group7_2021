@@ -8,6 +8,11 @@ const verify = data.util;
 const xss = require('xss');
 
 router.post('/add', async (req, res) => {
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
   let newName = xss(req.body.spaceName);
 
   const newAddress = req.body.address;
@@ -60,6 +65,11 @@ router.post('/add', async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
   try {
     let spaceList = await spaceData.getAllSpace();
     res.render('home/landing', { spaceList});
@@ -72,6 +82,12 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/edit', async (req, res) => {
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
+  
   let newName = xss(req.body.spaceName);
   let id = xss(req.body.id);
 
@@ -122,6 +138,11 @@ router.post('/edit', async (req, res) => {
 });
 
 router.post('/remove/:id',async(req,res) => {
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
   if (!req.params.id) {
 		res.status(400).json({ error: 'You must Supply an ID to delete' });
 		return;
@@ -143,6 +164,11 @@ router.post('/remove/:id',async(req,res) => {
 });
 
 router.post("/search", async (req, res) => {
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
   let errors = [];
   let search = req.body.name;
   try {
@@ -161,6 +187,11 @@ router.post("/search", async (req, res) => {
 });
 
 router.get('/:id',async(req,res) =>{
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
   if (!req.params.id) {
 		res.status(400).json({ error: 'You must Supply an ID to delete' });
 		return;
@@ -169,9 +200,9 @@ router.get('/:id',async(req,res) =>{
       let spaceDetails = await spaceData.getSpaceById(req.params.id);
        if(spaceDetails !== null)
        {
-         let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
+        //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
         //  let comments = await commentData.getAllCommentsOfSpace(req.params.id);
-         res.status(200).render('home/space', { spaceDetails,reviews});          
+         res.status(200).render('home/space', { spaceDetails});          
        }else {
         return res.status(404).send();
       }

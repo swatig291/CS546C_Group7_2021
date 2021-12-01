@@ -150,15 +150,22 @@ router.get("/user/:id",async function(req,res) {
     }
 });
 
-router.post('/delete/:commentId',async function(req,res) {
+router.post('/delete/:id',async function(req,res) {
     if(!req.session.email){
         res.status(400).redirect('/login');
         return;
     }
-    let commentId = xss(req.params.commentId)
-    if(!req.params.commentId) {
+    if(!req.params.id) {
         res.status(400).json({ error:'You must Supply an ID!' });
         return;
+    }
+    let commentId = xss(req.params.id)
+    let errors = [];
+    if (!verify.validString(commentId)){
+        errors.push('Invaild commentId!')
+    }
+    if(errors.length > 0) {
+        return res.status(400).json(errors);
     }
     try {
         let deleteComment = await commentData.deleteComment(commentId);

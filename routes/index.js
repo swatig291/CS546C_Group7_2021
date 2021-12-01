@@ -1,7 +1,7 @@
 
 const spaceData = require('./space');
-const signUpRoute = require('./userSignup');
-const loginRoute = require('./userLogin');
+const userRoute = require('./user');
+//const loginRoute = require('./userLogin');
 const commentData = require('./comments');
 const reviewData = require('./reviews');
 const data = require('../data');
@@ -12,8 +12,9 @@ const constructorMethod = (app) => {
     res.redirect('http://localhost:3000/space');
   });
 
-  app.use('/signup', signUpRoute);
-  app.use('/login', loginRoute);
+  //app.use('/signup', signUpRoute);
+  //app.use('/login', loginRoute);
+  app.use('/user', userRoute);
   app.use("/space", spaceData);
   app.use("/comment", commentData);
   app.use("/reviews", reviewData);

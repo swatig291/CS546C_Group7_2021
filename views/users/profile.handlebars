@@ -1,0 +1,86 @@
+
+{{#if userModified}}
+<h1 class="modification">User Profile is successfully changed.</h1>
+{{/if}}
+
+{{#if hasError}}
+<h1 class="error">{{error}}.</h1>
+{{/if}}
+
+<form action="/user/profile/firstName" method="POST" class="profile-form">
+
+{{#if userFirstNameModified}}
+<h1 class="modification">User's First Name is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your First Name:
+        <h4>{{firstName}}</h4> 
+        <input type="text" name="firstName" placeholder="Enter your new First Name" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update First Name" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/lastName" method="POST" class="profile-form">
+
+{{#if userLastNameModified}}
+<h1 class="modification">User's Last Name is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Last Name: 
+        <h4>{{lastName}}</h4>
+        <input type="text" name="lastName" placeholder="Enter your new Last Name" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Last Name" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/email" method="POST" class="profile-form">
+
+{{#if userEmailModified}}
+<h1 class="modification">User's Email is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Email: 
+        <h4>{{email}}</h4>
+        <input type="email" name="email" placeholder="Enter your new Email" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Email" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/phoneNumber" method="POST" class="profile-form"></form>
+
+{{#if userPhoneNumberModified}}
+<h1 class="modification">User's Phone Number is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Phone Number: 
+        <h4>{{phoneNumber}}</h4>
+        <input type="text" name="phoneNumber" placeholder="Enter your new Phone Number" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Phone Number" class="submit"/></label>
+    </div>
+</form>
+
+<a href='*'>Need to reset your Password? Click here</a>

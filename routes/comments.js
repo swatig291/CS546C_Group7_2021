@@ -8,7 +8,7 @@ const xss = require('xss');
 router.post('/comment/add', async function(req, res) {
     if(!req.session.AuthCookie)
     {
-      res.status(401).redirect("/login")
+      res.status(401).redirect("/user/login")
     }
     let errors = [];
     let userId = xss(req.body.userId);
@@ -85,7 +85,7 @@ router.post('/comment/add', async function(req, res) {
 router.get("/comment/:id",async function(req,res) {
     if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
     let errors = [];
@@ -111,7 +111,7 @@ router.get("/comment/:id",async function(req,res) {
 router.get("/:spaceId",async function(req,res) {
     if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
     let spaceId = xss(req.params.spaceId)
@@ -134,7 +134,7 @@ router.get("/:spaceId",async function(req,res) {
 router.get("/:userId",async function(req,res) {
     if(!req.session.email)
     {
-      res.status(400).redirect('/login');
+      res.status(400).redirect('/user/login');
       return;
     }
     let userId = xss(req.params.userId)
@@ -157,7 +157,7 @@ router.get("/:userId",async function(req,res) {
 router.post('/delete/:commentId',async function(req,res) {
     if(!req.session.email)
     {
-      res.status(400).redirect('/login');
+      res.status(400).redirect('/user/login');
       return;
     }
     if(!req.params.commentId) {

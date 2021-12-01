@@ -5,7 +5,7 @@ const spaceData = data.space;
 
 router.get('/', async (req, res) => {
     try{
-        res.render('users/signup', {pageTitle: 'signupPage'});
+        res.render('users/host', {pageTitle: 'Host Page'});
     }catch(e){
         
     }

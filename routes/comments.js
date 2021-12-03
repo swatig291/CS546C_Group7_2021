@@ -111,7 +111,7 @@ router.get("/comment/:id",async function(req,res) {
 });
 
 
-router.get("/:spaceId",async function(req,res) {
+router.get("/:id",async function(req,res) {
     if(!req.session.email)
   {
     res.status(400).redirect('/user/login');

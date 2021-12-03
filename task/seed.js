@@ -4,6 +4,8 @@ const spaceData = data.space;
 const userData = data.users;
 const commentData = data.comments;
 const reviews = require('../data/reviews.js');
+const bookings = require('../data/bookings.js');
+
 async function main() {
     const db = await dbConnection();
     await db.dropDatabase();
@@ -34,10 +36,10 @@ async function main() {
           spaceDim['width'] = '70';
           spaceDim['height'] = '75';
 
-    const space1   =  await spaceData.createSpace('A',  address1,  spaceDim, '45','619ad029ff55aec21408f9b8','imagePath1');
-    const space2   = await spaceData.createSpace(' B', address2,  spaceDim, '50' ,'619ad029ff55aec21408f9b8','imagePath1');
-    const space3   = await spaceData.createSpace('C',  address3,  spaceDim, '55','619ad029ff55aec21408f9b8','imagePath1');
-    const space4   = await spaceData.createSpace('D',  address4,  spaceDim, '60','619ad029ff55aec21408f9b8','imagePath1');
+    const space1   =  await spaceData.createSpace('A',  address1,  spaceDim, '45','619ad029ff55aec21408f9b8','Easy access, 5 steps downstairs, street access into the property. Much space is available. Looking to fill fast.');
+    const space2   = await spaceData.createSpace(' B', address2,  spaceDim, '50' ,'619ad029ff55aec21408f9b8','Easy access, 5 steps downstairs, street access into the property. Much space is available. Looking to fill fast.');
+    const space3   = await spaceData.createSpace('C',  address3,  spaceDim, '55','619ad029ff55aec21408f9b8','Easy access, 5 steps downstairs, street access into the property. Much space is available. Looking to fill fast.');
+    const space4   = await spaceData.createSpace('D',  address4,  spaceDim, '60','619ad029ff55aec21408f9b8','Easy access, 5 steps downstairs, street access into the property. Much space is available. Looking to fill fast.');
    
     
     // Users
@@ -63,7 +65,12 @@ async function main() {
     let c2 = await reviews.addReview(space2._id, "12345slfsf", "just so so", 4);
     let c3 = await reviews.addReview('619ad029ff55aec21408f9b8', "12345slfls", "awesome",5);
     let c4 = await reviews.addReview('619ad029ff55aec21408f9b8', "1234afsfkf", "bad",1);
-
+  //creat booking
+    //addbooking(spaceId, userId, startDate, endDate, totalPrice)
+    const b1 = await bookings.addbooking('619ad029ff55aec21408f9b8', "12345slfsf", "2019/01/11", "2019/03/11",5);
+    const b2 = await bookings.addbooking('619ad029ff55aec21408f9b8', "12345slfsf", "2019/01/11", "2019/03/11",2);
+    const b3 = await bookings.addbooking('619ad029ff55aec21408f9b8', "12345slfsf", "2019/01/11", "2019/03/11",3);
+    const b4 = await bookings.addbooking('619ad029ff55aec21408f9b8', "12345slfsf", "2019/01/11", "2019/03/11",1);
 
     console.log('Done seeding database');
     // await db.serverConfig.close();

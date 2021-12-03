@@ -4,19 +4,9 @@ const data = require("../data");
 const reviewData = data.reviews;
 
 
-// router.get("/:id", async function (req, res) {
-//     try {
-//         const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
-//         // console.log(req.params.id)
-//         res.json(reviewInfo);
-//     }
-//     catch (e) {
-//         res.status(404).json({ message: "'review' item not found!" });
-//     }
-// });
 
 
-
+//get all reviews by Space ID
 router.get("/:id", async function (req, res) {
     if(!req.session.email)
     {
@@ -32,6 +22,32 @@ router.get("/:id", async function (req, res) {
         res.status(404).json({ message: "'review' item not found!" });
     }
 });
+
+
+//get review by review ID
+router.get("/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
+//get all reviews by User ID
+router.get("/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getAllReviewsByUserId(req.params.id); // 
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
 
 //get reviews by space ID
 // router.get('/space/:id', async (req, res) => {

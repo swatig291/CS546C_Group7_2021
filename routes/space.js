@@ -14,7 +14,7 @@ const fs = require('fs')
 router.post('/add', async (req, res) => {
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
     var form = new formidable.IncomingForm();
@@ -100,7 +100,7 @@ catch (error) {
   router.get('/host',async(req,res) =>{
     if(!req.session.email)
     {
-      res.status(400).redirect('/login');
+      res.status(400).redirect('/user/login');
       return;
     }
   res.render('home/hostSpace');  
@@ -110,7 +110,7 @@ catch (error) {
 router.get("/", async (req, res) => {
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
   try {
@@ -138,7 +138,7 @@ router.get("/", async (req, res) => {
 router.post('/edit', async (req, res) => {
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
   
@@ -194,7 +194,7 @@ router.post('/edit', async (req, res) => {
 router.post('/remove/:id',async(req,res) => {
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
   if (!req.params.id) {
@@ -220,7 +220,7 @@ router.post('/remove/:id',async(req,res) => {
 router.post("/search", async (req, res) => {
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
   let errors = [];
@@ -256,7 +256,7 @@ router.post("/search", async (req, res) => {
 router.get('/:id',async(req,res) =>{
   if(!req.session.email)
   {
-    res.status(400).redirect('/login');
+    res.status(400).redirect('/user/login');
     return;
   }
   if (!req.params.id) {

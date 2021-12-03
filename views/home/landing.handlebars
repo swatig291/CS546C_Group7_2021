@@ -17,17 +17,26 @@
     <div class="col-sm-3" onClick="divFunction('{{this._id}}')">
             <div class="panel">
                 <div class="row">
+                     {{#each photoArray}}
+                      <div class = "col-sm-6"> 
+                        <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
+                        <br/>
+                        <br/>
+                        </div>
+                        {{/each}}         
+                </div>
+                <div class="row">
                 <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
                 <div class="col-sm-6 rating">
                     <p >{{this.rating}}/5</p>
                     <p hidden class="spaceId">{{this._id}}</p>
-                    <p class="starRate">{{this.rating}}</p>
+                    <p class="starRate">{{this.rating}}</p>                   
                  <span class='stars'></span>
                 </div>
                 </div>
                  <div >${{this.price}}/Night</div>
-                  <div>Space Dimension: {{spaceDim.length}} * {{spaceDim.width}} * {{spaceDim.height}}</div>
-             
+                  <div >{{this.address.city}}</div>
+                  <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
             </div>
     </div>
        {{/each}}

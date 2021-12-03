@@ -53,15 +53,40 @@ app.get('/', (req, res,next) => {
     }
 })
 
-app.get('/signup', async(req, res, next) => {
+app.get('/user/signup', async(req, res, next) => {
     if(req.session.email) return res.redirect('/space');
     next();
 });
 
-app.get('/login', async(req, res, next) => {
+app.get('/user/login', async(req, res, next) => {
   if(req.session.email) return res.redirect('/space');
   next();
 });
+
+app.get('/user/profile', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+})
+
+app.get('/user/profile/firstName', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+})
+
+app.get('/user/profile/lastName', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+})
+
+app.get('/user/profile/email', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+})
+
+app.get('/user/profile/phoneNumber', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+})
 
 // app.get('/private', async(req, res, next) => {
 //     if(!req.session.username) return res.status(403).render('Individual/error');

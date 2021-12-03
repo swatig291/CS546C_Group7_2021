@@ -6,8 +6,10 @@ const verify = data.util;
 const xss = require('xss');
 
 router.post('/comment/add', async function(req, res) {
-    if(!req.session.AuthCookie){
-        res.status(401).redirect("/login")
+    if(!req.session.AuthCookie)
+    {
+      res.status(401).redirect("/user/login")
+
     }
     let errors = [];
     let userId = xss(req.body.userId);
@@ -82,10 +84,12 @@ router.post('/comment/add', async function(req, res) {
 });
 
 router.get("/comment/:id",async function(req,res) {
-    if(!req.session.email){
-        res.status(400).redirect('/login');
-        return;
-    }
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/user/login');
+    return;
+  }
+
     let errors = [];
     if(!req.params.id.trim()) {
         res.status(400).json({ error: 'You must Supply an Id' });
@@ -106,12 +110,15 @@ router.get("/comment/:id",async function(req,res) {
     }
 });
 
-router.get("/space/:id",async function(req,res) {
-    if(!req.session.email){
-        res.status(400).redirect('/login');
-        return;
-    }
-    let spaceId = xss(req.params.id)
+
+router.get("/:spaceId",async function(req,res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/user/login');
+    return;
+  }
+    let spaceId = xss(req.params.id);
+
     let errors = [];
     if (!verify.validString(spaceId)){
         errors.push('Invaild spaceId!')
@@ -128,9 +135,10 @@ router.get("/space/:id",async function(req,res) {
     }
 });
 
+
 router.get("/user/:id",async function(req,res) {
     if(!req.session.email){
-        res.status(400).redirect('/login');
+        res.status(400).redirect('/user/login');
         return;
     }
     let userId = xss(req.params.id)
@@ -152,8 +160,9 @@ router.get("/user/:id",async function(req,res) {
 
 router.post('/delete/:id',async function(req,res) {
     if(!req.session.email){
-        res.status(400).redirect('/login');
+        res.status(400).redirect('/user/login');
         return;
+
     }
     if(!req.params.id) {
         res.status(400).json({ error:'You must Supply an ID!' });

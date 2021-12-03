@@ -77,7 +77,7 @@ function getStars(rating) {
 
     if(form){
         var formData = new FormData(form);
-
+    }
   var file = document.getElementById('addImg')
 
   // count for photos user has chosen
@@ -100,6 +100,28 @@ function getStars(rating) {
           $('#picTips').text('You can only upload 4 photos at most');
           $('#picTips').show();
       }
-  }
-}
-  
+  };
+
+  $('#booking').click( function(){
+    var form = document.getElementById('bookingForm');
+      let checkInDate =  $('#check-in').val();
+      let checkOutDate =  $('#check-out').val();
+      let spaceId = $('#spaceId').val();
+      let pricePerDay = $('#price').val();
+      var requestConfig = {
+            method: 'POST',
+            url: '/bookings/',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                checkIn: checkInDate,
+                checkOut: checkOutDate,
+                spaceId: spaceId,
+                pricePerDay: pricePerDay
+            })           
+    };
+      $.ajax(requestConfig).then(function(responseMessage) {
+                console.log(responseMessage);
+                // newContent.html(responseMessage.message);
+                //                alert("Data Saved: " + msg);
+            });
+  });

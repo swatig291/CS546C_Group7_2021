@@ -16,27 +16,31 @@
                 {{/each}}
               </div>
               <h2>{{spaceDetails.spaceName}}</h2>
-               <p><div >{{spaceDetails.description}}</div></p>
-               <h4> $x{{spaceDetails.price}}/Night</h4>
+               <div >{{spaceDetails.description}}</div>
+               <div id= "spaceId" hidden>{{spaceDetails.id}}</div>
+               <h4 id="price"> $x{{spaceDetails.price}}/Night</h4>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
           </div>
-          <div class="col-sm-4">
-             <div class="row">
-                 <h2>Booking</h2>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="date" required>
-                                    <span class="form-label">Check In</span>
+          <form action="post" id="bookingForm">
+            <div class="col-sm-4">
+                <div class="row">
+                    <h2>Booking</h2>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" type="date" id="check-in"required>
+                                        <span class="form-label">Check In</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="date" required>
-                                    <span class="form-label">Check out</span>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" type="check-out" required>
+                                        <span class="form-label">Check out</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-          </div>
+                         <button type="button" id="booking" value="submit"></button>
+                </div>
+            </div>
+            </form>
       </div>
   </div>
 </div>

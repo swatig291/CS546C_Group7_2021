@@ -4,7 +4,19 @@
       {{!-- <div class="col-sm-4"></div> --}}
       <div class="row">
           <div class="col-sm-8">
+              <div class="row">
+                {{#each spaceDetails.photoArray}}
+                <div class="col-sm-6">
+                    <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
+                    <br/>
+                       <br/>
+                          <br/>
+                             <br/>
+                </div>
+                {{/each}}
+              </div>
               <h2>{{spaceDetails.spaceName}}</h2>
+               <p><div >{{spaceDetails.description}}</div></p>
                <h4> $x{{spaceDetails.price}}/Night</h4>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
           </div>

@@ -39,4 +39,67 @@ function getStars(rating) {
         window.location = 'http://localhost:3000/space/' + data ;    
        
     }
-    
+    // if(form){
+    //   var formData = new FormData(form);
+  
+    $('#addNewPostButton').click(function () {
+      var form = document.getElementById('static-form');
+
+      if(form){
+          var formData = new FormData(form);
+      }
+      var xhr = new XMLHttpRequest();
+      formData.set("spaceName", $('#spaceName').val());
+      formData.set("length", $('#length').val());
+      formData.set("width", $('#width').val());
+      formData.set("height", $('#height').val());
+      formData.set("streetAddress", $('#streetAddress').val());
+      formData.set("city", $('#city').val());
+      formData.set("state", $('#state').val());
+      formData.set("zip", $('#zip').val());
+      formData.set("price", $('#price').val());
+      formData.set("description",$('#description').val());
+      formData.delete('photoArr');
+
+      xhr.open('post', 'http://localhost:3000/space/add');
+      xhr.send(formData);
+
+      xhr.onload = function () {
+          console.log(xhr.responseText);
+        
+          var Timeout = setTimeout(function () {
+              window.location.reload();
+          }, 500);
+      }
+  });
+
+  var form = document.getElementById('static-form');
+
+    if(form){
+        var formData = new FormData(form);
+
+  var file = document.getElementById('addImg')
+
+  // count for photos user has chosen
+  var fileCount = 0;
+  $('#picTips').hide();
+
+  // when user choose photos
+  file.onchange = function () {
+      for (let i = 0; i < this.files.length; i++) {
+          formData.append('photo' + i, this.files[i]); // add photos' path to formData
+          fileCount ++;
+      }
+      if(fileCount == 1){
+          $('#picTips').text('You have chosen '+fileCount+' photo');
+          $('#picTips').show();
+      } else if(fileCount > 1 && fileCount <=4){
+          $('#picTips').text('You have chosen '+fileCount+' photos');
+          $('#picTips').show();
+      } else {
+          $('#picTips').text('You can only upload 4 photos at most');
+          $('#picTips').show();
+      }
+  }
+}
+  

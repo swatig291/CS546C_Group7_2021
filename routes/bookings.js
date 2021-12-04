@@ -17,7 +17,7 @@ router.get("/:id", async function (req, res) {
 
 
 //get all bookings by Space ID
-router.get("/:id", async function (req, res) {
+router.get("/spaceId/:id", async function (req, res) {
     try {
         const bookingInfo = await bookingData.getAllbookingsBySpaceId(req.params.id); // 
         // console.log(req.params.id)
@@ -29,7 +29,7 @@ router.get("/:id", async function (req, res) {
 });
 
 //get all bookings by User ID
-router.get("/:id", async function (req, res) {
+router.get("/userId/:id", async function (req, res) {
     try {
         const bookingInfo = await bookingData.getAllbookingsByUserId(req.params.id); // 
         // console.log(req.params.id)
@@ -67,7 +67,7 @@ router.get("/", async function (req, res) {
 });
 
 // add
-router.post("/", async (req, res) => {
+router.post("/:id", async (req, res) => {
     let bookingInfo = req.body;
     if (!bookingInfo) {
         res.status(400).json({ error: 'You must provide data to create a booking' });

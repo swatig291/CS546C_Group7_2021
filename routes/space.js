@@ -2,14 +2,12 @@
 const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
-const reviewData = data.reviews;
+const commentData = data.comments;
 const verify = data.util;
 const xss = require('xss');
 const path = require("path");
 const formidable = require('formidable');
 const fs = require('fs')
-
-
 
 router.post('/add', async (req, res) => {
   if(!req.session.email)
@@ -260,25 +258,24 @@ router.get('/:id',async(req,res) =>{
     return;
   }
   if (!req.params.id) {
-		res.status(400).json({ error: 'You must Supply an ID to delete' });
+		res.status(400).json({ error: 'You must Supply an ID to search' });
 		return;
 	}
     try{
       let spaceDetails = await spaceData.getSpaceById(req.params.id);
-       if(spaceDetails !== null)
-       {
+       if(spaceDetails !== null){
         //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
-        //  let comments = await commentData.getAllCommentsOfSpace(req.params.id);
+        let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
         
-          let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
-          spaceDetails['photoArray'] = [];
-          if (fs.existsSync(folder)) {
-            fs.readdirSync(folder).forEach(file => {
-              let imgPath = 'http://localhost:3000/public/images/uploads/' + spaceDetails._id + '/'+ file;
-              spaceDetails.photoArray.push(imgPath);
-             });
-           }
-         res.status(200).render('home/space', { spaceDetails});          
+        let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
+        spaceDetails['photoArray'] = [];
+        if (fs.existsSync(folder)) {
+          fs.readdirSync(folder).forEach(file => {
+            let imgPath = 'http://localhost:3000/public/images/uploads/' + spaceDetails._id + '/'+ file;
+            spaceDetails.photoArray.push(imgPath);
+            });
+          }
+         res.status(200).render('home/space', { spaceDetails,commentList});          
        }else {
         return res.status(404).send();
       }

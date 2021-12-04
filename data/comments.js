@@ -10,7 +10,6 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
-
         commentId = ObjectId(commentId);
         const commentCollection = await comments();
         let comment = await commentCollection.findOne({ _id: commentId});
@@ -21,7 +20,7 @@ module.exports = {
         return comment;
     },
 
-    async createComment(userId, spaceId, comment, date) {
+    async createComment(userId, spaceId, comment) {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
@@ -30,9 +29,6 @@ module.exports = {
         }
         if (!verify.validString(comment)){
             throw 'Invaild comment!'
-        }
-        if (!verify.validString(date)){
-            throw 'Invaild date!'
         }
         
         if(userData.getUser(userId) == null){
@@ -44,35 +40,6 @@ module.exports = {
         userId = ObjectId(userId);
         spaceId = ObjectId(spaceId);
 
-        if (date.length !== 10 || date[2] !== '/' || date[5] !== '/') {
-            throw "date is not vaild!"
-        }
-        const month = Number(date.substring(0,2));
-        const day = Number(date.substring(3,5));
-        const year = Number(date.substring(6)); 
-        if(month < 1 || month > 12){
-            throw "The month parameter is invalid!"
-        }
-        if( month === 1,3,5,7,8,10,12){
-            if(day < 1 || day > 31){
-                throw "The day parameter is invalid!"
-            }
-        }
-        if( month === 2){
-            if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
-                if(day < 1 || day > 29){
-                    throw "The day parameter is invalid!"
-                }
-            }
-            else if(day < 1 || day > 28){
-                throw "The day parameter is invalid!"
-            }
-        }
-        if( month === 4,6,9,11){
-            if(day < 1 || day > 30){
-                throw "The day parameter is invalid!"
-            }
-        }
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();
         let cmonth = (myDate.getMonth()+1).toString();
@@ -84,15 +51,12 @@ module.exports = {
             cday = "0" + cday
         }
         const currentDate = cmonth + '/' + cday + '/' + cyear;
-        if(date != currentDate){
-            throw "date is not vaild!"
-        }
 
         let newComment = {
             userId: userId, 
             spaceId: spaceId, 
             comment: comment,
-            date: date
+            date: currentDate
         };
 
         const commentCollection = await comments();
@@ -111,7 +75,6 @@ module.exports = {
             throw 'Invaild commentId!'
         }
         commentId = ObjectId(commentId);
-
         const commentCollection = await comments();
         const deletionInfo = await commentCollection.deleteOne({ _id: commentId});
         if (deletionInfo.deletedCount === 0){
@@ -139,7 +102,6 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
-
         userId = ObjectId(userId);
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'userId': { $eq: userId}}).toArray();
@@ -149,4 +111,35 @@ module.exports = {
         }
         return commentList; 
     },
+
+    async updateComment(id, comment) {
+        if (!verify.validString(id)){
+            throw 'Invaild id!'
+        }
+        if (!verify.validString(comment)){
+            throw 'Invaild comment111!'
+        }
+        let objId = ObjectId(id.trim());
+        var myDate = new Date();
+        let cyear = myDate.getFullYear().toString();
+        let cmonth = (myDate.getMonth()+1).toString();
+        let cday = myDate.getDate().toString();
+        if(cmonth.length ==1){
+            cmonth = "0" + cmonth
+        }
+        if(cday.length ==1){
+            cday = "0" + cday
+        }
+        const currentDate = cmonth + '/' + cday + '/' + cyear;
+        const commentCollection = await comments();
+        const updateComment = {
+            comment: comment,
+            date: currentDate
+        };
+        const updateInfo = await commentCollection.updateOne({ _id: objId }, {$set: updateComment});
+        if (updateInfo.modifiedCount === 0) {
+            throw "Error (updateComment): Failed to update comment in Database.";
+        }
+        return  await this.getCommentById(id);
+    }
 }

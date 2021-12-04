@@ -5,17 +5,14 @@ const commentData = data.comments;
 const verify = data.util;
 const xss = require('xss');
 
-router.post('/comment/add', async function(req, res) {
-    if(!req.session.AuthCookie)
-    {
+router.post('/creatComment/:id', async function(req, res){
+    if(!req.session.AuthCookie){
       res.status(401).redirect("/user/login")
-
     }
-    let errors = [];
-    let userId = xss(req.body.userId);
-    let spaceId = xss(req.body.spaceId);
-    let comment = xss(req.body.comment);
-    let date = xss(req.body.date);
+    errors = [];
+    const spaceId = req.params.id;
+    const userId = req.session._id;
+    const comment = xss(req.body.comment);
 
     if (!verify.validString(userId)){
         errors.push('Invaild userId!')
@@ -26,72 +23,37 @@ router.post('/comment/add', async function(req, res) {
     if (!verify.validString(comment)){
         errors.push('Invaild comment!')
     }
-    if (!verify.validString(date)){
-        errors.push('Invaild date!')
-    }
-    if (date.length !== 10 || date[2] !== '/' || date[5] !== '/') {
-        errors.push("date is not vaild!")
-    }
-    const month = Number(date.substring(0,2));
-    const day = Number(date.substring(3,5));
-    const year = Number(date.substring(6)); 
-    if(month < 1 || month > 12){
-        errors.push("The month parameter is invalid!")
-    }
-    if( month === 1,3,5,7,8,10,12){
-        if(day < 1 || day > 31){
-            errors.push("The day parameter is invalid!")
-        }
-    }
-    if( month === 2){
-        if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
-            if(day < 1 || day > 29){
-                errors.push("The day parameter is invalid!")
-            }
-        }
-        else if(day < 1 || day > 28){
-            errors.push("The day parameter is invalid!")
-        }
-    }
-    if( month === 4,6,9,11){
-        if(day < 1 || day > 30){
-            errors.push("The day parameter is invalid!")
-        }
-    }
-    var myDate = new Date();
-    let cyear = myDate.getFullYear().toString();
-    let cmonth = (myDate.getMonth()+1).toString();
-    let cday = myDate.getDate().toString();
-    if(cmonth.length ==1){
-        cmonth = "0" + cmonth
-    }
-    if(cday.length ==1){
-        cday = "0" + cday
-    }
-    const currentDate = cmonth + '/' + cday + '/' + cyear;
-    if(date != currentDate){
-        errors.push("date is not vaild!")
-    }
     if (errors.length > 0) {
         return res.status(400).json(errors);
     }
     try {
-        const newComment = await commentData.createComment(userId, spaceId, comment, date);
+        //let userDetails = await userData.getUser(req.session._id);
+        const newComment = await commentData.createComment(userId, spaceId, comment);
         return res.json(newComment);
     } catch(e) {
         res.status(500).json({error: e});
     }
 });
+router.get('/creatComment/:id', async function(req, res){
+    if(!req.session.email){
+      res.status(400).redirect('/user/login');
+      return;
+    }
+    try{
+        id = req.params.id
+        res.render('comments/creat', {pageTitle: 'creatComment',spaceId: id});
+    }catch(e){
+        
+    }
+});
 
-router.get("/comment/:id",async function(req,res) {
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/user/login');
-    return;
-  }
-
+router.get("/:id",async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
     let errors = [];
-    if(!req.params.id.trim()) {
+    if(!req.params.id.trim()){
         res.status(400).json({ error: 'You must Supply an Id' });
         return;
     }
@@ -110,13 +72,11 @@ router.get("/comment/:id",async function(req,res) {
     }
 });
 
-
-router.get("/:id",async function(req,res) {
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/user/login');
-    return;
-  }
+router.get("/space/:id",async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
     let spaceId = xss(req.params.id);
 
     let errors = [];
@@ -135,8 +95,7 @@ router.get("/:id",async function(req,res) {
     }
 });
 
-
-router.get("/user/:id",async function(req,res) {
+router.get("/user/:id",async function(req,res){
     if(!req.session.email){
         res.status(400).redirect('/user/login');
         return;
@@ -146,7 +105,7 @@ router.get("/user/:id",async function(req,res) {
     if (!verify.validString(userId)){
         errors.push('Invaild userId!')
     }
-    if(errors.length > 0) {
+    if(errors.length > 0){
         return res.status(400).json(errors);
     }
     try{
@@ -158,11 +117,10 @@ router.get("/user/:id",async function(req,res) {
     }
 });
 
-router.post('/delete/:id',async function(req,res) {
+router.post('/delete/:id',async function(req,res){
     if(!req.session.email){
         res.status(400).redirect('/user/login');
         return;
-
     }
     if(!req.params.id) {
         res.status(400).json({ error:'You must Supply an ID!' });
@@ -176,16 +134,52 @@ router.post('/delete/:id',async function(req,res) {
     if(errors.length > 0) {
         return res.status(400).json(errors);
     }
-    try {
+    try{
         let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
             res.status(200).json(deleteComment);
-        }else {
+        }else{
             return res.status(404).send();
         }
     } 
     catch(e){
         res.status(500).json({ error: e });
+    }
+});
+
+router.post('/edit/:id', async function(req, res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    const id = req.params.id;
+    const comment = xss(req.body.comment);
+    errors = [];
+    console.log(comment)
+    if(!verify.validString(comment)){
+        throw 'Invaild comment22!'
+    }
+    if(errors.length > 0){
+        return res.status(400).json(errors);
+    }
+    try {
+        const newComment = await commentData.updateComment(id, comment);
+        return res.json(newComment);
+    } catch(e) {
+        res.status(500).json({error: e});
+    }
+});
+  
+router.get('/edit/:id', async function(req, res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    try{
+        id = req.params.id
+        res.render('comments/edit', {pageTitle: 'editComment',commentId: id});
+    }catch(e){
+ 
     }
 });
 

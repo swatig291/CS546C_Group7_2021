@@ -7,7 +7,7 @@ const reviewData = data.reviews;
 
 
 //get all reviews by Space ID
-router.get("/:id", async function (req, res) {
+router.get("/spaceId/:id", async function (req, res) {
     if(!req.session.email)
     {
       res.status(400).redirect('/login');
@@ -37,7 +37,7 @@ router.get("/:id", async function (req, res) {
 });
 
 //get all reviews by User ID
-router.get("/:id", async function (req, res) {
+router.get("/userId/:id", async function (req, res) {
     try {
         const reviewInfo = await reviewData.getAllReviewsByUserId(req.params.id); // 
         // console.log(req.params.id)
@@ -80,12 +80,13 @@ router.get("/", async function (req, res) {
     }
 });
 
-router.post("/", async (req, res) => { // add
+router.post("/:id", async (req, res) => { // add
     if(!req.session.email)
   {
     res.status(400).redirect('/login');
     return;
   }
+  let idInfo = req.params.id;
     let reviewInfo = req.body;
     if (!reviewInfo) {
         res.status(400).json({ error: 'You must provide data to create a review' });
@@ -112,15 +113,43 @@ router.post("/", async (req, res) => { // add
         return;
     }
     try {
+
+        let newReview = {};
+        newReview.spaceId = reviewInfo.spaceId;
+        newReview.userId = reviewInfo.userId;
+        newReview.content = reviewInfo.content;
+        newReview.rating = reviewInfo.rating;
+        newReview.datetime = reviewInfo.datetime;
+      
+            const spaceById = await reviewData.addReview( newReview.spaceId, newReview.userId, newReview.content, newReview.rating, newReview.datetime);
+            const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(idInfo);
+            let  averageRating=0 ;
+            for(var i=0;i<allReviewsAtThisspace.length;i++){
+                    averageRating+=allReviewsAtThisspace[i].rating;
+                    
+            }
+          
+            averageRating = averageRating/allReviewsAtThisspace.length;
+    
+            spaceById.overallRating = averageRating;
+            const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
+    
+            // async updateSpace(id,spaceName, address, spaceDim,price,hostId,description) {
+           // console.log(allReviewsAtThisspace.length);
+            //console.log(averageRating);//
+            // res.json(spaceById);
+
+
         // const newreview = await reviewData.addReview(title, user, space, content);
-        const newreview = await reviewData.addReview( spaceId, userId, content, rating, datetime);
-        res.status(200).send(newreview)
+        // const newreview = await reviewData.addReview( spaceId, userId, content, rating, datetime);
+        res.status(200).send(spaceById)
     } catch (e) {
         res.status(500).json({ error: e })
     }
 });
 
 router.post('/remove/:id', async (req, res) => {
+    
     if(!req.session.email)
     {
       res.status(400).redirect('/login');
@@ -132,9 +161,32 @@ router.post('/remove/:id', async (req, res) => {
     }
 
     try {
-        let deletereview = await reviewData.removeReview(req.params.id);
-        if (deletereview) {
-            res.status(200).json(deletereview);
+
+        const spaceById = await reviewData.removeReview(req.params.id);
+        const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(spaceById.resId);
+        const objToBeUp = await spacesData.get(spaceById.resId);
+        //console.log("deleted res");
+        //console.log(objToBeUp);
+
+        let  averageRating=0 ;
+        for(var i=0;i<allReviewsAtThisspace.length;i++){
+                averageRating+=allReviewsAtThisspace[i].rating;
+                
+        }
+        averageRating = averageRating/allReviewsAtThisspace.length;
+        //console.log("average rating after delete");
+        //console.log(averageRating);
+        objToBeUp.overallRating = averageRating;
+        const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
+
+        let resObj = {
+            reviewId: spaceById.reviewId,
+            deleted: true,
+           
+        };
+
+        if (resObj) {
+            res.status(200).json(resObj);
             // return res.redirect("/spaces/" + req.params.spaceId);
         } else {
             return res.status(404).send();

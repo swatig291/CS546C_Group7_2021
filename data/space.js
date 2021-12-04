@@ -18,7 +18,7 @@ let { ObjectId } = require('mongodb');
 //                             },
 //             "price": "50",
 //             "hostId": "507f1f77bcf86cd799439011",
-//             "imagePath": "imagePath1"
+//             "description": "description"
 // }
 module.exports = {
     // Returns an array of all the Space in the database
@@ -44,7 +44,7 @@ module.exports = {
     },
 
    
-    async createSpace(spaceName, address, spaceDim,price,hostId,imagePath) {
+    async createSpace(spaceName, address, spaceDim,price,hostId,newDesc) {
         if (!verify.validString(spaceName))    throw 'Space name must be a valid string.';
 
         if (!verify.validString(address.streetAddress)) throw 'Street address must be a valid string.';
@@ -58,7 +58,7 @@ module.exports = {
 
         if (!verify.validNumber(price)) throw 'Length must be a number';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
-        if(!verify.validString(imagePath)) throw 'Image Path must be valid string';
+        if(!verify.validString(newDesc)) throw 'Image Path must be valid string';
 
         const spaceCollection = await spaces();
         //check for duplicate adress before adding 
@@ -83,7 +83,7 @@ module.exports = {
             spaceVolume: spaceDim.length * spaceDim.width * spaceDim.height,
             hostId: hostId.trim(),
             rating: 0,
-            imagePath: imagePath
+            description: newDesc
         };
         //Insert space into DB.
         const insertInfo = await spaceCollection.insertOne(newSpace);
@@ -93,7 +93,7 @@ module.exports = {
         return await this.getSpaceById(id);
     },
     //Update space details
-    async updateSpace(id,spaceName, address, spaceDim,price,hostId,imagePath) {
+    async updateSpace(id,spaceName, address, spaceDim,price,hostId,description) {
         if (!verify.validString(spaceName))    throw 'Space name must be a valid string.';
 
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
@@ -109,7 +109,7 @@ module.exports = {
 
         if (!verify.validNumber(price)) throw 'Length must be a number';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
-        if(!verify.validString(imagePath)) throw 'Image Path must be valid string';
+        if(!verify.validString(description)) throw 'Image Path must be valid string';
 
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);
@@ -133,7 +133,7 @@ module.exports = {
                     spaceVolume: spaceDim.length * spaceDim.width * spaceDim.height,
                     hostId: hostId.trim(),
                     rating: existingData.rating,
-                    imagePath: imagePath
+                    description: description
         };
         //check for existing data.
 
@@ -168,6 +168,18 @@ module.exports = {
         }
     
         return true;
-    }
+    },
+    async getSpaceSearch(search) {
+        if (!search) throw "Error (getSpaceSearch): Must provide search.";
+        if (typeof(search) !== "string") throw "Error (getSpaceSearch): Search must be a string.";
+        const spaceCollection = await spaces();
+        const query = new RegExp(search, "i");
+        const restaurantList = await spaceCollection.find({ $or: [ {'address.city': {$regex: query}}, {'address.state': {$regex: query}} ] }).toArray();
+        if(restaurantList !== null)
+        {
+            restaurantList.map(verify.convertId)
+        }
+        return restaurantList;
+    },
 
 }

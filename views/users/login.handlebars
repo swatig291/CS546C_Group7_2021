@@ -1,0 +1,24 @@
+
+{{#if hasError}}
+<h1 class="error">{{error}}.</h1>
+{{/if}}
+
+<form action="/user/login" method="POST" id="login-form">
+    <div>
+        <label>
+        Email: 
+        <input type="email" name="email" placeholder="Enter your email" class="full-width-input"/>
+        </label>
+    </div>
+    <div>
+        <label>
+        Password: 
+        <input name="password" placeholder="Enter your password" type="password" class="full-width-input"/>
+        </label>
+    </div>
+    <div>
+        <label><input type="submit" value="Login" class="submit"/></label>
+    </div>
+</form>
+
+<a href='/user/signup'>Need to register? Click here to signup</a>

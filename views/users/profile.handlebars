@@ -1,0 +1,111 @@
+
+{{#if hasError}}
+<h1 class="error">Some error has occured.</h1>
+{{/if}}
+
+<form action="/user/profile/firstName" method="POST" class="profile-form">
+
+{{#if userFirstNameModified}}
+<h1 class="modification">User's First Name is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your First Name:
+        <h4>{{firstName}}</h4> 
+        <input type="text" name="firstName" placeholder="New First Name" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update First Name" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/lastName" method="POST" class="profile-form">
+
+{{#if userLastNameModified}}
+<h1 class="modification">User's Last Name is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Last Name: 
+        <h4>{{lastName}}</h4>
+        <input type="text" name="lastName" placeholder="New Last Name" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Last Name" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/email" method="POST" class="profile-form">
+
+{{#if userEmailModified}}
+<h1 class="modification">User's Email is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Email: 
+        <h4>{{email}}</h4>
+        <input type="email" name="email" placeholder="New Email" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Email" class="submit"/></label>
+    </div>
+</form>
+
+<form action="/user/profile/phoneNumber" method="POST" class="profile-form">
+
+{{#if userPhoneNumberModified}}
+<h1 class="modification">User's Phone Number is successfully changed.</h1>
+{{/if}}
+
+    <div>
+        <label>
+        Your Phone Number: 
+        <h4>{{phoneNumber}}</h4>
+        <input type="text" name="phoneNumber" placeholder="New Phone Number" class="full-width-input"/>
+        </label>
+    </div>
+
+    <div>
+        <label><input type="submit" value="Update Phone Number" class="submit"/></label>
+    </div>
+</form>
+
+<div id='resetting-password'>
+    <p>Need to reset your password?</p>
+    <input id="passwordReset" type="button" value="Reset" > 
+</div>
+
+<div id='passwordDiv' hidden>
+    <form id='password-form' action='POST'>
+        <label>
+            {{#if userPasswordModified}}
+                <h1 class="modification">User's Password is successfully changed.</h1>
+            {{/if}}
+            <div>
+                Your Old Password:
+                <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
+            </div>
+            <div>
+                Your New Password:
+                <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
+            </div>
+            <div>
+                Confirm Your New Password
+                <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
+            </div>
+        </label>
+    <div>
+        <label><input type="button" value="Update Password" id="submitPassword"/></label>
+    </div>
+    </form>
+</div>
+

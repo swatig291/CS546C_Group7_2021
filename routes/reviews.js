@@ -4,79 +4,206 @@ const data = require("../data");
 const reviewData = data.reviews;
 
 
-router.get("/:id",async function(req,res) {
-    try{
-        const reviewInfo = await reviewData.getReviewById(req.params.id); //
+
+
+//get all reviews by Space ID
+router.get("/spaceId/:id", async function (req, res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
+    try {
+        const reviewInfo = await reviewData.getAllReviewsBySpaceId(req.params.id); // 
         // console.log(req.params.id)
         res.json(reviewInfo);
     }
-    catch(e){
-        res.status(404).json({message:"'review' item not found!"});
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
     }
 });
 
-router.get("/",async function(req,res) {
-    try{
-        const reviewList = await reviewData.getAllReviewsOfspace();
+
+//get review by review ID
+router.get("/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
+//get all reviews by User ID
+router.get("/userId/:id", async function (req, res) {
+    try {
+        const reviewInfo = await reviewData.getAllReviewsByUserId(req.params.id); // 
+        // console.log(req.params.id)
+        res.json(reviewInfo);
+    }
+    catch (e) {
+        res.status(404).json({ message: "'review' item not found!" });
+    }
+});
+
+
+//get reviews by space ID
+// router.get('/space/:id', async (req, res) => {
+//     let idInfo = req.params.id;
+//     if (!idInfo) {
+//         res.status(400).json({ error: 'You must provide id to get a space' });
+//         return;
+//     }
+//     try {
+//         const spaceById = await reviewData.getAllReviewsBySpaceId(idInfo);
+//         res.json(spaceById);
+//     } catch (error) {
+//         // console.log(error);
+//         res.status(404).json({ error: 'review not found' });
+//     }
+// });
+
+router.get("/", async function (req, res) {
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
+    try {
+        const reviewList = await reviewData.getAllReviews();
         res.json(reviewList);
     }
-    catch(e){
+    catch (e) {
         res.status(500).send();
     }
 });
 
-router.post("/", async(req, res) => { // add
+router.post("/:id", async (req, res) => { // add
+    if(!req.session.email)
+  {
+    res.status(400).redirect('/login');
+    return;
+  }
+  let idInfo = req.params.id;
     let reviewInfo = req.body;
     if (!reviewInfo) {
         res.status(400).json({ error: 'You must provide data to create a review' });
         return;
-      }
+    }
 
-    const {reviewerId, spaceId, reviewText} = reviewInfo;
-
-
-    if (!reviewerId || typeof reviewerId !== 'string') {
-        res.status(400).json({ error: 'You must provide a reviewerId(String) for the review' });
+    // const {title, user, space, content} = reviewInfo;
+    const { spaceId, userId, content, rating, datetime } = reviewInfo;
+    if (!spaceId || typeof spaceId !== 'string') {
+        res.status(400).json({ error: 'You must provide a spaceId for the review' });
         return;
     }
-    if (!spaceId) {
-        res.status(400).json({ error: 'You must provide spaceId for the review' });
+    if (!userId) {
+        res.status(400).json({ error: 'You must provide user id for the review' });
         return;
     }
   
-    if (! reviewText || typeof  reviewText !== 'string') {
+    if (!content || typeof content !== 'string') {
         res.status(400).json({ error: 'review content can not be empty.' });
+        return;
+    }
+    if (!rating || typeof rating !== 'number' ||rating > 5 || rating < 1) {
+        res.status(400).json({ error: 'You must provide space review rating,and it must be a integer number between 1-5 ' });
+        return;
+    }
+    try {
+
+        let newReview = {};
+        newReview.spaceId = reviewInfo.spaceId;
+        newReview.userId = reviewInfo.userId;
+        newReview.content = reviewInfo.content;
+        newReview.rating = reviewInfo.rating;
+        newReview.datetime = reviewInfo.datetime;
+      
+            const spaceById = await reviewData.addReview( newReview.spaceId, newReview.userId, newReview.content, newReview.rating, newReview.datetime);
+            const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(idInfo);
+            let  averageRating=0 ;
+            for(var i=0;i<allReviewsAtThisspace.length;i++){
+                    averageRating+=allReviewsAtThisspace[i].rating;
+                    
+            }
+          
+            averageRating = averageRating/allReviewsAtThisspace.length;
+    
+            spaceById.overallRating = averageRating;
+            const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
+    
+            // async updateSpace(id,spaceName, address, spaceDim,price,hostId,description) {
+           // console.log(allReviewsAtThisspace.length);
+            //console.log(averageRating);//
+            // res.json(spaceById);
+
+
+        // const newreview = await reviewData.addReview(title, user, space, content);
+        // const newreview = await reviewData.addReview( spaceId, userId, content, rating, datetime);
+        res.status(200).send(spaceById)
+    } catch (e) {
+        res.status(500).json({ error: e })
+    }
+});
+
+router.post('/remove/:id', async (req, res) => {
+    
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/login');
+      return;
+    }
+    if (!req.params.id) {
+        res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;
     }
 
     try {
-        const newreview = await reviewData.createReview(reviewerId, spaceId, reviewText);
-        res.status(200).send(newreview)
-    }catch(e){
-        res.status(500).json({error:e})
+
+        const spaceById = await reviewData.removeReview(req.params.id);
+        const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(spaceById.resId);
+        const objToBeUp = await spacesData.get(spaceById.resId);
+        //console.log("deleted res");
+        //console.log(objToBeUp);
+
+        let  averageRating=0 ;
+        for(var i=0;i<allReviewsAtThisspace.length;i++){
+                averageRating+=allReviewsAtThisspace[i].rating;
+                
+        }
+        averageRating = averageRating/allReviewsAtThisspace.length;
+        //console.log("average rating after delete");
+        //console.log(averageRating);
+        objToBeUp.overallRating = averageRating;
+        const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
+
+        let resObj = {
+            reviewId: spaceById.reviewId,
+            deleted: true,
+           
+        };
+
+        if (resObj) {
+            res.status(200).json(resObj);
+            // return res.redirect("/spaces/" + req.params.spaceId);
+        } else {
+            return res.status(404).send();
+        }
+        //res.json({deleted: true, data: toBeDeletedReview});
+    } catch (e) {
+        res.status(500).json({ error: e });
     }
+
 });
 
-router.delete("/:id", async (req, res) => {
-    try {
-      await reviewData.getreview(req.params.id);
-    } catch (e) {
-      res.status(404).json({ error: "No review found" });
-    }
-    try {
-      const msg = await reviewData.remove(req.params.id);
-      res.status(200).send(msg)
-    } catch (e) {
-      res.status(500).json({ error: e });
-    }
-  });
-
-  // this function should be added into "data/posts.js"
-  async function getListOfreviewsInPost(postId){
+// this function should be added into "data/posts.js"
+async function getListOfreviewsInPost(postId) {
     const thisPost = await post.getPost(postId);
     const listOfreviews = thisPost.reviews; // an array of IDs
     return listOfreviews;
-  }
+}
 
 
 module.exports = router;

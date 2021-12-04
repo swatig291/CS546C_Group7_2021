@@ -85,38 +85,38 @@ function getStars(rating) {
   $('#picTips').hide();
 
   // when user choose photos
-  file.onchange = function () {
-      for (let i = 0; i < this.files.length; i++) {
-          formData.append('photo' + i, this.files[i]); // add photos' path to formData
-          fileCount ++;
-      }
-      if(fileCount == 1){
-          $('#picTips').text('You have chosen '+fileCount+' photo');
-          $('#picTips').show();
-      } else if(fileCount > 1 && fileCount <=4){
-          $('#picTips').text('You have chosen '+fileCount+' photos');
-          $('#picTips').show();
-      } else {
-          $('#picTips').text('You can only upload 4 photos at most');
-          $('#picTips').show();
-      }
-  };
+//   file.onchange = function () {
+//       for (let i = 0; i < this.files.length; i++) {
+//           formData.append('photo' + i, this.files[i]); // add photos' path to formData
+//           fileCount ++;
+//       }
+//       if(fileCount == 1){
+//           $('#picTips').text('You have chosen '+fileCount+' photo');
+//           $('#picTips').show();
+//       } else if(fileCount > 1 && fileCount <=4){
+//           $('#picTips').text('You have chosen '+fileCount+' photos');
+//           $('#picTips').show();
+//       } else {
+//           $('#picTips').text('You can only upload 4 photos at most');
+//           $('#picTips').show();
+//       }
+//   };
 
   $('#booking').click( function(){
     var form = document.getElementById('bookingForm');
       let checkInDate =  $('#check-in').val();
       let checkOutDate =  $('#check-out').val();
-      let spaceId = $('#spaceId').val();
-      let pricePerDay = $('#price').val();
+      let spaceId = $('#spaceId').text();
+      let pricePerDay = $('#pricePerNight').text();
       var requestConfig = {
             method: 'POST',
             url: '/bookings/',
             contentType: 'application/json',
             data: JSON.stringify({
-                checkIn: checkInDate,
-                checkOut: checkOutDate,
+                startDate: checkInDate,
+                endDate: checkOutDate,
                 spaceId: spaceId,
-                pricePerDay: pricePerDay
+                totalPrice: pricePerMonth
             })           
     };
       $.ajax(requestConfig).then(function(responseMessage) {

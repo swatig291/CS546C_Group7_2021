@@ -57,6 +57,11 @@ router.get("/:id", async function (req, res) {
 // });
 
 router.get("/", async function (req, res) {
+    if(!req.session.AuthCookie)
+    {
+      res.status(401).redirect("/user/login")
+
+    }
     try {
         const bookingList = await bookingData.getAllbookings();
         res.json(bookingList);
@@ -75,7 +80,8 @@ router.post("/", async (req, res) => {
     }
 
     // const {title, user, space, startDate} = bookingInfo;
-    const { spaceId, userId, startDate, endDate, totalPrice } = bookingInfo;
+    const { spaceId, startDate, endDate, totalPrice } = bookingInfo;
+    let userId = session.userId;
     if (!spaceId || typeof spaceId !== 'string') {
         res.status(400).json({ error: 'You must provide a spaceId for the booking' });
         return;

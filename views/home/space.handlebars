@@ -16,15 +16,16 @@
                 {{/each}}
               </div>
               <h2>{{spaceDetails.spaceName}}</h2>
-               <div >{{spaceDetails.description}}</div>
-               <div id= "spaceId" hidden>{{spaceDetails.id}}</div>
+               <p >{{spaceDetails.description}}</p>
+               <p id= "spaceId" hidden>{{spaceDetails._id}}</p>
                <h4 id="price"> $x{{spaceDetails.price}}/Night</h4>
+               <h4 id="pricePerMonth" hidden> {{spaceDetails.price}}</h4>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
           </div>
           <form action="post" id="bookingForm">
             <div class="col-sm-4">
                 <div class="row">
-                    <h2>Booking</h2>
+                    <h2>Booking</h2>                    
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <input class="form-control" type="date" id="check-in"required>
@@ -33,11 +34,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input class="form-control" type="check-out" required>
+                                        <input class="form-control" type="date" id="check-out" required>
                                         <span class="form-label">Check out</span>
                                     </div>
                                 </div>
-                         <button type="button" id="booking" value="submit"></button>
+                         <button type="button" id="booking" value="submit">Book</button>
                 </div>
             </div>
             </form>

@@ -40,21 +40,6 @@ router.get("/userId/:id", async function (req, res) {
     }
 });
 
-//get bookings by space ID
-// router.get('/space/:id', async (req, res) => {
-//     let idInfo = req.params.id;
-//     if (!idInfo) {
-//         res.status(400).json({ error: 'You must provide id to get a space' });
-//         return;
-//     }
-//     try {
-//         const spaceById = await bookingData.getAllbookingsBySpaceId(idInfo);
-//         res.json(spaceById);
-//     } catch (error) {
-//         // console.log(error);
-//         res.status(404).json({ error: 'booking not found' });
-//     }
-// });
 
 router.get("/", async function (req, res) {
     if(!req.session.AuthCookie)
@@ -74,27 +59,25 @@ router.get("/", async function (req, res) {
 // add
 router.post("/:id", async (req, res) => {
     let bookingInfo = req.body;
-    if (!bookingInfo) {
-        res.status(400).json({ error: 'You must provide data to create a booking' });
-        return;
+    let errors = [];
+    let startDate = xss(req.body.startDate);
+    let endDate = xss(req.body.emdDate);
+    let spaceId = xss(req.body.spaceId);
+    let pricePerMonth = xss(req.body.pricePerMonth)
+
+    if (!verify.validDate(startDate)) errors.push('select proper start Date');
+    if (!verify.validDate(endDate)) errors.push('select proper end Date');
+    if (!verify.validString(spaceId))  errors.push('Host id must be a valid string.');
+    if (!verify.validNumber(pricePerMonth))  errors.push('Host id must be a valid string.');
+    
+
+    if (errors.length > 0) {
+        return res.status(400).json(errors);
     }
 
     // const {title, user, space, startDate} = bookingInfo;
-    const { spaceId, startDate, endDate, totalPrice } = bookingInfo;
     let userId = session.userId;
-    if (!spaceId || typeof spaceId !== 'string') {
-        res.status(400).json({ error: 'You must provide a spaceId for the booking' });
-        return;
-    }
-    if (!userId) {
-        res.status(400).json({ error: 'You must provide user id for the booking' });
-        return;
-    }
-
-    if (!startDate || typeof startDate !== 'string') {
-        res.status(400).json({ error: 'booking startDate can not be empty.' });
-        return;
-    }
+    userId = xss(userId);
   
     try {
         // const newbooking = await bookingData.addbooking(title, user, space, startDate);

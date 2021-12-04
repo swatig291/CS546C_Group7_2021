@@ -25,6 +25,7 @@
     "express-session": "^1.17.2",
     "formidable": "^1.2.1",
     "handlebars": "^4.7.7",
+    "moment": "^2.29.1",
     "mongodb": "^4.2.0",
     "xss": "^1.0.10"
   }

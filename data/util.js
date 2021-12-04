@@ -58,13 +58,19 @@ function validNumber(num)
     if (isNaN(num) || !num || (typeof num != 'number') || !Number.isInteger(num)) return false;
     return true;
 }
-
+function validDate(date)
+{
+    return moment(date, 'MM/DD/YYYY',true).isValid();
+}
 function validLink(link) {
     if (!validString(link)) return false;
     const re = /^https:\/\/www\.yelp\.com\/biz\/((\w+)-)*\w+/;
     return re.test(String(link).toLowerCase());
 }
-
+function validId(id)
+{
+    return (!/[0-9A-Fa-f]{24}/.test(req.params.id)) 
+}
 function generateList(n) {
     let arr = [];
     for (let i = 0; i < n; i++) {
@@ -84,5 +90,6 @@ module.exports = {
     validRating,
     validMetrics,
     validLink,
-    generateList
+    generateList,
+    validDate
 };

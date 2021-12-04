@@ -18,24 +18,29 @@
                <h2>{{spaceDetails.spaceName}}</h2>
                <p><div >{{spaceDetails.description}}</div></p>
                <h4> $x{{spaceDetails.price}}/Night</h4>
+               <p id="pricePerMonth" hidden> {{spaceDetails.price}}</p>
+               <p id="spaceId" hidden>{{spaceDetails._id}}</p>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
             </div>
 
             <div class="col-sm-4">
                 <div class="row">
-                    <h2>Booking</h2>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="date" required>
-                                <span class="form-label">Check In</span>
+                    <form action="post" id="bookingform">
+                        <h2>Booking</h2>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input class="form-control" type="date" id="check-in" required>
+                                    <span class="form-label">Check In</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="date" required>
-                                <span class="form-label">Check out</span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input class="form-control" type="date" id="check-out" mrequired>
+                                    <span class="form-label">Check out</span>
+                                </div>
                             </div>
-                        </div>
+                            <input id="booking" name="submit" type="button" class="btn AllButton" value="Submit" >
+                    </form>
                 </div>
             </div>
 
@@ -46,6 +51,7 @@
                         <h2>{{this.comment}}</h2> 
                         <h4>Posted by: {{this.userId}}</h4>
                         <h4> at {{this.date}}</h4>
+
                         <div>
                             <a href="/comments/edit/{{this._id}}">
                                 <button type="submit" class="btn btn-primary" name="editButton" id="editButton">edit</button>
@@ -65,40 +71,10 @@
         </div>
     </div>
 </div>
-<h2>
+
+               <h2>
     <a href= "/comments/creatComment/{{spaceDetails._id}}">
         <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
     </a>
 </h2>
-                {{/each}}
-              </div>
-              <h2>{{spaceDetails.spaceName}}</h2>
-               <p >{{spaceDetails.description}}</p>
-               <p id= "spaceId" hidden>{{spaceDetails._id}}</p>
-               <h4 id="price"> $x{{spaceDetails.price}}/Night</h4>
-               <h4 id="pricePerMonth" hidden> {{spaceDetails.price}}</h4>
-               <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
-          </div>
-          <form action="post" id="bookingForm">
-            <div class="col-sm-4">
-                <div class="row">
-                    <h2>Booking</h2>                    
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input class="form-control" type="date" id="check-in"required>
-                                        <span class="form-label">Check In</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input class="form-control" type="date" id="check-out" required>
-                                        <span class="form-label">Check out</span>
-                                    </div>
-                                </div>
-                         <button type="button" id="booking" value="submit">Book</button>
-                </div>
-            </div>
-            </form>
-      </div>
-  </div>
-</div>
+     

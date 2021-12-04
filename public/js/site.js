@@ -107,16 +107,16 @@ function getStars(rating) {
       let checkInDate =  $('#check-in').val();
       let checkOutDate =  $('#check-out').val();
       let spaceId = $('#spaceId').text();
-      let pricePerDay = $('#pricePerNight').text();
+      let pricePerMonth = $('#pricePerMonth').text();
       var requestConfig = {
             method: 'POST',
-            url: '/bookings/',
+            url: '/bookings/'+ spaceId,
             contentType: 'application/json',
             data: JSON.stringify({
                 startDate: checkInDate,
                 endDate: checkOutDate,
                 spaceId: spaceId,
-                totalPrice: pricePerMonth
+                pricePerMonth: pricePerMonth
             })           
     };
       $.ajax(requestConfig).then(function(responseMessage) {

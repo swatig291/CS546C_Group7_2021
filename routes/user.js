@@ -53,6 +53,15 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+router.get('/logout', async (req, res) => {
+    try{
+        req.session.destroy();
+        res.render('users/logout', {pageTitle: 'logoutPage'});
+    }catch(e){
+        res.status(500).render('users/logout', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
+    }
+})
+
 router.get('/profile', async (req, res) => {
     try{
         let userDetails = await userData.getUser(req.session._id);

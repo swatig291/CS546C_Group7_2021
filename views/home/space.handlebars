@@ -1,42 +1,72 @@
 <div class="container-fluid bg-3">  
-  <div class="row">
+    <div class="row">
       {{!-- Iterate iamges in teh following div --}}
       {{!-- <div class="col-sm-4"></div> --}}
-      <div class="row">
-          <div class="col-sm-8">
-              <div class="row">
-                {{#each spaceDetails.photoArray}}
-                <div class="col-sm-6">
-                    <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
-                    <br/>
-                       <br/>
-                          <br/>
-                             <br/>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="row">
+                    {{#each spaceDetails.photoArray}}
+                        <div class="col-sm-6">
+                            <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    {{/each}}
                 </div>
-                {{/each}}
-              </div>
-              <h2>{{spaceDetails.spaceName}}</h2>
+               <h2>{{spaceDetails.spaceName}}</h2>
                <p><div >{{spaceDetails.description}}</div></p>
                <h4> $x{{spaceDetails.price}}/Night</h4>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
-          </div>
-          <div class="col-sm-4">
-             <div class="row">
-                 <h2>Booking</h2>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="date" required>
-                                    <span class="form-label">Check In</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="date" required>
-                                    <span class="form-label">Check out</span>
-                                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="row">
+                    <h2>Booking</h2>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" type="date" required>
+                                <span class="form-label">Check In</span>
                             </div>
                         </div>
-          </div>
-      </div>
-  </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" type="date" required>
+                                <span class="form-label">Check out</span>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="row">
+                    <h2>Comments:</h2>
+                    {{#each commentList}}
+                        <h2>{{this.comment}}</h2> 
+                        <h4>Posted by: {{this.userId}}</h4>
+                        <h4> at {{this.date}}</h4>
+                        <div>
+                            <a href="/comments/edit/{{this._id}}">
+                                <button type="submit" class="btn btn-primary" name="editButton" id="editButton">edit</button>
+                            </a>     
+                        </div>
+                        <div>
+                            <form action="/comments/delete/{{this._id}}" method="POST" id="delete">
+                                <div id="comment-delete-button">
+                                    <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    {{/each}}
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<h2>
+    <a href= "/comments/creatComment/{{spaceDetails._id}}">
+        <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
+    </a>
+</h2>

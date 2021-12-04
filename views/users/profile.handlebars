@@ -1,10 +1,6 @@
 
-{{#if userModified}}
-<h1 class="modification">User Profile is successfully changed.</h1>
-{{/if}}
-
 {{#if hasError}}
-<h1 class="error">{{error}}.</h1>
+<h1 class="error">Some error has occured.</h1>
 {{/if}}
 
 <form action="/user/profile/firstName" method="POST" class="profile-form">
@@ -17,7 +13,7 @@
         <label>
         Your First Name:
         <h4>{{firstName}}</h4> 
-        <input type="text" name="firstName" placeholder="Enter your new First Name" class="full-width-input"/>
+        <input type="text" name="firstName" placeholder="New First Name" class="full-width-input"/>
         </label>
     </div>
 
@@ -36,7 +32,7 @@
         <label>
         Your Last Name: 
         <h4>{{lastName}}</h4>
-        <input type="text" name="lastName" placeholder="Enter your new Last Name" class="full-width-input"/>
+        <input type="text" name="lastName" placeholder="New Last Name" class="full-width-input"/>
         </label>
     </div>
 
@@ -55,7 +51,7 @@
         <label>
         Your Email: 
         <h4>{{email}}</h4>
-        <input type="email" name="email" placeholder="Enter your new Email" class="full-width-input"/>
+        <input type="email" name="email" placeholder="New Email" class="full-width-input"/>
         </label>
     </div>
 
@@ -64,7 +60,7 @@
     </div>
 </form>
 
-<form action="/user/profile/phoneNumber" method="POST" class="profile-form"></form>
+<form action="/user/profile/phoneNumber" method="POST" class="profile-form">
 
 {{#if userPhoneNumberModified}}
 <h1 class="modification">User's Phone Number is successfully changed.</h1>
@@ -74,7 +70,7 @@
         <label>
         Your Phone Number: 
         <h4>{{phoneNumber}}</h4>
-        <input type="text" name="phoneNumber" placeholder="Enter your new Phone Number" class="full-width-input"/>
+        <input type="text" name="phoneNumber" placeholder="New Phone Number" class="full-width-input"/>
         </label>
     </div>
 
@@ -83,4 +79,33 @@
     </div>
 </form>
 
-<a href='*'>Need to reset your Password? Click here</a>
+<div id='resetting-password'>
+    <p>Need to reset your password?</p>
+    <input id="passwordReset" type="button" value="Reset" > 
+</div>
+
+<div id='passwordDiv' hidden>
+    <form id='password-form' action='POST'>
+        <label>
+            {{#if userPasswordModified}}
+                <h1 class="modification">User's Password is successfully changed.</h1>
+            {{/if}}
+            <div>
+                Your Old Password:
+                <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
+            </div>
+            <div>
+                Your New Password:
+                <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
+            </div>
+            <div>
+                Confirm Your New Password
+                <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
+            </div>
+        </label>
+    <div>
+        <label><input type="button" value="Update Password" id="submitPassword"/></label>
+    </div>
+    </form>
+</div>
+

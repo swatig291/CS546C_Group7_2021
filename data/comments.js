@@ -92,6 +92,7 @@ module.exports = {
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
         
+        
         for(i = 0; i < commentList.lenght; i++) {
             commentList[i]._id = commentList[i]._id.toString();
         }

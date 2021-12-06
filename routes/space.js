@@ -3,11 +3,13 @@ const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
 const commentData = data.comments;
+const bookingData = data.bookings;
 const verify = data.util;
 const xss = require('xss');
 const path = require("path");
 const formidable = require('formidable');
-const fs = require('fs')
+const fs = require('fs');
+const { errors } = require('formidable');
 
 router.post('/add', async (req, res) => {
   if(!req.session.email)
@@ -261,11 +263,37 @@ router.get('/:id',async(req,res) =>{
 		res.status(400).json({ error: 'You must Supply an ID to search' });
 		return;
 	}
+  let errors = [];
     try{
       let spaceDetails = await spaceData.getSpaceById(req.params.id);
        if(spaceDetails !== null){
         //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
-        let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
+        let commentList;
+        try{
+          commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
+        }
+        catch(e)
+        {
+          errors.push('Error while fecthing comments');
+        }
+       
+        var bookings = new Array();
+        try
+        { 
+          let bookingList = await bookingData.getAllbookingsBySpaceId(spaceDetails._id);
+           for(let i = 0; i < bookingList.length ; i++)
+           {
+             bookings[i] = new Array();
+             
+              bookings[i][0]= bookingList[i].startDate;
+              bookings[i][1]= bookingList[i].endDate;
+             
+           }
+        }
+        catch(e)
+        {
+          errors.push('There are no bookings for this space');
+        }
         
         let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
         spaceDetails['photoArray'] = [];
@@ -275,7 +303,7 @@ router.get('/:id',async(req,res) =>{
             spaceDetails.photoArray.push(imgPath);
             });
           }
-         res.status(200).render('home/space', { spaceDetails,commentList});          
+         res.status(200).render('home/space', { spaceDetails,commentList,booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();
       }
@@ -285,4 +313,40 @@ router.get('/:id',async(req,res) =>{
     }
 });
 
-    module.exports = router
+router.get('/filter/:filterBy',async(req,res) =>{
+  let errors = [];
+  if(!req.session.email)
+  {
+    res.status(400).redirect('/user/login');
+    return;
+  }
+  let param = xss(req.params.filterBy);
+  if (!verify.validString(param))  errors.push('Filter value must be valid string');
+  if (!param) {
+    errors.push('You must select a value to filter');
+		return;
+	}
+  if (errors.length > 0) {
+    return res.status(400).json(errors);
+  }
+    try{
+      var spaceList = await spaceData.filterSpace(param)
+      if(spaceList !== null)
+      {
+      spaceList.forEach(space => {
+        let folder  = path.join(__dirname, '../','public/','images/','uploads/',space._id);
+        space['photoArray'] = [];
+        if (fs.existsSync(folder)) {
+          fs.readdirSync(folder).forEach(file => {
+            let imgPath = 'http://localhost:3000/public/images/uploads/' + space._id + '/'+ file;
+            space.photoArray.push(imgPath);
+           });
+         }
+      })
+    }
+      res.status(200).render('home/landing', { spaceList});
+    }catch(e){
+
+    }
+});
+ module.exports = router

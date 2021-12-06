@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const data = require("../data");
+const xss = require('xss');
+const verify = data.util;
 const bookingData = data.bookings;
 
 //get booking by booking ID
@@ -58,27 +60,28 @@ router.get("/", async function (req, res) {
 
 // add
 router.post("/:id", async (req, res) => {
-    let bookingInfo = req.body;
     let errors = [];
     let startDate = xss(req.body.startDate);
-    let endDate = xss(req.body.emdDate);
+    let endDate = xss(req.body.endDate);
     let spaceId = xss(req.body.spaceId);
-    let pricePerMonth = xss(req.body.pricePerMonth)
+    let totalPrice = xss(req.body.totalPrice)
 
     if (!verify.validDate(startDate)) errors.push('select proper start Date');
     if (!verify.validDate(endDate)) errors.push('select proper end Date');
     if (!verify.validString(spaceId))  errors.push('Host id must be a valid string.');
-    if (!verify.validNumber(pricePerMonth))  errors.push('Host id must be a valid string.');
-    
+    if (!verify.validNumber(totalPrice))  errors.push('Host id must be a valid string.');
+    if (!verify.validId(spaceId))  errors.push('space id must be a valid.');
+    let userId = req.session.userId;
+    userId = xss(userId);
+    if (!verify.validString(userId))  errors.push('user id must be a valid.');
 
     if (errors.length > 0) {
         return res.status(400).json(errors);
     }
 
     // const {title, user, space, startDate} = bookingInfo;
-    let userId = session.userId;
-    userId = xss(userId);
-  
+    
+    
     try {
         // const newbooking = await bookingData.addbooking(title, user, space, startDate);
         const newbooking = await bookingData.addbooking(spaceId, userId, startDate,endDate,totalPrice);

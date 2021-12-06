@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
         let authentication = await userData.checkUser(email, password);
         if(authentication !== null) {
             req.session.email = email;
-            req.session._id = authentication._id.toString();
+            req.session.userId = authentication._id.toString();
             res.redirect('/');
         }
         else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});

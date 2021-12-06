@@ -18,7 +18,7 @@
                <h2>{{spaceDetails.spaceName}}</h2>
                <p><div >{{spaceDetails.description}}</div></p>
                <h4> $x{{spaceDetails.price}}/Night</h4>
-               <p id="pricePerMonth" hidden> {{spaceDetails.price}}</p>
+               <p id="pricePerDay" hidden> {{spaceDetails.price}}</p>
                <p id="spaceId" hidden>{{spaceDetails._id}}</p>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
             </div>
@@ -29,13 +29,13 @@
                         <h2>Booking</h2>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input class="form-control" type="date" id="check-in" required>
+                                    <input class="form-control dateDisplay" id = 'check-in' type="input"  placeholder="MM/DD/YYYY" autocomplete="false" required >
                                     <span class="form-label">Check In</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input class="form-control" type="date" id="check-out" mrequired>
+                                    <input class="form-control dateDisplay"  id = 'check-out' type="input" placeholder="MM/DD/YYYY" autocomplete="false" required >
                                     <span class="form-label">Check out</span>
                                 </div>
                             </div>
@@ -71,10 +71,18 @@
         </div>
     </div>
 </div>
-
-               <h2>
+        <h2>
     <a href= "/comments/creatComment/{{spaceDetails._id}}">
         <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
     </a>
 </h2>
+<div id='bookingsList'>{{bookings}}</div>
+<script>
+    
+$( document ).ready(function() {
+    var check_in = {{{booking}}}
+//var check_in = [["2021-12-05","2021-12-05"], ["2021-12-15", "2021-12-20"]];
+   disableDates(check_in);
+});
+</script>
      

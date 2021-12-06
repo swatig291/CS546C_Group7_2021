@@ -1,3 +1,5 @@
+const moment= require('moment') 
+
 function validString(str) {
     if (!str || typeof str !== 'string' || !str.trim()) return false;
     return true;
@@ -69,7 +71,7 @@ function validLink(link) {
 }
 function validId(id)
 {
-    return (!/[0-9A-Fa-f]{24}/.test(req.params.id)) 
+    return /[0-9A-Fa-f]{24}/.test(id);
 }
 function generateList(n) {
     let arr = [];
@@ -91,5 +93,6 @@ module.exports = {
     validMetrics,
     validLink,
     generateList,
-    validDate
+    validDate,
+    validId
 };

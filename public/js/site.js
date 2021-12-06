@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function(){
         document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);
            
      }
-   
-   
 });
 
 function getStars(rating) {
@@ -83,8 +81,7 @@ function getStars(rating) {
   // count for photos user has chosen
   var fileCount = 0;
   $('#picTips').hide();
-
-  // when user choose photos
+ // when user choose photos
 //   file.onchange = function () {
 //       for (let i = 0; i < this.files.length; i++) {
 //           formData.append('photo' + i, this.files[i]); // add photos' path to formData
@@ -101,27 +98,104 @@ function getStars(rating) {
 //           $('#picTips').show();
 //       }
 //   };
-
   $('#booking').click( function(){
     var form = document.getElementById('bookingForm');
       let checkInDate =  $('#check-in').val();
       let checkOutDate =  $('#check-out').val();
       let spaceId = $('#spaceId').text();
-      let pricePerMonth = $('#pricePerMonth').text();
-      var requestConfig = {
-            method: 'POST',
-            url: '/bookings/'+ spaceId,
-            contentType: 'application/json',
-            data: JSON.stringify({
-                startDate: checkInDate,
-                endDate: checkOutDate,
-                spaceId: spaceId,
-                pricePerMonth: pricePerMonth
-            })           
-    };
-      $.ajax(requestConfig).then(function(responseMessage) {
-                console.log(responseMessage);
-                // newContent.html(responseMessage.message);
-                //                alert("Data Saved: " + msg);
-            });
+      let pricePerDay = $('#pricePerDay').text();
+      let totalPrice = daysBetween(checkInDate, checkOutDate);
+    //show price and confirm before saving..!!
+    ConfirmDialog('Are you sure');
+
+function ConfirmDialog(message) {
+   $('<div id="dialog"></div>').appendTo('body')
+    .html('<div><h6>' + 'Total price for this booking will be $'+ totalPrice + '. Clicking on yes will complete your booking' + '?</h6></div>');
+   
+    $('#dialog').dialog({
+      modal: true,
+      title: 'Confirm booking',
+      zIndex: 10000,
+      autoOpen: true,
+      width: 'auto',
+      resizable: false,
+      buttons: {
+        Yes: function() {
+          $(this).dialog("close");
+          // $('body').append('<h1>Confirm Dialog Result: <i>Yes</i></h1>');
+              // alert(daysBetween($('#first').val(), $('#second').val()));
+              var requestConfig = {
+                method: 'POST',
+                url: '/bookings/'+ spaceId,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    startDate: checkInDate,
+                    endDate: checkOutDate,
+                    spaceId: spaceId,
+                    totalPrice: totalPrice
+                })           
+              };
+              $.ajax(requestConfig).then(function(responseMessage) {
+                $('.dateDisplay').datepicker('setDate', null)
+               
+                });
+        },
+        No: function() {
+          $('body').append('<h1>Confirm Dialog Result: <i>No</i></h1>');
+          $('.dateDisplay').datepicker('setDate', null)
+          $(this).dialog("close");
+        }
+      },
+      close: function(event, ui) {
+        $(this).remove();
+      }
+    });
+};
+
+
+    
   });
+  //Days calculation.
+      
+  function treatAsUTC(date) {
+    var result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
+}
+
+function daysBetween(startDate, endDate) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return Math.round((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay);
+}
+
+$('.dropdown-item').click( function(e){
+  let val = e.target.innerText;
+  var requestConfig = {
+    method: 'Get',
+    url: 'space/filter/'+ val,      
+  };
+  $.ajax(requestConfig).then(function(responseMessage) {
+    $("body").html(responseMessage);
+    });
+});
+
+function disableDates(check_in){
+$('.dateDisplay').datepicker({
+  dateFormat: 'mm/dd/yy',
+  minDate: 0,
+  beforeShowDay: function(date) {
+    var string = jQuery.datepicker.formatDate('mm/dd/yy', date);
+    for (var i = 0; i < check_in.length; i++) {
+      if (Array.isArray(check_in[i])) {
+        var from = new Date(check_in[i][0].replace( /(\d{4})-(\d{2})-(\d{2})/, "$2/$3/$1"))
+        var to = new Date(check_in[i][1].replace( /(\d{4})-(\d{2})-(\d{2})/, "$2/$3/$1"))
+        // var from1 = new Date(check_in[i][0]);
+        // var to1 = new Date(check_in[i][1]);
+        var current = new Date(string);
+        if (current >= from && current <= to) return false;
+      }
+    }
+    return [check_in.indexOf(string) == -1]
+  }
+})
+};

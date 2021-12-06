@@ -63,6 +63,11 @@ app.get('/user/login', async(req, res, next) => {
   next();
 });
 
+app.get('/user/logout', async(req, res, next) => {
+  if(!req.session.email) return res.redirect('/user/login');
+  next();
+});
+
 app.get('/user/profile', async(req, res, next) => {
   if(!req.session.email) return res.redirect('/user/login');
   next();

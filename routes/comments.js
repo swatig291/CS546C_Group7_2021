@@ -11,7 +11,7 @@ router.post('/creatComment/:id', async function(req, res){
     }
     let errors = [];
     const spaceId = req.params.id;
-    const userId = req.session._id;
+    const userId = req.session.userId;
     const comment = xss(req.body.comment);
 
     if (!verify.validString(userId)){
@@ -27,7 +27,7 @@ router.post('/creatComment/:id', async function(req, res){
         return res.status(400).json(errors);
     }
     try {
-        //let userDetails = await userData.getUser(req.session._id);
+        //let userDetails = await userData.getUser(req.session.userId);
         const newComment = await commentData.createComment(userId, spaceId, comment);
         return res.render('home/space', {newComment, spaceId: id});
     } catch(e) {
@@ -119,7 +119,7 @@ router.post('/delete/:id',async function(req,res){
     let comment = await commentData.getCommentById(commentId);
     let loggedUserId = comment.userId.toString();
     
-    if(loggedUserId != req.session._id){
+    if(loggedUserId != req.session.userId){
         errors.push('You can not delete the comment post by other person!')
     }
     if(!verify.validString(commentId)){
@@ -152,7 +152,7 @@ router.post('/edit/:id', async function(req, res){
     let comment1 = await commentData.getCommentById(commentId);
     let loggedUserId = comment1.userId.toString();
     errors = [];
-    if(loggedUserId != req.session._id){
+    if(loggedUserId != req.session.userId){
         errors.push('You can not edit the comment post by other person!')
     }
     console.log(comment)

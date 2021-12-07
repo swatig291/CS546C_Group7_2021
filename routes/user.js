@@ -64,7 +64,7 @@ router.get('/logout', async (req, res) => {
 
 router.get('/profile', async (req, res) => {
     try{
-        let userDetails = await userData.getUser(req.session._id);
+        let userDetails = await userData.getUser(req.session.userId);
         res.render('users/profile', {
             pageTitle: 'Profile Page',
             firstName: userDetails.firstName,

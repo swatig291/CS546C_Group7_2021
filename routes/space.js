@@ -3,7 +3,9 @@ const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
 const commentData = data.comments;
+const reviewData = data.reviews;
 const bookingData = data.bookings;
+
 const userData = data.users;
 const verify = data.util;
 const xss = require('xss');
@@ -337,6 +339,9 @@ router.get('/:id',async(req,res) =>{
       let spaceDetails = await spaceData.getSpaceById(req.params.id);
        if(spaceDetails !== null){
         //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
+
+        let reviewList = await reviewData.getAllreviewsOfSpace(req.params.id);
+
         var bookings = new Array();
         try
         { 
@@ -356,11 +361,21 @@ router.get('/:id',async(req,res) =>{
         }
         
         let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
+
         for(i in commentList){
           let user = await userData.getUser(commentList[i].userId.toString())
           commentList[i].userName = user.firstName + " " +user.lastName;
           if(commentList[i].userId == req.session._id){
             commentList[i].sameUser = true;
+          }
+        }
+
+
+        for(i in reviewList){
+          let user = await userData.getUser(reviewList[i].userId.toString())
+          reviewList[i].userName = user.firstName + " " +user.lastName;
+          if(reviewList[i].userId == req.session._id){
+            reviewList[i].sameUser = true;
           }
         }
 
@@ -372,6 +387,7 @@ router.get('/:id',async(req,res) =>{
             spaceDetails.photoArray.push(imgPath);
             });
           }
+
          res.status(200).render('home/space', { spaceDetails,commentList,booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();

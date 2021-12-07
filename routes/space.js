@@ -24,12 +24,13 @@ router.post('/add', async (req, res) => {
   }
     var form = new formidable.IncomingForm();
     const folderName = path.join(__dirname, '../','public/','images/','uploads/','temp/');
+    let errors = [];
     try {
       if (!fs.existsSync(folderName)) {
            fs.mkdirSync(folderName)
       }
     } catch (err) {
-      console.error(err)
+      errors.push(err);
     }
 
     form.uploadDir = folderName;
@@ -55,7 +56,7 @@ router.post('/add', async (req, res) => {
           let newDesc = xss(fields.description);
           // let newImagePath = xss(req.body.imagePath)
 
-          let errors = [];
+         
           if (!verify.validString(newName))  errors.push('Space name must be a valid string.');
 
           if (!verify.validString(newAddress.streetAddress))  errors.push('Street address must be a valid string.');
@@ -398,7 +399,7 @@ router.get('/:id',async(req,res) =>{
     }
 });
 //get All spaces by userId
-router.get("/userId", async (req, res) => {
+router.get('/user', async (req, res) => {
   if(!req.session.email)
   {
     res.status(400).redirect('/user/login');

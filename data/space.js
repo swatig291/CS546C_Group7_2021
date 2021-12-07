@@ -174,12 +174,51 @@ module.exports = {
         if (typeof(search) !== "string") throw "Error (getSpaceSearch): Search must be a string.";
         const spaceCollection = await spaces();
         const query = new RegExp(search, "i");
-        const restaurantList = await spaceCollection.find({ $or: [ {'address.city': {$regex: query}}, {'address.state': {$regex: query}} ] }).toArray();
-        if(restaurantList !== null)
+        const spaceList = await spaceCollection.find({ $or: [ {'address.city': {$regex: query}}, {'address.state': {$regex: query}} ] }).toArray();
+        if(spaceList !== null)
         {
-            restaurantList.map(verify.convertId)
+            spaceList.map(verify.convertId)
         }
-        return restaurantList;
+        return spaceList;
     },
+    async getAllSpaceByUserID(id) {
+        if (!verify.validString(id)) throw 'User id must be a valid string.';
+       
+        const spaceCollection = await spaces();
+
+        const spaceList = await spaceCollection.find({hostId: id}).toArray();
+        if (!spaceList) throw `You don't have any spaces hosted.`;
+
+         spaceList.map(verify.convertId)
+        // Convert _id field to string before returning
+        return spaceList;
+    },
+    async filterSpace(filterBy)
+    {
+        filterBy = filterBy.trim();
+        if (!filterBy) throw "Select an option to filter";
+        if (typeof(filterBy) !== "string") throw "filer is not a proper type";
+        const spaceCollection = await spaces();
+        let spaceList;
+        if( filterBy === 'Price(Low-High)'){
+             spaceList = await spaceCollection.find().sort({price : 1}).collation({ locale: "en_US", numericOrdering: true }).toArray();
+        }
+        else if( filterBy === 'Price(High-Low)'){
+            spaceList  = await spaceCollection.find().sort({price : -1}).collation({ locale: "en_US", numericOrdering: true }).toArray();
+        }
+        else if( filterBy === 'Volume(Low-High)'){
+            spaceList =   await spaceCollection.find().sort({spaceVolume : 1}).collation({ locale: "en_US", numericOrdering: true }).toArray();
+        }
+        else if( filterBy === 'Volume(High-Low)'){
+           spaceList =  await spaceCollection.find().sort({spaceVolume : -1}).collation({ locale: "en_US", numericOrdering: true }).toArray();
+        }
+
+        if(spaceList !== null)
+        {
+            spaceList.map(verify.convertId)
+        }
+        return spaceList;
+
+    }
 
 }

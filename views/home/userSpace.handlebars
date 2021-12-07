@@ -1,0 +1,56 @@
+<div class="container-fluid bg-3 landingPage">  
+    <div class="row">  
+    <div class="col-sm-12">
+        <p> Spaces hosted by you.!</p>
+    </div>
+    
+    </div>
+
+  <div class="row">
+       {{#each spaceList}}
+        
+                <div class="col-sm-3">
+                        <div class="panel">
+                            <div class="row" onClick="divFunction('{{this._id}}')">
+                                {{#each photoArray}}
+                                <div class = "col-sm-6"> 
+                                    <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
+                                    <br/>
+                                    <br/>
+                                    </div>
+                                    {{/each}}         
+                            </div>
+                            <div class="row" onClick="divFunction('{{this._id}}')">
+                                <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
+                                    <div class="col-sm-6 rating">
+                                        <p >{{this.rating}}/5</p>
+                                        <p hidden class="spaceId">{{this._id}}</p>
+                                        <p class="starRate">{{this.rating}}</p>                   
+                                    <span class='stars'></span>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div >${{this.price}}/Night</div>
+                                        <div >{{this.address.city}}</div>
+                                        <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                                    </div>
+                                   
+                            </div>
+                            <div class="row" >   
+                                  <div class='col-xs-6'></div>                             
+                                    <div class='col-xs-6'>
+                                    <div class="row">
+                                            <div class='col-xs-4'>
+                                            <a href="/space/host/{{this._id}}"> <span class="glyphicon glyphicon-pencil"></span></p> </a>  
+                                            </div>
+                                            <div class="col-xs-4">
+                                            <a href="/space/remove/{{this._id}}"> <span class="glyphicon glyphicon-trash"></span></a>
+                                            </div>
+                                     </div>
+                                    </div>                                                      
+                            </div>
+                        </div>
+               </div>
+        
+       {{/each}}
+  </div>
+</div>

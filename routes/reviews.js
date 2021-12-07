@@ -11,7 +11,7 @@ router.post('/creatreview/:id', async function(req, res){
     }
     errors = [];
     const spaceId = req.params.id;
-    const userId = req.session._id;
+    const userId = req.session.userId;
     const review = xss(req.body.review);
     const rating = xss(req.body.rating);
     if (!verify.validString(userId)){
@@ -27,23 +27,11 @@ router.post('/creatreview/:id', async function(req, res){
         return res.status(400).json(errors);
     }
     try {
-        //let userDetails = await userData.getUser(req.session._id);
+        //let userDetails = await userData.getUser(req.session.userId);
         const newreview = await reviewData.createreview(userId, spaceId, review,rating);
-        return res.json(newreview);
+        return res.render('home/space', {newreview});
     } catch(e) {
         res.status(500).json({error: e});
-    }
-});
-router.get('/creatreview/:id', async function(req, res){
-    if(!req.session.email){
-      res.status(400).redirect('/user/login');
-      return;
-    }
-    try{
-        id = req.params.id
-        res.render('reviews/creat', {pageTitle: 'creatreview',spaceId: id});
-    }catch(e){
-        
     }
 });
 
@@ -137,7 +125,7 @@ router.post('/delete/:id',async function(req,res){
     try{
         let deletereview = await reviewData.deletereview(reviewId);
         if(deletereview){
-            res.status(200).json(deletereview);
+            res.redirect('/space');
         }else{
             return res.status(404).send();
         }
@@ -165,22 +153,9 @@ router.post('/edit/:id', async function(req, res){
     }
     try {
         const newreview = await reviewData.updatereview(id, review,rating);
-        return res.json(newreview);
+        res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
-    }
-});
-  
-router.get('/edit/:id', async function(req, res){
-    if(!req.session.email){
-        res.status(400).redirect('/user/login');
-        return;
-    }
-    try{
-        id = req.params.id
-        res.render('reviews/edit', {pageTitle: 'editreview',reviewId: id});
-    }catch(e){
- 
     }
 });
 

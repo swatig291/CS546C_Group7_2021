@@ -1,8 +1,7 @@
 <div class="container-fluid bg-3">  
-  <div class="row">
+    <div class="row">
       {{!-- Iterate iamges in teh following div --}}
       {{!-- <div class="col-sm-4"></div> --}}
-
         <div class="row">
             <div class="col-sm-8">
                 <div class="row">
@@ -15,19 +14,22 @@
                             <br/>
                         </div>
                     {{/each}}
-                </div>s
+                </div>
+
                <h2>{{spaceDetails.spaceName}}</h2>
                <p><div >{{spaceDetails.description}}</div></p>
                <h4> $x{{spaceDetails.price}}/Night</h4>
                <p id="pricePerDay" hidden> {{spaceDetails.price}}</p>
                <p id="spaceId" hidden>{{spaceDetails._id}}</p>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
+
             </div>
 
             <div class="col-sm-4">
                 <div class="row">
                     <form action="post" id="bookingform">
                         <h2>Booking</h2>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input class="form-control dateDisplay" id = 'check-in' type="input"  placeholder="MM/DD/YYYY" autocomplete="false" required >
@@ -39,46 +41,76 @@
                                     <input class="form-control dateDisplay"  id = 'check-out' type="input" placeholder="MM/DD/YYYY" autocomplete="false" required >
                                     <span class="form-label">Check out</span>
                                 </div>
+
                             </div>
-                            <input id="booking" name="submit" type="button" class="btn AllButton" value="Submit" >
+                        </div>
+                        <input id="booking" name="submit" type="button" class="btn AllButton" value="Submit" >
                     </form>
                 </div>
                 <div class="row error"></div>
             </div>
-
+        </div>
+    </div>
+    <div class="col-sm-6" id="commentList">
+        <h2>Comments:</h2>
+        {{#each commentList}}
             <div>
-                <div class="row">
-                    <h2>Comments:</h2>
-                    {{#each commentList}}
-                        <h2>{{this.comment}}</h2> 
-                        <h4>Posted by: {{this.userId}}</h4>
-                        <h4> at {{this.date}}</h4>
-
-                        <div>
-                            <a href="/comments/edit/{{this._id}}">
-                                <button type="submit" class="btn btn-primary" name="editButton" id="editButton">edit</button>
-                            </a>     
+                <h2>{{this.comment}}</h2> 
+                <h4>Posted by: {{this.userName}}</h4>
+                <h4>at {{this.date}}</h4>
+                {{#if this.sameUser}}
+                <div id="judgeUserId">
+                    <form action="/comments/edit/{{this._id}}" method="POST" name="editCommentForm" id="editCommentForm" style="display: block;">
+                        <div id="editCommentText">
+                            <label>
+                                <h3>Update your comment</h3>
+                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="20" rows="2" placeholder="You can update this comment here."></textarea>
+                            </label>
                         </div>
-                        <div>
-                            <form action="/comments/delete/{{this._id}}" method="POST" id="delete">
-                                <div id="comment-delete-button">
-                                    <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
-                                </div>
-                            </form>
+                        <div id="comment-submit-button">
+                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update Comment</button>
                         </div>
-                    {{/each}}
-
+                    </form>
+                    <form action="/comments/delete/{{this._id}}" method="POST" id="delete">
+                        <div id="comment-delete-button">
+                            <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
+                        </div>
+                    </form>
+                </div>
+                {{/if}}
+            </div>
+            <br>
+        {{/each}}
+        <br/>
+        <br/>
+        <div class="w-100">
+            <br>
+            <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
+                <div>
+                    <label>
+                        <h2>Post a new comment here</h2>
+                        <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="5" placeholder="You can enter any questions you want to ask about this Space here."></textarea>
+                    </label>
                 </div>
 
-            </div>
+                <div id="comment-submit-button">
+                    <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
         <h2>
     <a href= "/comments/creatComment/{{spaceDetails._id}}">
         <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
     </a>
 </h2>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+<script src="public/js/site.js"></script>
 
 <div id='bookings' hidden>{{booking}}</div>
 

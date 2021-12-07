@@ -85,22 +85,22 @@ function getStars(rating) {
   $('#picTips').hide();
 
   // when user choose photos
-//   file.onchange = function () {
-//       for (let i = 0; i < this.files.length; i++) {
-//           formData.append('photo' + i, this.files[i]); // add photos' path to formData
-//           fileCount ++;
-//       }
-//       if(fileCount == 1){
-//           $('#picTips').text('You have chosen '+fileCount+' photo');
-//           $('#picTips').show();
-//       } else if(fileCount > 1 && fileCount <=4){
-//           $('#picTips').text('You have chosen '+fileCount+' photos');
-//           $('#picTips').show();
-//       } else {
-//           $('#picTips').text('You can only upload 4 photos at most');
-//           $('#picTips').show();
-//       }
-//   };
+  // file.onchange = function () {
+  //     for (let i = 0; i < this.files.length; i++) {
+  //         formData.append('photo' + i, this.files[i]); // add photos' path to formData
+  //         fileCount ++;
+  //     }
+  //     if(fileCount == 1){
+  //         $('#picTips').text('You have chosen '+fileCount+' photo');
+  //         $('#picTips').show();
+  //     } else if(fileCount > 1 && fileCount <=4){
+  //         $('#picTips').text('You have chosen '+fileCount+' photos');
+  //         $('#picTips').show();
+  //     } else {
+  //         $('#picTips').text('You can only upload 4 photos at most');
+  //         $('#picTips').show();
+  //     }
+  // };
 
   $('#booking').click( function(){
     var form = document.getElementById('bookingForm');
@@ -125,3 +125,33 @@ function getStars(rating) {
                 //                alert("Data Saved: " + msg);
             });
   });
+
+$('#passwordReset').click(function(){
+  $('#passwordDiv').removeAttr('hidden');
+  $('#passwordDiv').show();
+});
+
+$('#submitPassword').click(function(){
+  let oldPassword = $('#oldPassword').val();
+  let newPassword = $('#newPassword').val();
+  let newPassword1 = $('#newPassword1').val();
+
+  if(newPassword == newPassword1){
+    var requestConfig = {
+      method: 'POST',
+      url: '/user/profile/password',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      })
+    };
+  
+  $.ajax(requestConfig).then(function(responseMessage){
+    if(responseMessage == true) $('#passwordDiv').hide();
+  });
+}
+});
+function confirmPostComment(){
+  confirm("Successfully post!")
+};

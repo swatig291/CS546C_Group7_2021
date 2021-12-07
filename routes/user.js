@@ -144,4 +144,18 @@ router.post('/profile/phoneNumber', async (req, res) => {
     }
 })
 
+router.post('/profile/password', async (req, res) => {
+    try{
+        let cred = req.body;
+        const {oldPassword, newPassword} = cred;
+        
+        let authentication = await userData.updateUserPassword(req.session._id, oldPassword, newPassword);
+        if(authentication.userPasswordModified == true) {
+            res.json(true);
+        }
+    }catch(e){
+        res.json(false);
+    }
+})
+
 module.exports = router;

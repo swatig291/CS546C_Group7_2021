@@ -76,6 +76,7 @@ router.post('/add', async (req, res) => {
 
           try {
                newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
+               console.log(newSpace);
                let id = newSpace._id.toString();
                let folderNameNew = path.join(folderName,'../',id);
                fs.renameSync(folderName, folderNameNew)

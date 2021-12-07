@@ -195,7 +195,7 @@ let updateUserPhoneNumber = async function updateUserPhoneNumber(id, phoneNumber
     if(!verify.validString(id)) throw 'Id is invalid.';
     if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
     if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
-    
+
     const userData = await users();
 
     let parseId = ObjectId(id);
@@ -217,6 +217,38 @@ let updateUserPhoneNumber = async function updateUserPhoneNumber(id, phoneNumber
     }
 
     return {userPhoneNumberModified: true};
+}
+
+let updateUserPassword = async function updateUserPassword(id, oldPassword, newPassword){
+
+    if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0) throw 'The Old Password is invalid.';
+    if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The New Password is invalid.';
+    
+    const userData = await users();
+
+    let parseId = ObjectId(id);
+    let rounds = 16;
+
+    const finder = await userData.findOne({_id: parseId});
+    if(finder == null) throw 'The user cannot be found';
+
+    passwordAuthenticator = await bcrypt.compare(oldPassword, finder['password']);
+    if(passwordAuthenticator == false) throw 'The Old Password is invalid';
+    
+    const newUpdatedUser = {
+        password: await bcrypt.hash(newPassword, rounds)
+    }
+
+    const updatedUser = await userData.updateOne(
+        { _id: parseId },
+        { $set: newUpdatedUser }
+    );
+
+    if (updatedUser.modifiedCount === 0) {
+        throw "could not update user's Password successfully";
+    }
+
+    return {userPasswordModified: true};
 }
 
 let checkUser = async function checkUser(email, password){
@@ -245,5 +277,6 @@ module.exports = {
     updateUserLastName,
     updateUserEmail,
     updateUserPhoneNumber,
+    updateUserPassword,
     checkUser
 }

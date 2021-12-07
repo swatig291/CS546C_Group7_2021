@@ -22,6 +22,22 @@ router.get("/:id", async function (req, res) {
     }
 });
 
+//get all bookings by User ID
+router.get("/user/action", async function (req, res) {
+    if(!req.session.email)
+    {
+      res.status(400).redirect('/user/login');
+      return;
+    }
+    try {
+        const bookingInfo = await bookingData.getAllbookingsByUserId(req.session.userId); // 
+         res.render('home/userBooking', { bookingInfo});
+    }
+    catch (e) {
+        console.log(req.params.id)
+        res.status(404).json({ message: "'booking' " });
+    }
+});
 
 //get all bookings by Space ID
 router.get("/spaceId/:id", async function (req, res) {
@@ -32,23 +48,6 @@ router.get("/spaceId/:id", async function (req, res) {
     }
     try {
         const bookingInfo = await bookingData.getAllbookingsBySpaceId(req.params.id); // 
-        // console.log(req.params.id)
-        res.json(bookingInfo);
-    }
-    catch (e) {
-        res.status(404).json({ message: "'booking' item not found!" });
-    }
-});
-
-//get all bookings by User ID
-router.get("/userId", async function (req, res) {
-    if(!req.session.email)
-    {
-      res.status(400).redirect('/user/login');
-      return;
-    }
-    try {
-        const bookingInfo = await bookingData.getAllbookingsByUserId(req.session.userId); // 
         // console.log(req.params.id)
         res.json(bookingInfo);
     }

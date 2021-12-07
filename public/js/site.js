@@ -151,8 +151,7 @@ $('#submitPassword').click(function(){
     if(responseMessage == true) $('#passwordDiv').hide();
   });
 }
+});
 function confirmPostComment(){
   confirm("Successfully post!")
 };
-
-});

@@ -1,13 +1,14 @@
- const express = require('express');
+const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
 const commentData = data.comments;
+const userData = data.users;
 const verify = data.util;
 const xss = require('xss');
 const path = require("path");
 const formidable = require('formidable');
-const fs = require('fs')
+const fs = require('fs');
 
 router.post('/add', async (req, res) => {
   if(!req.session.email)
@@ -75,12 +76,12 @@ router.post('/add', async (req, res) => {
           }
 
           try {
-               newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
-               console.log(newSpace);
-               let id = newSpace._id.toString();
-               let folderNameNew = path.join(folderName,'../',id);
-               fs.renameSync(folderName, folderNameNew)
-               return res.json(newSpace);
+              newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
+              console.log(newSpace);
+              let id = newSpace._id.toString();
+              let folderNameNew = path.join(folderName,'../',id);
+              fs.renameSync(folderName, folderNameNew)
+              return res.json(newSpace);
 
           } catch(e) {
               res.status(500).json({error: e});
@@ -253,8 +254,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.get('/:id',async(req,res) =>{
-  if(!req.session.email)
-  {
+  if(!req.session.email){
     res.status(400).redirect('/user/login');
     return;
   }
@@ -267,7 +267,13 @@ router.get('/:id',async(req,res) =>{
        if(spaceDetails !== null){
         //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
         let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
-        
+        for(i in commentList){
+          let user = await userData.getUser(commentList[i].userId.toString())
+          commentList[i].userName = user.firstName + " " +user.lastName;
+          if(commentList[i].userId == req.session._id){
+            commentList[i].sameUser = true;
+          }
+        }
         let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
         spaceDetails['photoArray'] = [];
         if (fs.existsSync(folder)) {

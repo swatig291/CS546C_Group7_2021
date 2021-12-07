@@ -69,7 +69,7 @@ let getUser = async function getUser(id){
     const finder = await userData.findOne({_id: parseId});
     if(finder == null) throw 'There is no user with the given ID';
 
-    return verify.convertId(finder);
+    return finder;
 }
 
 let updateUser = async function updateUser(id, firstName, lastName, email, phoneNumber){

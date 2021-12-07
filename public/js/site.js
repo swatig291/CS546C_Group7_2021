@@ -37,9 +37,44 @@ function getStars(rating) {
         window.location = 'http://localhost:3000/space/' + data ;    
        
     }
+    // function deleteSpace(data)
+    // {
+    //   window.location = 'http://localhost:3000/space/remove/' + data ;
+    // }
     // if(form){
     //   var formData = new FormData(form);
+    $('#updateSpace').click(function () {
+      var form = document.getElementById('static-update-form');
   
+      if(form){
+          var formData = new FormData(form);
+      }
+      var xhr = new XMLHttpRequest();
+      formData.set("spaceName", $('#spaceName').val());
+      formData.set("length", $('#length').val());
+      formData.set("width", $('#width').val());
+      formData.set("height", $('#height').val());
+      formData.set("streetAddress", $('#streetAddress').val());
+      formData.set("city", $('#city').val());
+      formData.set("state", $('#state').val());
+      formData.set("zip", $('#zip').val());
+      formData.set("price", $('#price').val());
+      formData.set("description",$('#description').val());
+      formData.set("id",$('#editSpaceId').val());
+      
+      formData.delete('photoArr');
+  
+      xhr.open('post', 'http://localhost:3000/space/edit');
+      xhr.send(formData);
+  
+      xhr.onload = function () {
+          console.log(xhr.responseText);
+        
+          var Timeout = setTimeout(function () {
+              window.location.reload();
+          }, 500);
+      }
+  });
     $('#addNewPostButton').click(function () {
       var form = document.getElementById('static-form');
 
@@ -77,7 +112,7 @@ function getStars(rating) {
         var formData = new FormData(form);
     }
   var file = document.getElementById('addImg')
-
+  
   // count for photos user has chosen
   var fileCount = 0;
   $('#picTips').hide();
@@ -98,15 +133,58 @@ function getStars(rating) {
 //           $('#picTips').show();
 //       }
 //   };
+function dateCheck(from,to,check) {
+
+  var fDate,lDate,cDate;
+  fDate = Date.parse(from);
+  lDate = Date.parse(to);
+  cDate = Date.parse(check);
+
+  if((cDate <= lDate && cDate >= fDate)) {
+      return true;
+  }
+  return false;
+}
   $('#booking').click( function(){
+    $('.error').empty();
     var form = document.getElementById('bookingForm');
       let checkInDate =  $('#check-in').val();
       let checkOutDate =  $('#check-out').val();
       let spaceId = $('#spaceId').text();
       let pricePerDay = $('#pricePerDay').text();
+
+      // input valoidation
+      if(!checkInDate)
+      {
+        return $("<p/>").text('please provide check in date').appendTo(( '.error' ));
+      }
+      if(!checkOutDate)
+      {
+       return $("<p/>").text('please provide check out date').appendTo(( '.error' ));
+      }
       let totalPrice = daysBetween(checkInDate, checkOutDate);
-    //show price and confirm before saving..!!
-    ConfirmDialog('Are you sure');
+       totalPrice = pricePerDay * totalPrice
+
+  
+  // Check -out date should be greater than or equal to check in
+      if (Date.parse(checkOutDate) <= Date.parse(checkInDate)) {
+        $("<p/>").text('check out date should be greater than or equal to chekc in date').appendTo(( '.error' ));
+        return;
+     }
+     let bookedArray = $('#bookings')[0].innerText;
+     //check of check - in date
+     bookedArray = $.parseJSON(bookedArray)
+     for(let i = 0; i < bookedArray.length ;i++)
+     {
+        if( dateCheck (checkInDate,checkOutDate,bookedArray[i][0]))
+        {
+           $("<p/>").text('Please select Proper Range of date.').appendTo(( '.error' ));
+          
+          return;
+        }   
+         
+     }
+     ConfirmDialog('Are you sure');
 
 function ConfirmDialog(message) {
    $('<div id="dialog"></div>').appendTo('body')
@@ -137,12 +215,13 @@ function ConfirmDialog(message) {
               };
               $.ajax(requestConfig).then(function(responseMessage) {
                 $('.dateDisplay').datepicker('setDate', null)
-               
+                location.reload();
                 });
         },
         No: function() {
           $('body').append('<h1>Confirm Dialog Result: <i>No</i></h1>');
           $('.dateDisplay').datepicker('setDate', null)
+          
           $(this).dialog("close");
         }
       },
@@ -150,11 +229,10 @@ function ConfirmDialog(message) {
         $(this).remove();
       }
     });
-};
-
-
-    
+};  
   });
+
+  
   //Days calculation.
       
   function treatAsUTC(date) {

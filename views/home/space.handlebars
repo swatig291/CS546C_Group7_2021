@@ -43,6 +43,7 @@
                             <input id="booking" name="submit" type="button" class="btn AllButton" value="Submit" >
                     </form>
                 </div>
+                <div class="row error"></div>
             </div>
 
             <div>
@@ -79,7 +80,8 @@
     </a>
 </h2>
 
-<div id='bookingsList'>{{bookings}}</div>
+<div id='bookings' hidden>{{booking}}</div>
+
 <script>
     
 $( document ).ready(function() {

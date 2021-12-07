@@ -181,7 +181,18 @@ module.exports = {
         }
         return spaceList;
     },
+    async getAllSpaceByUserID(id) {
+        if (!verify.validString(id)) throw 'User id must be a valid string.';
+       
+        const spaceCollection = await spaces();
 
+        const spaceList = await spaceCollection.find({hostId: id}).toArray();
+        if (!spaceList) throw `You don't have any spaces hosted.`;
+
+         spaceList.map(verify.convertId)
+        // Convert _id field to string before returning
+        return spaceList;
+    },
     async filterSpace(filterBy)
     {
         filterBy = filterBy.trim();

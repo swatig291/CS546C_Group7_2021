@@ -17,11 +17,11 @@ async function getbookingById(id) {
     return bookingGoal;
 }
 
-async function getAllbookings() {
-    let bookingCollection = await bookings();
-    let allbookings = await bookingCollection.find({}).toArray();
-    return allbookings;
-}
+// async function getAllbookings() {
+//     let bookingCollection = await bookings();
+//     let allbookings = await bookingCollection.find({}).toArray();
+//     return allbookings;
+// }
 
 async function addbooking(spaceId, userId, startDate,endDate,totalPrice) {
 
@@ -61,13 +61,11 @@ async function getAllbookingsBySpaceId(id) {
     const bookingCollection = await bookings();
     const bookingsList = await bookingCollection.find({'spaceId': { $eq: id}}).toArray();
     if (bookingsList === null || bookingsList.length == 0) throw `no bookings for the Space _id are found`;
-    // for (let i = 0; i < bookingsList.bookings.length; i++) {
-    //     bookingsList.bookings[i]._id = bookingsList.bookings[i]._id.toString();
-    // }
+    
     bookingsList.map(verify.convertId)
 
     return bookingsList;
-    //Return object bookings in array.
+  
 }
 
 async function getAllbookingsByUserId(id) {
@@ -77,14 +75,12 @@ async function getAllbookingsByUserId(id) {
         throw `id  must be  a valid ObjectId`;
     }
     const usersCollection = await users();
-    const bookingsList = await usersCollection.findOne({ _id: parsedId }, { projection: { bookings: 1, _id: 0 } });
+    const bookingsList = await usersCollection.find({'userId': { $eq: id}});
     if (bookingsList === null || bookingsList.bookings.length == 0) throw `no bookings for the user _id are found`;
-    for (let i = 0; i < bookingsList.bookings.length; i++) {
-        bookingsList.bookings[i]._id = bookingsList.bookings[i]._id.toString();
-    }
+    bookingsList.map(verify.convertId)
 
-    return bookingsList.bookings;
-    //Return object bookings in array.
+    return bookingsList;
+    
 }
 
 async function removebooking(id) {
@@ -93,8 +89,6 @@ async function removebooking(id) {
     } catch (error) {
         throw `id  must be  a valid ObjectId`;
     }
-
-
     const spacesCollection = await space();
     const targetspace = await spacesCollection.findOne({ 'bookings._id': parsedId });
     //console.log(targetspace);
@@ -141,7 +135,6 @@ module.exports = {
     getbookingById,
     addbooking,
     removebooking,
-    getAllbookings,
     getAllbookingsBySpaceId,
     getAllbookingsByUserId
 }

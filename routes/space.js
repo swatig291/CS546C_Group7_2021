@@ -388,7 +388,7 @@ router.get('/:id',async(req,res) =>{
             });
           }
 
-         res.status(200).render('home/space', { spaceDetails,commentList,booking : JSON.stringify(bookings)});          
+         res.status(200).render('home/space', { spaceDetails,commentList, reviewList, booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();
       }

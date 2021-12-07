@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const spaceData = data.space;
 const commentData = data.comments;
+const reviewData = data.reviews;
 const userData = data.users;
 const verify = data.util;
 const xss = require('xss');
@@ -266,7 +267,9 @@ router.get('/:id',async(req,res) =>{
       let spaceDetails = await spaceData.getSpaceById(req.params.id);
        if(spaceDetails !== null){
         //  let reviews = await reviewData.getAllReviewsOfspace(req.params.id);
+        let reviewList = await reviewData.getAllreviewsOfSpace(req.params.id);
         let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
+
         for(i in commentList){
           let user = await userData.getUser(commentList[i].userId.toString())
           commentList[i].userName = user.firstName + " " +user.lastName;
@@ -274,6 +277,16 @@ router.get('/:id',async(req,res) =>{
             commentList[i].sameUser = true;
           }
         }
+
+        for(i in reviewList){
+          let user = await userData.getUser(reviewList[i].userId.toString())
+          reviewList[i].userName = user.firstName + " " +user.lastName;
+          if(reviewList[i].userId == req.session._id){
+            reviewList[i].sameUser = true;
+          }
+        }
+
+
         let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
         spaceDetails['photoArray'] = [];
         if (fs.existsSync(folder)) {
@@ -282,7 +295,7 @@ router.get('/:id',async(req,res) =>{
             spaceDetails.photoArray.push(imgPath);
             });
           }
-         res.status(200).render('home/space', { spaceDetails,commentList});          
+         res.status(200).render('home/space', { spaceDetails,commentList,reviewList});          
        }else {
         return res.status(404).send();
       }

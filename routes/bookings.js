@@ -23,7 +23,7 @@ router.get("/:id", async function (req, res) {
 });
 
 //get all bookings by User ID
-router.get("/user", async function (req, res) {
+router.get("/user/action", async function (req, res) {
     if(!req.session.email)
     {
       res.status(400).redirect('/user/login');
@@ -31,12 +31,11 @@ router.get("/user", async function (req, res) {
     }
     try {
         const bookingInfo = await bookingData.getAllbookingsByUserId(req.session.userId); // 
-         console.log(req.params.id)
-        res.json(bookingInfo);
+         res.render('home/userBooking', { bookingInfo});
     }
     catch (e) {
         console.log(req.params.id)
-        res.status(404).json({ message: "'booking' item not found!" });
+        res.status(404).json({ message: "'booking' " });
     }
 });
 

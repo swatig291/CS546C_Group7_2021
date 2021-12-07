@@ -399,7 +399,7 @@ router.get('/:id',async(req,res) =>{
     }
 });
 //get All spaces by userId
-router.get('/user', async (req, res) => {
+router.get('/user/action', async (req, res) => {
   if(!req.session.email)
   {
     res.status(400).redirect('/user/login');

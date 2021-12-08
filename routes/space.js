@@ -400,7 +400,7 @@ router.get('/:id',async(req,res) =>{
          {
            canBook = false;
          }
-         res.status(200).render('home/space', { spaceDetails,commentList,canBook,booking : JSON.stringify(bookings)});          
+         res.status(200).render('home/space', { spaceDetails,commentList,reviewList, canBook,booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();
       }

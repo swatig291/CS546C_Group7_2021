@@ -74,8 +74,8 @@ async function getAllbookingsByUserId(id) {
     } catch (error) {
         throw `id  must be  a valid ObjectId`;
     }
-    const usersCollection = await users();
-    const bookingsList = await usersCollection.find({'userId': { $eq: id}});
+    const bookingCollection = await bookings();
+    const bookingsList = await bookingCollection.find({'userId': { $eq: id}});
     if (bookingsList === null || bookingsList.bookings.length == 0) throw `no bookings for the user _id are found`;
     bookingsList.map(verify.convertId)
 

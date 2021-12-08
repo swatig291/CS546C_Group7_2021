@@ -30,9 +30,8 @@ router.post('/creatComment/:id', async function(req, res){
         return res.status(400).json(errors);
     }
     try {
-        //let userDetails = await userData.getUser(req.session.userId);
         const newComment = await commentData.createComment(userId, spaceId, comment);
-        return res.render('home/space', {newComment, spaceId: id});
+        return res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
     }

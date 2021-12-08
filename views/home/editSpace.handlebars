@@ -1,0 +1,70 @@
+ <form id="static-update-form" method="POST" enctype="multipart/form-data" action="/space/edit" >
+        <div class="row">
+            <h4 id="Guide">Add your space here</h4>
+            {{!-- <input id='editSpaceId'name="editSpaceId" value="{{spaceDetails._id}}"> --}}
+            <input name="editSpaceId" id="editSpaceId" type="text"   value="{{spaceDetails._id}}">
+            <div class="col-sm-8">
+                <input name="spaceName" id="spaceName" type="text"  class="form-control" placeholder="Space name" value="{{spaceDetails.spaceName}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="col-sm-8">
+                <h5>Space Dimension</h5>
+                <div class='col-sm-2' class="form-group">              
+                    <input name="length" id="length" type="number"   
+                    class="form-control" placeholder="Length" value="{{spaceDetails.spaceDim.length}}" aria-describedby="basic-addon1">
+                </div>
+                <div class='col-sm-2'>
+                    <input name="width"  id="width" type="number"  class="form-control" placeholder="Width" value="{{spaceDetails.spaceDim.width}}" aria-describedby="basic-addon1">
+                </div>
+                    <div class='col-sm-2'>   
+                    
+                    <input name="height" id="height" type="number"   class="form-control" placeholder="Height" value="{{spaceDetails.spaceDim.height}}" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class='col-sm-8' class="form-group">   
+                <label>Price per day</label>           
+                <input name="price" id="price" type="number"   class="form-control" placeholder="price" value="{{spaceDetails.price}}" aria-describedby="basic-addon1">
+            </div>
+            <div class="col-sm-8">
+                    <h5>Adress</h5>
+                    <div class="form-group">
+                        <label>Street address</label>
+                        <input type="text" class="form-control"  name="streetAddress" id="streetAddress" value="{{spaceDetails.address.streetAddress}}" placeholder="Enter street address">
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control"  name="city" value="{{spaceDetails.address.city}}" id="city" placeholder="Enter city">
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control"  name="state" id="state" value="{{spaceDetails.address.state}}" placeholder="state">
+                    </div>
+                    <div class="form-group">
+                        <label>Zip</label>
+                        <input type="number" class="form-control"  name="zip" id="zip" value="{{spaceDetails.address.zip}}" placeholder="zip">
+                    </div>
+            </div>
+             <div class="col-sm-8">
+                    <h5>Location</h5>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="text" class="form-control"  name="longitude" id="longitude" placeholder="Enter longitude">
+                    </div>
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="text" class="form-control"  name="latitude" id="latitude" placeholder="Enter latitude">
+                    </div>
+            </div>
+                <div class="col-sm-8">
+                    <h5>About space</h5>
+                    <textarea name="description" class="form-control" id="description" cols="74" rows="6" value="{{spaceDetails.description}}" placeholder="Say something..." value=""></textarea>
+                </div>                  
+        </div>
+        
+        <div>
+              <input id="updateSpace" name="submit" type="button" class="btn AllButton" value="Update" >
+        </div>
+</form>
+  <p style="margin-top: 3px; color: #b52818" id="picTips"></p>
+  
+
+            

@@ -80,7 +80,7 @@ module.exports = {
         if (deletionInfo.deletedCount === 0){
             throw `Could not delete comment with id of ${commentId}！`;
         }
-        return 'Successfully delete!'; 
+        return true; 
     },
 
     async getAllCommentsOfSpace(spaceId) {
@@ -91,6 +91,7 @@ module.exports = {
         spaceId = ObjectId(spaceId);
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        
         
         for(i = 0; i < commentList.lenght; i++) {
             commentList[i]._id = commentList[i]._id.toString();
@@ -117,7 +118,7 @@ module.exports = {
             throw 'Invaild id!'
         }
         if (!verify.validString(comment)){
-            throw 'Invaild comment111!'
+            throw 'Invaild comment!'
         }
         let objId = ObjectId(id.trim());
         var myDate = new Date();
@@ -140,6 +141,6 @@ module.exports = {
         if (updateInfo.modifiedCount === 0) {
             throw "Error (updateComment): Failed to update comment in Database.";
         }
-        return  await this.getCommentById(id);
+        return  {commentModified: true};
     }
 }

@@ -75,6 +75,34 @@ function getStars(rating) {
           }, 500);
       }
   });
+
+  var form = document.getElementById('static-form');
+
+  if(form){
+      var formData = new FormData(form);
+  }
+var file = document.getElementById('addImg')
+
+// count for photos user has chosen
+var fileCount = 0;
+$('#imageCount').hide();
+//  when user choose photos
+file.onchange = function () {
+    for (let i = 0; i < this.files.length; i++) {
+        formData.append('photo' + i, this.files[i]); // add photos' path to formData
+        fileCount ++;
+    }
+    if(fileCount == 1){
+        $('#imageCount').text('You have chosen '+fileCount+' photo');
+        $('#imageCount').show();
+    } else if(fileCount > 1 && fileCount <=4){
+        $('#pimageCount').text('You have chosen '+fileCount+' photos');
+        $('#imageCount').show();
+    } else {
+        $('#pimageCount').text('You can only upload 4 photos at most');
+        $('#imageCount').show();
+    }
+};
     $('#addNewPostButton').click(function () {
       var form = document.getElementById('static-form');
 
@@ -92,6 +120,8 @@ function getStars(rating) {
       formData.set("zip", $('#zip').val());
       formData.set("price", $('#price').val());
       formData.set("description",$('#description').val());
+      formData.set("longitude", $('#longitude').val());
+      formData.set("latitude", $('#latitude').val());
       formData.delete('photoArr');
 
       xhr.open('post', 'http://localhost:3000/space/add');
@@ -106,34 +136,6 @@ function getStars(rating) {
       }
   });
 
-  var form = document.getElementById('static-form');
-
-    if(form){
-        var formData = new FormData(form);
-    }
-  var file = document.getElementById('addImg')
-  
-  // count for photos user has chosen
-  var fileCount = 0;
-  $('#picTips').hide();
-
- // when user choose photos
-//   file.onchange = function () {
-//       for (let i = 0; i < this.files.length; i++) {
-//           formData.append('photo' + i, this.files[i]); // add photos' path to formData
-//           fileCount ++;
-//       }
-//       if(fileCount == 1){
-//           $('#picTips').text('You have chosen '+fileCount+' photo');
-//           $('#picTips').show();
-//       } else if(fileCount > 1 && fileCount <=4){
-//           $('#picTips').text('You have chosen '+fileCount+' photos');
-//           $('#picTips').show();
-//       } else {
-//           $('#picTips').text('You can only upload 4 photos at most');
-//           $('#picTips').show();
-//       }
-//   };
 function dateCheck(from,to,check) {
 
   var fDate,lDate,cDate;

@@ -4,6 +4,7 @@ const data = require("../data");
 const xss = require('xss');
 const verify = data.util;
 const bookingData = data.bookings;
+const spaceData =  data.space;
 
 //get booking by booking ID
 router.get("/:id", async function (req, res) {
@@ -31,6 +32,15 @@ router.get("/user/action", async function (req, res) {
     }
     try {
         const bookingInfo = await bookingData.getAllbookingsByUserId(req.session.userId); // 
+        let spaceList;
+        if(bookingInfo !== null)
+        {
+            for(let i=0 ; i< bookingInfo.length ; i++)
+            {
+                let spaceDetails = await spaceData.getSpaceById(bookingInfo[i].spaceId);
+                bookingInfo[i]['SpaceName'] = spaceDetails.spaceName;
+            }
+        }
          res.render('home/userBooking', { bookingInfo});
     }
     catch (e) {
@@ -112,7 +122,7 @@ router.post("/:id", async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.get('/remove/:id', async (req, res) => {
     if(!req.session.email)
   {
     res.status(400).redirect('/user/login');

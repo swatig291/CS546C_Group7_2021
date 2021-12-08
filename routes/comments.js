@@ -6,14 +6,17 @@ const verify = data.util;
 const xss = require('xss');
 
 router.post('/creatComment/:id', async function(req, res){
-    if(!req.session.AuthCookie){
-      res.status(401).redirect("/user/login")
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
     }
     let errors = [];
     const spaceId = req.params.id;
     const userId = req.session.userId;
     const comment = xss(req.body.comment);
-
+    if (!comment){
+        errors.push('Comment cannot be empty!')
+    }
     if (!verify.validString(userId)){
         errors.push('Invaild userId!')
     }
@@ -27,9 +30,8 @@ router.post('/creatComment/:id', async function(req, res){
         return res.status(400).json(errors);
     }
     try {
-        //let userDetails = await userData.getUser(req.session.userId);
         const newComment = await commentData.createComment(userId, spaceId, comment);
-        return res.render('home/space', {newComment, spaceId: id});
+        return res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
     }

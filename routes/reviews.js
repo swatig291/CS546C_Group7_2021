@@ -2,18 +2,28 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const reviewData = data.reviews;
+const spaceData = data.space;
 const verify = data.util;
 const xss = require('xss');
 
 router.post('/creatreview/:id', async function(req, res){
-    if(!req.session.AuthCookie){
-      res.status(401).redirect("/user/login")
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
     }
-    errors = [];
+    let errors = [];
     const spaceId = req.params.id;
     const userId = req.session.userId;
     const review = xss(req.body.review);
-    const rating = xss(req.body.rating);
+    const rating = Number(xss(req.body.rating));
+    let sumRating = 0;
+    sumRating = Number(sumRating);
+    if (!review){
+        errors.push('Review can not be empty!')
+    }
+    if (!rating){
+        errors.push('Rating can not be empty!')
+    }
     if (!verify.validString(userId)){
         errors.push('Invaild userId!')
     }
@@ -23,13 +33,22 @@ router.post('/creatreview/:id', async function(req, res){
     if (!verify.validString(review)){
         errors.push('Invaild review!')
     }
+    if (!verify.validRating(rating)){
+        errors.push('Invaild rating!')
+    }
     if (errors.length > 0) {
         return res.status(400).json(errors);
     }
     try {
-        //let userDetails = await userData.getUser(req.session.userId);
-        const newreview = await reviewData.createreview(userId, spaceId, review,rating);
-        return res.render('home/space', {newreview});
+        let reviewList = await reviewData.getAllreviewsOfSpace(spaceId);
+        for(i in reviewList){
+            sumRating += reviewList[i].rating;
+        }
+        let newSumRating = sumRating + rating;
+        let avgRating = Math.round((newSumRating / (reviewList.length + 1)) * 10) / 10;
+        const newSpace = await spaceData.updateSpaceRating(spaceId,avgRating);
+        const newreview = await reviewData.createreview(userId, spaceId, review, rating);
+        return res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
     }
@@ -114,7 +133,7 @@ router.post('/delete/:id',async function(req,res){
         res.status(400).json({ error:'You must Supply an ID!' });
         return;
     }
-    let reviewId = xss(req.params.id)
+    let reviewId = xss(req.params.id);
     let errors = [];
     if (!verify.validString(reviewId)){
         errors.push('Invaild reviewId!')
@@ -123,6 +142,20 @@ router.post('/delete/:id',async function(req,res){
         return res.status(400).json(errors);
     }
     try{
+        let sumRating = 0;
+        sumRating = Number(sumRating);
+        let thisReview = await reviewData.getreviewById(reviewId);
+        let reviewList = await reviewData.getAllreviewsOfSpace(thisReview.spaceId.toString())
+        for(i in reviewList){
+            sumRating += reviewList[i].rating
+        }
+        let newSumRating = sumRating - thisReview.rating;
+        let avgRating = Math.round((newSumRating / (reviewList.length - 1)) * 10) / 10;
+        let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
+        if(reviewList.length == 1){
+            avgRating = 0;
+        }
+        const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
         let deletereview = await reviewData.deletereview(reviewId);
         if(deletereview){
             res.redirect('/space');
@@ -142,17 +175,30 @@ router.post('/edit/:id', async function(req, res){
     }
     const id = req.params.id;
     const review = xss(req.body.review);
-    const rating = xss(req.body.rating);
-    errors = [];
-    console.log(review)
+    const rating = Number(xss(req.body.rating));
+    let errors = [];
     if(!verify.validString(review)){
-        throw 'Invaild review22!'
+        errors.push('Invaild review!')
     }
-    if(errors.length > 0){
+    if (!verify.validRating(rating)){
+        errors.push('Invaild rating!')
+    }
+    if(errors.length > 0) {
         return res.status(400).json(errors);
     }
     try {
-        const newreview = await reviewData.updatereview(id, review,rating);
+        let sumRating = 0;
+        sumRating = Number(sumRating);
+        let thisReview = await reviewData.getreviewById(id);
+        let reviewList = await reviewData.getAllreviewsOfSpace(thisReview.spaceId.toString())
+        for(i in reviewList){
+            sumRating += reviewList[i].rating
+        }
+        let newSumRating = sumRating - thisReview.rating + rating;
+        let avgRating = Math.round((newSumRating / reviewList.length) * 10) / 10;
+        let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
+        const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
+        const newreview = await reviewData.updatereview(id, review, rating);
         res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});

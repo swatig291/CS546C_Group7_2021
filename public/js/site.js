@@ -331,7 +331,3 @@ function userSpace(){
   window.location = 'http://localhost:3000/space/user' ;    
  
 }
-
-function confirmPostComment(){
-  confirm("Successfully post!")
-};

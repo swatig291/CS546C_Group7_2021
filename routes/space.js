@@ -371,7 +371,7 @@ router.get('/:id',async(req,res) =>{
         for(i in commentList){
           let user = await userData.getUser(commentList[i].userId.toString())
           commentList[i].userName = user.firstName + " " +user.lastName;
-          if(commentList[i].userId == req.session._id){
+          if(commentList[i].userId == req.session.userId){
             commentList[i].sameUser = true;
           }
         }
@@ -380,7 +380,7 @@ router.get('/:id',async(req,res) =>{
         for(i in reviewList){
           let user = await userData.getUser(reviewList[i].userId.toString())
           reviewList[i].userName = user.firstName + " " +user.lastName;
-          if(reviewList[i].userId == req.session._id){
+          if(reviewList[i].userId == req.session.userId){
             reviewList[i].sameUser = true;
           }
         }
@@ -393,6 +393,7 @@ router.get('/:id',async(req,res) =>{
             spaceDetails.photoArray.push(imgPath);
             });
           }
+
          //Avoid host from booking the space he hosted.
          let canBook = true;
          if(req.session.userId === spaceDetails.userId)

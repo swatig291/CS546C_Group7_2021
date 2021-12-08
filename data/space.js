@@ -160,7 +160,21 @@ module.exports = {
         return  await this.getSpaceById(id);
 
     },
+    
+    async updateSpaceRating(id, rating) {
+        if (!verify.validString(id))  throw 'Space id must be a valid string.';
 
+        let objId = ObjectId(id.trim());
+        let existingData = await this.getSpaceById(id);
+        if(existingData === null) throw 'Space does not exist for the given Id'
+    
+        const spaceCollection = await spaces();
+            const updateSpace = {
+                rating: rating
+            };
+        const updateInfo = await spaceCollection.updateOne({ _id: objId }, {$set: updateSpace});
+        return  await this.getSpaceById(id);
+    },
     //Delete Space
     async  removeSpace(id) {
         if (!verify.validString(id)) throw 'Space id must be a valid string.';

@@ -48,7 +48,7 @@ router.post('/creatreview/:id', async function(req, res){
         let avgRating = Math.round((newSumRating / (reviewList.length + 1)) * 10) / 10;
         const newSpace = await spaceData.updateSpaceRating(spaceId,avgRating);
         const newreview = await reviewData.createreview(userId, spaceId, review, rating);
-        return res.render('home/space', {newreview});
+        return res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
     }

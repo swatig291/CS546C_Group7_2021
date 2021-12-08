@@ -48,7 +48,7 @@ router.post('/creatreview/:id', async function(req, res){
         let avgRating = Math.round((newSumRating / (reviewList.length + 1)) * 10) / 10;
         const newSpace = await spaceData.updateSpaceRating(spaceId,avgRating);
         const newreview = await reviewData.createreview(userId, spaceId, review, rating);
-        return res.redirect('/space');
+        res.redirect('http://localhost:3000/space/' + spaceId);
     } catch(e) {
         res.status(500).json({error: e});
     }
@@ -158,7 +158,7 @@ router.post('/delete/:id',async function(req,res){
         const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
         let deletereview = await reviewData.deletereview(reviewId);
         if(deletereview){
-            res.redirect('/space');
+            res.redirect('http://localhost:3000/space/' + thisReview.spaceId);
         }else{
             return res.status(404).send();
         }
@@ -199,7 +199,7 @@ router.post('/edit/:id', async function(req, res){
         let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
         const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
         const newreview = await reviewData.updatereview(id, review, rating);
-        res.redirect('/space');
+        res.redirect('http://localhost:3000/space/' + thisReview.spaceId);
     } catch(e) {
         res.status(500).json({error: e});
     }

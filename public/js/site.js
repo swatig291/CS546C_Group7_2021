@@ -326,6 +326,4 @@ $('#submitPassword').click(function(){
 }
 });
 
-function confirmPostComment(){
-  confirm("Successfully post!")
-};
+

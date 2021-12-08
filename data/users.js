@@ -1,5 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
+const spaces = mongoCollections.space;
+const reviews = mongoCollections.reviews;
+const comments = mongoCollections.comments;
+const bookings = mongoCollections.bookings;
 const bcrypt = require('bcryptjs');
 const verify = require('./util');
 
@@ -70,6 +74,19 @@ let getUser = async function getUser(id){
     if(finder == null) throw 'There is no user with the given ID';
 
     return finder;
+}
+
+let getSavedSpaces = async function getUser(id){
+
+    if(!verify.validString(id)) throw 'Id is invalid.';
+
+    const userData = await users();
+    let parseId = ObjectId(id);
+
+    const finder = await userData.findOne({_id: parseId});
+    if(finder == null) throw 'There is no user with the given ID';
+
+    return finder['savedStorages'];
 }
 
 let updateUser = async function updateUser(id, firstName, lastName, email, phoneNumber){
@@ -269,14 +286,39 @@ let checkUser = async function checkUser(email, password){
 
 }
 
+let deleteUser = async function deleteUser(id){
+    if(!verify.validString(id)) throw 'Id is invalid.';
+
+    const userData = await users();
+    const spaceData = await spaces();
+    const commentData = await comments();
+    const reviewData = await reviews();
+    const bookingData = await bookings();
+
+    let parseId = ObjectId(id);
+
+    const delUser = await userData.deleteOne({_id: parseId});
+    const delUserSpaces = await spaceData.deleteMany({UserId: id});
+    const delUserComments = await commentData.deleteMany({UserId: id});
+    const delUserReviews = await reviewData.deleteMany({UserId: id});
+    const delUserBookings = await bookingData.deleteMany({UserId: id});
+
+    console.log(delUserSpaces);
+    if(delUser.deletedCount === 0) throw 'unable to delete user with the given ID';
+    
+    return {userDeleted: true};
+}
+
 module.exports = {
     createUser,
     getUser,
+    getSavedSpaces,
     updateUser,
     updateUserFirstName,
     updateUserLastName,
     updateUserEmail,
     updateUserPhoneNumber,
     updateUserPassword,
-    checkUser
+    checkUser,
+    deleteUser
 }

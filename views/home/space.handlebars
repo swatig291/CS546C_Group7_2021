@@ -100,7 +100,7 @@
     </div>
 
    <div class="col-sm-6" id="reviewList">
-        <h2>reviews:</h2>
+        <h2>Reviews:</h2>
         {{#each reviewList}}
         <div>
             <h2>{{this.review}}</h2>
@@ -114,23 +114,21 @@
                     style="display: block;">
                     <div id="editreviewText">
                         <label>
-                            <h3>Update your review</h3>
+                            <h3>Update your review:</h3>
                             <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2"
                                 placeholder="You can update this review here."></textarea>
-                            Please enter your rating:
+                                Update your rating:
                             <input type="number" name="rating" class="form-control form-control-lg" id="rating"
-                                placeholder="rating">
+                                placeholder="rating (number 1-5)">
                         </label>
                     </div>
                     <div id="review-submit-button">
-                        <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update
-                            review</button>
+                        <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update review</button>
                     </div>
                 </form>
                 <form action="/reviews/delete/{{this._id}}" method="POST" id="delete">
                     <div id="review-delete-button">
-                        <button type="submit" class="btn btn-primary" name="deleteButton"
-                            id="deleteButton">delete</button>
+                        <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
                     </div>
                 </form>
             </div>
@@ -147,12 +145,11 @@
                     <label>
                         <h2>Post a new review and rating below</h2>
                         <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
-                            placeholder="You can enter any questions you want to ask about this Space here."></textarea>
+                            placeholder="You can write any reviews about this space."></textarea>
+                        <br>
+                        <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
+                        placeholder="rating (number 1-5)">
                     </label>
-                   
-                    <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
-                        placeholder="rating">
-
                 </div>
 
                 <div id="review-submit-button">
@@ -162,25 +159,14 @@
             </form>
         </div>
     </div>
-
-
 </div>
-        <h2>
-    <a href= "/comments/creatComment/{{spaceDetails._id}}">
-        <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
-    </a>
-</h2>
 
 <div id='bookings' hidden>{{booking}}</div>
 
 <script>
-    
 $( document ).ready(function() {
     var check_in = {{{booking}}}
 //var check_in = [["2021-12-05","2021-12-05"], ["2021-12-15", "2021-12-20"]];
    disableDates(check_in);
 });
 </script>
-
-
-

@@ -44,7 +44,7 @@ module.exports = {
     },
 
    
-    async createSpace(spaceName, address, spaceDim,price,hostId,newDesc) {
+    async createSpace(spaceName, address, spaceDim,price,hostId,newDesc,location) {
         if (!verify.validString(spaceName))    throw 'Space name must be a valid string.';
 
         if (!verify.validString(address.streetAddress)) throw 'Street address must be a valid string.';
@@ -59,13 +59,17 @@ module.exports = {
         if (!verify.validNumber(price)) throw 'Length must be a number';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(newDesc)) throw 'Image Path must be valid string';
+        if (!verify.validNumber(location.longitude)) throw 'Longitude must be a number';
+        if (!verify.validNumber(location.latitude)) throw 'Latitude must be a number';
+
 
         const spaceCollection = await spaces();
         //check for duplicate adress before adding 
         const allSpace = await this.getAllSpace();
             for (let x of allSpace) {
                 //city, state and zip can be same for multiple adress so comparing only street adress.
-                if (x.address.streetAddress.toLowerCase() === address.streetAddress.toLowerCase()) throw 'A space with this address already exists.';
+                if (x.address.streetAddress.toLowerCase() === address.streetAddress.toLowerCase() &&
+                    x.address.zip.toLowerCase() === address.zip.toLowerCase()) throw 'A space with this address already exists.';
             }
                     const newSpace = {
             spaceName: spaceName.trim(),
@@ -83,7 +87,11 @@ module.exports = {
             spaceVolume: spaceDim.length * spaceDim.width * spaceDim.height,
             hostId: hostId.trim(),
             rating: 0,
-            description: newDesc
+            description: newDesc,
+            location: {
+                longitude: location.longitude,
+                latitude: location.latitude
+            }
         };
         //Insert space into DB.
         const insertInfo = await spaceCollection.insertOne(newSpace);
@@ -93,7 +101,7 @@ module.exports = {
         return await this.getSpaceById(id);
     },
     //Update space details
-    async updateSpace(id,spaceName, address, spaceDim,price,hostId,description) {
+    async updateSpace(id,spaceName, address, spaceDim,price,hostId,description,location) {
         if (!verify.validString(spaceName))    throw 'Space name must be a valid string.';
 
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
@@ -110,6 +118,10 @@ module.exports = {
         if (!verify.validNumber(price)) throw 'Length must be a number';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(description)) throw 'Image Path must be valid string';
+
+        if (!verify.validNumber(location.longitude)) throw 'Longitude must be a number';
+        if (!verify.validNumber(location.latitude)) throw 'Latitude must be a number';
+
 
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);
@@ -133,7 +145,11 @@ module.exports = {
                     spaceVolume: spaceDim.length * spaceDim.width * spaceDim.height,
                     hostId: hostId.trim(),
                     rating: existingData.rating,
-                    description: description
+                    description: description,
+                    location: {
+                        longitude: location.longitude,
+                        latitude: location.latitude
+                    }
         };
         //check for existing data.
 

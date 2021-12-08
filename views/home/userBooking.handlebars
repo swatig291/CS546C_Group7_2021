@@ -1,5 +1,21 @@
 <div class='row'>
-   <div class='col-sm-4'>
-              
+   <h4>Spaces booked by you</h4>
+   {{#each bookingInfo}}
+   <div class='col-sm-3'>
+      <div class='panel'>
+        <div>
+            <p>{{this.SpaceName}}</p>
+        </div>
+        <div>
+           <p>your booking is from {{this.startDate}} to {{endDate}}</p>
+        </div>
+        <div>
+         <p>Price for this booking is ${{this.totalPrice}}</p>
+        </div>
+        <div>
+            <a href="/bookings/remove/{{this._id}}"> <span class="glyphicon glyphicon-trash"></span></a>
+        </div>
+        </div>
    </div>
+   {{/each}}
 </div>

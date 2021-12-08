@@ -75,8 +75,8 @@ async function getAllbookingsByUserId(id) {
         throw `id  must be  a valid ObjectId`;
     }
     const bookingCollection = await bookings();
-    const bookingsList = await bookingCollection.find({'userId': { $eq: id}});
-    if (bookingsList === null || bookingsList.bookings.length == 0) throw `no bookings for the user _id are found`;
+    const bookingsList = await bookingCollection.find({'userId': { $eq: id}}).toArray();
+    if (bookingsList === null || bookingsList.bookingCollectionlength == 0) throw `no bookings for the user _id are found`;
     bookingsList.map(verify.convertId)
 
     return bookingsList;
@@ -89,20 +89,19 @@ async function removebooking(id) {
     } catch (error) {
         throw `id  must be  a valid ObjectId`;
     }
-    const spacesCollection = await space();
-    const targetspace = await spacesCollection.findOne({ 'bookings._id': parsedId });
+    const bookingCollection = await bookings();
+    const targetBooking = await bookingCollection.findOne({ _id: parsedId });
     //console.log(targetspace);
     //console.log("lll");
-    if (targetspace === null) throw `cannot found `;
+    if (targetBooking === null) throw `Booking is not available `;
 
-    const bookingDeleteFromspace = await spacesCollection.updateOne({ _id: targetspace._id }, { $pull: { bookings: { _id: parsedId } } });
+        let deletionInfo = await bookingCollection.deleteOne({ _id: parsedId });
+        if (deletionInfo.deletedCount === 0) {
+            throw `Could not delete the booking with id of ${id}`;
+        }
+    
+        return true;
 
-    let spaceObj = {
-        bookingId: id,
-        deleted: true,
-        spaceId: targetspace._id
-    };
-    return spaceObj;
 }
 
 

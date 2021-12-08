@@ -12,8 +12,6 @@ const xss = require('xss');
 const path = require("path");
 const formidable = require('formidable');
 const fs = require('fs');
-const { errors } = require('formidable');
-
 
 
 router.post('/add', async (req, res) => {
@@ -54,6 +52,10 @@ router.post('/add', async (req, res) => {
           let newHostId = xss(req.session.userId);
           let newName = xss(fields.spaceName);
           let newDesc = xss(fields.description);
+
+          let location = {};    
+           location['longitude'] = xss(fields.longitude);
+           location['latitude'] = xss(fields.latitude);
           // let newImagePath = xss(req.body.imagePath)
 
          
@@ -70,6 +72,9 @@ router.post('/add', async (req, res) => {
 
           if (!verify.validNumber(newPrice)) errors.push('Length must be a number');
           if (!verify.validString(newHostId))  errors.push('Host id must be a valid string.');
+
+          if (!verify.validNumber(location.longitude)) errors.push('longitude must be a number');
+          if (!verify.validNumber(location.latitude)) errors.push('latitude must be a number');
           // if(!verify.validString(newImagePath))  errors.push('Image Path must be valid string');
          
           const allSpace = await spaceData.getAllSpace();
@@ -83,7 +88,7 @@ router.post('/add', async (req, res) => {
           }
 
           try {
-              newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
+              newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc,location);
               console.log(newSpace);
               let id = newSpace._id.toString();
               let folderNameNew = path.join(folderName,'../',id);
@@ -104,7 +109,7 @@ catch (error) {
     
 });
 
-  router.get('/host',async(req,res) =>{
+router.get('/host',async(req,res) =>{
     if(!req.session.email)
     {
       res.status(400).redirect('/user/login');
@@ -389,7 +394,13 @@ router.get('/:id',async(req,res) =>{
             });
           }
 
-         res.status(200).render('home/space', { spaceDetails,commentList, reviewList, booking : JSON.stringify(bookings)});          
+         //Avoid host from booking the space he hosted.
+         let canBook = true;
+         if(req.session.userId === spaceDetails.userId)
+         {
+           canBook = false;
+         }
+         res.status(200).render('home/space', { spaceDetails,commentList,canBook,booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();
       }

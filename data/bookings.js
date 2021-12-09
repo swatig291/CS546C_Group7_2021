@@ -9,6 +9,7 @@ const verify = require("./util");
 async function getbookingById(id) {
     if (!id || typeof id !== "string")
         throw 'You must provide an id to search for';
+    if(!verify.validId(id)) throw 'the id is invalid';
     let bookingCollection = await bookings();
     let objId = ObjectId.createFromHexString(id);
     let bookingGoal = await bookingCollection.findOne({ _id: objId });
@@ -27,7 +28,8 @@ async function addbooking(spaceId, userId, startDate,endDate,totalPrice) {
 
     if (!verify.validDate(startDate)) throw 'select proper start Date';
     if (!verify.validDate(endDate)) throw 'select proper end Date';
-    if (!verify.validString(spaceId))  throw 'Host id must be a valid string.';
+    if (!verify.validString(spaceId))  throw 'space id must be a valid string.';
+    if (!verify.validString(userId))  throw 'user id must be a valid string.';
     if (!verify.validNumber(totalPrice))  throw 'Host id must be a valid string.';
     if (!verify.validId(spaceId))  throw 'space id must be a valid.';
     if (!verify.validId(userId))  throw 'user id must be a valid.';
@@ -54,6 +56,7 @@ async function addbooking(spaceId, userId, startDate,endDate,totalPrice) {
 
 async function getAllbookingsBySpaceId(id) {
     try {
+        if (!verify.validString(id))  throw 'id must be a valid string.';
         var parsedId = ObjectId(id);
     } catch (error) {
         throw `id  must be  a valid ObjectId`;
@@ -70,6 +73,7 @@ async function getAllbookingsBySpaceId(id) {
 
 async function getAllbookingsByUserId(id) {
     try {
+        if (!verify.validString(id))  throw 'id must be a valid string.';
         var parsedId = ObjectId(id);
     } catch (error) {
         throw `id  must be  a valid ObjectId`;
@@ -85,6 +89,7 @@ async function getAllbookingsByUserId(id) {
 
 async function removebooking(id) {
     try {
+        if (!verify.validString(id))  throw 'id must be a valid string.';
         var parsedId = ObjectId(id);
     } catch (error) {
         throw `id  must be  a valid ObjectId`;

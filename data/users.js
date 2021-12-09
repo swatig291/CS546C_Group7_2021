@@ -299,13 +299,13 @@ let deleteUser = async function deleteUser(id){
 
     const delUser = await userData.deleteOne({_id: parseId});
     const delUserSpaces = await spaceData.deleteMany({UserId: id});
-    const delUserComments = await commentData.deleteMany({UserId: id});
-    const delUserReviews = await reviewData.deleteMany({UserId: id});
+    const delUserComments = await commentData.deleteMany({UserId: parseId});
+    const delUserReviews = await reviewData.deleteMany({UserId: parseId});
     const delUserBookings = await bookingData.deleteMany({UserId: id});
 
     console.log(delUserSpaces);
     if(delUser.deletedCount === 0) throw 'unable to delete user with the given ID';
-    
+
     return {userDeleted: true};
 }
 

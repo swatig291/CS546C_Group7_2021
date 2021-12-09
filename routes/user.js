@@ -3,11 +3,10 @@ const router = express.Router();
 const data = require('../data');
 const userData = data.users;
 const spaceData = data.space;
-const commentData = data.comments;
-const reviewData = data.reviews;
-const bookingData = data.bookings;
+const verify = require('../data/util');
 const path = require("path");
 const fs = require('fs');
+const xss = require('xss');
 
 router.get('/login', async (req, res) => {
     try{
@@ -21,9 +20,14 @@ router.post('/login', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {email, password} = cred
+        const email = xss(cred.email);
+        const password = xss(cred.password);
         
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
+        if(password.trim().length<6 || password.indexOf(' ')>=0) throw 'The password is invalid';
+
         let authentication = await userData.checkUser(email, password);
+
         if(authentication !== null) {
             req.session.email = email;
             req.session.userId = authentication._id.toString();
@@ -47,8 +51,17 @@ router.post('/signup', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {firstName, lastName, email, password, phoneNumber, ssn} = cred
-        
+        const {firstName, lastName, email, password, phoneNumber, ssn} = xss(cred);
+
+        if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
+        if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
+        if(password.trim().length<6 || password.indexOf(' ')>=0) throw 'The password is invalid';
+        if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
+        if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
+        if(!verify.validNumber(ssn)) throw 'The SSN is invalid';
+        if(ssn.length != 9) throw 'The SSN is invalid';
+
         let authentication = await userData.createUser(firstName, lastName, email, password, phoneNumber, ssn);
         if(authentication.userInserted == true) {
             res.redirect('/user/login');
@@ -103,7 +116,9 @@ router.post('/profile/firstName', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {firstName} = cred;
+        const {firstName} = xss(cred);
+
+        if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
         
         let authentication = await userData.updateUserFirstName(req.session.userId, firstName);
         if(authentication.userFirstNameModified == true) {
@@ -119,7 +134,9 @@ router.post('/profile/lastName', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {lastName} = cred;
+        const {lastName} = xss(cred);
+
+        if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
         
         let authentication = await userData.updateUserLastName(req.session.userId, lastName);
         if(authentication.userLastNameModified == true) {
@@ -135,7 +152,9 @@ router.post('/profile/email', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {email} = cred;
+        const {email} = xss(cred);
+
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
         
         let authentication = await userData.updateUserEmail(req.session.userId, email);
         if(authentication.userEmailModified == true) {
@@ -152,7 +171,10 @@ router.post('/profile/phoneNumber', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {phoneNumber} = cred;
+        const {phoneNumber} = xss(cred);
+
+        if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
+        if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
         
         let authentication = await userData.updateUserPhoneNumber(req.session.userId, phoneNumber);
         if(authentication.userPhoneNumberModified == true) {
@@ -167,7 +189,10 @@ router.post('/profile/phoneNumber', async (req, res) => {
 router.post('/profile/password', async (req, res) => {
     try{
         let cred = req.body;
-        const {oldPassword, newPassword} = cred;
+        const {oldPassword, newPassword} = xss(cred);
+
+        if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0) throw 'The password is invalid';
+        if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The password is invalid';
         
         let authentication = await userData.updateUserPassword(req.session.userId, oldPassword, newPassword);
         if(authentication.userPasswordModified == true) {
@@ -181,7 +206,7 @@ router.post('/profile/password', async (req, res) => {
 router.get('/savedSpaces', async (req, res) => {
     try{
         let savedStorage = await userData.getSavedSpaces(req.session.userId);
-        console.log(savedStorage);
+        
         if(savedStorage.length == 0) {
             res.json('There are no saved spaces');
         }else{

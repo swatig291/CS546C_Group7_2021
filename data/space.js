@@ -1,8 +1,13 @@
 const mongoCollections = require('../config/mongoCollections');
 const spaces = mongoCollections.space;
+const comments = mongoCollections.comments;
+const reviews = mongoCollections.reviews;
+const bookings = mongoCollections.bookings;
+
 const verify = require('./util');
 
 let { ObjectId } = require('mongodb');
+const { comments } = require('.');
 // {
 //     "spaceName" : "spaceName1",
 //             "spaceDim": {
@@ -190,9 +195,16 @@ module.exports = {
         //delete reviews related to respective Id
 
         //check delete info.(track)
-    
+        let commentData = await comments();
+        let reviewData = await reviews();
+        let bookingData = await bookings();
         let spaceCollection = await spaces();
+
         let deletionInfo = await spaceCollection.deleteOne({ _id: objId });
+        const delUserComments = await commentData.deleteMany({spaceId: objId});
+        const delUserReviews = await reviewData.deleteMany({spaceId: objId});
+        const delUserBookings = await bookingData.deleteMany({spaceId: id});
+
         if (deletionInfo.deletedCount === 0) {
             throw `Could not delete the space with id of ${id}`;
         }

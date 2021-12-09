@@ -63,6 +63,7 @@ module.exports = {
         if (!verify.validNumber(spaceDim.height)) throw 'Length must be a number';
 
         if (!verify.validNumber(price)) throw 'Length must be a number';
+        if (price<0) throw 'price cannot be negative';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(newDesc)) throw 'Image Path must be valid string';
         if (!verify.validNumber(location.longitude)) throw 'Longitude must be a number';
@@ -123,6 +124,7 @@ module.exports = {
         if (!verify.validNumber(spaceDim.height)) throw 'Length must be a number';
 
         if (!verify.validNumber(price)) throw 'Length must be a number';
+        if (price<0) throw 'price cannot be negative';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(description)) throw 'Image Path must be valid string';
 
@@ -171,6 +173,9 @@ module.exports = {
     async updateSpaceRating(id, rating) {
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
         if(!verify.validId(id)) throw 'Id is invalid';
+
+        if(!verify.validNumber(rating)) throw 'rating is invalid';
+        if(rating > 0 || rating < 5) throw 'rating is invalid';
 
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);

@@ -37,6 +37,7 @@ module.exports = {
     // Returns: a singular document (JSON) from the database
     async getSpaceById(id) {
         if (!verify.validString(id)) throw 'Space id must be a valid string.';
+        if(!verify.validId(id)) throw 'Id is invalid';
         let objId = ObjectId(id.trim());
 
         const spaceCollection = await spaces();
@@ -110,6 +111,7 @@ module.exports = {
         if (!verify.validString(spaceName))    throw 'Space name must be a valid string.';
 
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
+        if(!verify.validId(id)) throw 'Id is invalid';
 
         if (!verify.validString(address.streetAddress)) throw 'Street address must be a valid string.';
         if (!verify.validString(address.city)) throw 'Space city must be a valid string.';
@@ -168,6 +170,7 @@ module.exports = {
     
     async updateSpaceRating(id, rating) {
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
+        if(!verify.validId(id)) throw 'Id is invalid';
 
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);
@@ -183,6 +186,7 @@ module.exports = {
     //Delete Space
     async  removeSpace(id) {
         if (!verify.validString(id)) throw 'Space id must be a valid string.';
+        if(!verify.validId(id)) throw 'Id is invalid';
 
         let objId = ObjectId(id.trim());
 
@@ -225,6 +229,7 @@ module.exports = {
     },
     async getAllSpaceByUserID(id) {
         if (!verify.validString(id)) throw 'User id must be a valid string.';
+        if(!verify.validId(id)) throw 'Id is invalid';
        
         const spaceCollection = await spaces();
 

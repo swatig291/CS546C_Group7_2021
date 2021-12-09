@@ -10,6 +10,8 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+        if(!verify.validId(commentId)) throw 'the commentId is invalid';
+        
         commentId = ObjectId(commentId);
         const commentCollection = await comments();
         let comment = await commentCollection.findOne({ _id: commentId});
@@ -24,9 +26,11 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
         if (!verify.validString(comment)){
             throw 'Invaild comment!'
         }
@@ -74,6 +78,7 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+        if(!verify.validId(commentId)) throw 'the commentId is invalid';
         commentId = ObjectId(commentId);
         const commentCollection = await comments();
         const deletionInfo = await commentCollection.deleteOne({ _id: commentId});
@@ -87,6 +92,7 @@ module.exports = {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
 
         spaceId = ObjectId(spaceId);
         const commentCollection = await comments();
@@ -103,6 +109,7 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
         userId = ObjectId(userId);
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'userId': { $eq: userId}}).toArray();
@@ -117,6 +124,7 @@ module.exports = {
         if (!verify.validString(id)){
             throw 'Invaild id!'
         }
+        if(!verify.validId(id)) throw 'the id is invalid';
         if (!verify.validString(comment)){
             throw 'Invaild comment!'
         }

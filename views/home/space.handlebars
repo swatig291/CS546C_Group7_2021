@@ -96,7 +96,8 @@
                         <div id="editCommentText">
                             <label>
                                 <h3>Update your comment</h3>
-                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="20" rows="2" placeholder="You can update this comment here."></textarea>
+                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="20" rows="2" 
+                                placeholder="You can update this comment here." autocomplete="false" required></textarea>
                             </label>
                         </div>
                         <div id="comment-submit-button">
@@ -121,7 +122,8 @@
                 <div>
                     <label>
                         <h2>Post a new comment here</h2>
-                        <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="5" placeholder="You can enter any questions you want to ask about this Space here."></textarea>
+                        <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="5" 
+                        placeholder="You can enter any questions you want to ask about this Space here." autocomplete="false" required></textarea>
                     </label>
                 </div>
 
@@ -149,10 +151,10 @@
                         <label>
                             <h3>Update your review:</h3>
                             <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2"
-                                placeholder="You can update this review here."></textarea>
+                                placeholder="You can update this review here." autocomplete="false" required></textarea>
                                 Update your rating:
                             <input type="number" name="rating" class="form-control form-control-lg" id="rating"
-                                placeholder="rating (number 1-5)">
+                                placeholder="rating (number 1-5)" autocomplete="false" required>
                         </label>
                     </div>
                     <div id="review-submit-button">
@@ -178,10 +180,10 @@
                     <label>
                         <h2>Post a new review and rating below</h2>
                         <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
-                            placeholder="You can write any reviews about this space."></textarea>
+                            placeholder="You can write any reviews about this space." autocomplete="false" required></textarea>
                         <br>
                         <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
-                        placeholder="rating (number 1-5)">
+                        placeholder="rating (number 1-5)" autocomplete="false" required>
                     </label>
                 </div>
 
@@ -194,11 +196,6 @@
     </div>
 </div>
 
-    <h2>
-    <a href= "/comments/creatComment/{{spaceDetails._id}}">
-        <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">Post new comment</button>
-    </a>
-</h2>
 
 <div id='bookings' hidden>{{booking}}</div>
  <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>

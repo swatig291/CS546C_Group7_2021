@@ -30,7 +30,7 @@ async function addbooking(spaceId, userId, startDate,endDate,totalPrice) {
     if (!verify.validDate(endDate)) throw 'select proper end Date';
     if (!verify.validString(spaceId))  throw 'space id must be a valid string.';
     if (!verify.validString(userId))  throw 'user id must be a valid string.';
-    if (!verify.validNumber(totalPrice))  throw 'Host id must be a valid string.';
+    if (!verify.validNumber(totalPrice))  throw 'total price must be a valid number.';
     if (!verify.validId(spaceId))  throw 'space id must be a valid.';
     if (!verify.validId(userId))  throw 'user id must be a valid.';
     let bookingCollection = await bookings();

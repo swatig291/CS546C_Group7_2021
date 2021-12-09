@@ -31,7 +31,7 @@ router.post('/creatComment/:id', async function(req, res){
     }
     try {
         const newComment = await commentData.createComment(userId, spaceId, comment);
-        return res.redirect('/space');
+        return res.redirect('http://localhost:3000/space/' + spaceId);
     } catch(e) {
         res.status(500).json({error: e});
     }
@@ -133,7 +133,7 @@ router.post('/delete/:id',async function(req,res){
     try{
         let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
-            res.redirect('/space');
+            res.redirect('http://localhost:3000/space/' + comment.spaceId);
             //res.status(200).json(deleteComment);
         }else{
             return res.status(404).send();
@@ -167,7 +167,7 @@ router.post('/edit/:id', async function(req, res){
     try {
         let authentication = await commentData.updateComment(commentId, comment);
         if(authentication.commentModified == true) {
-            res.redirect('/space');
+            res.redirect('http://localhost:3000/space/' + comment1.spaceId);
         }else{
             res.status(500).render('/home/space', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
         }

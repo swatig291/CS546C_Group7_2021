@@ -1,44 +1,102 @@
-<div class="container-fluid bg-3">  
-    <div class="row text-center">  
-    <div  class="col-md-12">
+<div class="container-fluid bg-3 landingPage">  
+    <div class="row">  
+    <div  class="col-md-8 text-center">
         <form class="form-inline" action="/space/search" method="POST">
             <div class="input-group">
-            <input type="text" name="name"class="form-control" size="50" placeholder="Enter city or state" required>
-             {{!-- <input type="text" name="name" id="marvelName" placeholder="Marvel" class="search">  --}}
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-danger">Search</button>
-            </div>
+              <input type="text" name="name"class="form-control" size="50" placeholder="Enter city or state" required>
+              {{!-- <input type="text" name="name" id="marvelName" placeholder="Marvel" class="search">  --}}
+              <div class="input-group-btn">
+                  <button type="submit" class="btn btn-danger">Search</button>
+              </div>
+              
             </div>
         </form>
-  </div>
+    </div>
+    <div  class="col-md-4">
+        <div class="dropdown ml-0">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <p class="dropdown-item" >Price(Low-High)</p>
+                <p class="dropdown-item" >Price(High-Low)</p>
+                <p class="dropdown-item">Volume(Low-High)</p>
+                <p class="dropdown-item" >Volume(High-Low)</p >
+            </div>
+        </div>
+    </div>
+  
+</div>
     </div>
   <div class="row">
        {{#each spaceList}}
-    <div class="col-sm-3" onClick="divFunction('{{this._id}}')">
+    <div class="col-sm-3">
             <div class="panel">
                 <div class="row">
-                     {{#each photoArray}}
-                      <div class = "col-sm-6"> 
-                        <img class="media-object user-Pic" src={{this}}  alt="Flowers in Chania" style='height: 100%; width: 100%; object-fit: contain'>
-                        <br/>
-                        <br/>
+                        <div class="carouselStyle">
+                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                </ol>
+
+                                <div class="carousel-inner" role="listbox">
+                                {{#each photoArray}}
+                                    {{#if @first}}
+                                    <div class="item active">
+                                            <img class="img-ad" src={{this}} alt="..." >
+                                            <div class="carousel-caption">
+                                            </div>
+                                        </div>
+                                        {{else}}
+                                        <div class="item">
+                                            <img class="img-ad" src={{this}} alt="..." >
+                                            <div class="carousel-caption">
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                      
+                                {{/each}}   
+                                  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                         </div>
-                        {{/each}}         
-                </div>
-                <div class="row">
-                <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
-                <div class="col-sm-6 rating">
-                    <p >{{this.rating}}/5</p>
-                    <p hidden class="spaceId">{{this._id}}</p>
-                    <p class="starRate">{{this.rating}}</p>                   
-                 <span class='stars'></span>
+                      
+                      
+                    </div>
                 </div>
                 </div>
+                <div class="row" onClick="divFunction('{{this._id}}')">
+                    <div class="col-sm-6 panel-heading">{{this.spaceName}}</div>
+                        <div class="col-sm-6 rating" >
+                            <p >{{this.rating}}/5</p>
+                            <p hidden class="spaceId">{{this._id}}</p>
+                            <p class="starRate">{{this.rating}}</p>                   
+                        <span class='stars'></span>
+                    </div>
+                </div>
+                <div onClick="divFunction('{{this._id}}')">
                  <div >${{this.price}}/Night</div>
-                  <div >{{this.address.city}}</div>
-                  <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                 <div >{{this.address.city}}</div>
+                <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                </div>
             </div>
     </div>
        {{/each}}
   </div>
 </div>
+<script>
+    $(".dropdown").on("click", ".dropdown-toggle", function(e) { 
+    e.preventDefault();
+    $(this).parent().addClass("show");
+    $(this).attr("aria-expanded", "true");
+    $(this).next().addClass("show"); 
+  });
+</script>

@@ -7,8 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
+   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+  {{!-- <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script> --}}
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -34,7 +39,8 @@
         <li><a href="#">FAQs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-         <li><a href="/user/profile"><span></span> UserProfile</a></li>
+        <li><a href="/user/savedSpaces"><span></span>Spaces Saved</a></li>
+        <li><a href="/user/profile"><span></span> UserProfile</a></li>
         <li><a href="/user/signup"><span class="glyphicon glyphicon-log-in"></span> Sign Up</a></li>
         <li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         <li><a href="/user/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -43,7 +49,6 @@
   </div>
 </nav>
 {{{body}}}
-
   
 
 <footer class="container-fluid text-center">

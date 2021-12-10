@@ -1,213 +1,208 @@
 const express = require('express');
 const router = express.Router();
-const data = require("../data");
+const data = require('../data');
 const reviewData = data.reviews;
+const spaceData = data.space;
+const verify = data.util;
+const xss = require('xss');
 
-
-
-
-//get all reviews by Space ID
-router.get("/spaceId/:id", async function (req, res) {
-    if(!req.session.email)
-    {
-      res.status(400).redirect('/login');
-      return;
-    }
-    try {
-        const reviewInfo = await reviewData.getAllReviewsBySpaceId(req.params.id); // 
-        // console.log(req.params.id)
-        res.json(reviewInfo);
-    }
-    catch (e) {
-        res.status(404).json({ message: "'review' item not found!" });
-    }
-});
-
-
-//get review by review ID
-router.get("/:id", async function (req, res) {
-    try {
-        const reviewInfo = await reviewData.getReviewById(req.params.id); // title, user(id), post(id), content, time
-        // console.log(req.params.id)
-        res.json(reviewInfo);
-    }
-    catch (e) {
-        res.status(404).json({ message: "'review' item not found!" });
-    }
-});
-
-//get all reviews by User ID
-router.get("/userId/:id", async function (req, res) {
-    try {
-        const reviewInfo = await reviewData.getAllReviewsByUserId(req.params.id); // 
-        // console.log(req.params.id)
-        res.json(reviewInfo);
-    }
-    catch (e) {
-        res.status(404).json({ message: "'review' item not found!" });
-    }
-});
-
-
-//get reviews by space ID
-// router.get('/space/:id', async (req, res) => {
-//     let idInfo = req.params.id;
-//     if (!idInfo) {
-//         res.status(400).json({ error: 'You must provide id to get a space' });
-//         return;
-//     }
-//     try {
-//         const spaceById = await reviewData.getAllReviewsBySpaceId(idInfo);
-//         res.json(spaceById);
-//     } catch (error) {
-//         // console.log(error);
-//         res.status(404).json({ error: 'review not found' });
-//     }
-// });
-
-router.get("/", async function (req, res) {
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/login');
-    return;
-  }
-    try {
-        const reviewList = await reviewData.getAllReviews();
-        res.json(reviewList);
-    }
-    catch (e) {
-        res.status(500).send();
-    }
-});
-
-router.post("/:id", async (req, res) => { // add
-    if(!req.session.email)
-  {
-    res.status(400).redirect('/login');
-    return;
-  }
-  let idInfo = req.params.id;
-    let reviewInfo = req.body;
-    if (!reviewInfo) {
-        res.status(400).json({ error: 'You must provide data to create a review' });
+router.post('/creatreview/:id', async function(req, res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
         return;
     }
-
-    // const {title, user, space, content} = reviewInfo;
-    const { spaceId, userId, content, rating, datetime } = reviewInfo;
-    if (!spaceId || typeof spaceId !== 'string') {
-        res.status(400).json({ error: 'You must provide a spaceId for the review' });
-        return;
+    let errors = [];
+    const spaceId = req.params.id;
+    const userId = req.session.userId;
+    const review = xss(req.body.review);
+    const rating = Number(xss(req.body.rating));
+    let sumRating = 0;
+    sumRating = Number(sumRating);
+    if (!review){
+        errors.push('Review can not be empty!')
     }
-    if (!userId) {
-        res.status(400).json({ error: 'You must provide user id for the review' });
-        return;
+    if (!rating){
+        errors.push('Rating can not be empty!')
     }
-  
-    if (!content || typeof content !== 'string') {
-        res.status(400).json({ error: 'review content can not be empty.' });
-        return;
+    if (!verify.validString(userId)){
+        errors.push('Invaild userId!')
     }
-    if (!rating || typeof rating !== 'number' ||rating > 5 || rating < 1) {
-        res.status(400).json({ error: 'You must provide space review rating,and it must be a integer number between 1-5 ' });
-        return;
+    if (!verify.validString(spaceId)){
+        errors.push('Invaild spaceId!')
+    }
+    if (!verify.validString(review)){
+        errors.push('Invaild review!')
+    }
+    if (!verify.validRating(rating)){
+        errors.push('Invaild rating!')
+    }
+    if (errors.length > 0) {
+        return res.status(400).json(errors);
     }
     try {
-
-        let newReview = {};
-        newReview.spaceId = reviewInfo.spaceId;
-        newReview.userId = reviewInfo.userId;
-        newReview.content = reviewInfo.content;
-        newReview.rating = reviewInfo.rating;
-        newReview.datetime = reviewInfo.datetime;
-      
-            const spaceById = await reviewData.addReview( newReview.spaceId, newReview.userId, newReview.content, newReview.rating, newReview.datetime);
-            const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(idInfo);
-            let  averageRating=0 ;
-            for(var i=0;i<allReviewsAtThisspace.length;i++){
-                    averageRating+=allReviewsAtThisspace[i].rating;
-                    
-            }
-          
-            averageRating = averageRating/allReviewsAtThisspace.length;
-    
-            spaceById.overallRating = averageRating;
-            const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
-    
-            // async updateSpace(id,spaceName, address, spaceDim,price,hostId,description) {
-           // console.log(allReviewsAtThisspace.length);
-            //console.log(averageRating);//
-            // res.json(spaceById);
-
-
-        // const newreview = await reviewData.addReview(title, user, space, content);
-        // const newreview = await reviewData.addReview( spaceId, userId, content, rating, datetime);
-        res.status(200).send(spaceById)
-    } catch (e) {
-        res.status(500).json({ error: e })
-    }
-});
-
-router.post('/remove/:id', async (req, res) => {
-    
-    if(!req.session.email)
-    {
-      res.status(400).redirect('/login');
-      return;
-    }
-    if (!req.params.id) {
-        res.status(400).json({ error: 'You must Supply an ID to delete' });
-        return;
-    }
-
-    try {
-
-        const spaceById = await reviewData.removeReview(req.params.id);
-        const allReviewsAtThisspace = await reviewData.getAllReviewsBySpaceId(spaceById.resId);
-        const objToBeUp = await spacesData.get(spaceById.resId);
-        //console.log("deleted res");
-        //console.log(objToBeUp);
-
-        let  averageRating=0 ;
-        for(var i=0;i<allReviewsAtThisspace.length;i++){
-                averageRating+=allReviewsAtThisspace[i].rating;
-                
+        let reviewList = await reviewData.getAllreviewsOfSpace(spaceId);
+        for(i in reviewList){
+            sumRating += reviewList[i].rating;
         }
-        averageRating = averageRating/allReviewsAtThisspace.length;
-        //console.log("average rating after delete");
-        //console.log(averageRating);
-        objToBeUp.overallRating = averageRating;
-        const addReviewsTospacesInfo = await spacesData.updateSpace(spaceById.id,spaceById.spaceName, spaceById.address,spaceById.spaceDim,spaceById.price,spaceById.hostId,spaceById.description);
+        let newSumRating = sumRating + rating;
+        let avgRating = Math.round((newSumRating / (reviewList.length + 1)) * 10) / 10;
+        const newSpace = await spaceData.updateSpaceRating(spaceId,avgRating);
+        const newreview = await reviewData.createreview(userId, spaceId, review, rating);
+        res.redirect('http://localhost:3000/space/' + spaceId);
+    } catch(e) {
+        res.status(500).json({error: e});
+    }
+});
 
-        let resObj = {
-            reviewId: spaceById.reviewId,
-            deleted: true,
-           
-        };
+router.get("/:id",async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    let errors = [];
+    if(!req.params.id.trim()){
+        res.status(400).json({ error: 'You must Supply an Id' });
+        return;
+    }
+    if(!verify.validString(req.params.id.trim())){
+        errors.push('Invalid Id!');
+    }
+    if(errors.length > 0) {
+        return res.status(400).json(errors);
+    }
+    try{
+        let review = await reviewData.getreviewById(req.params.id);
+        res.status(200).json(review);
+    }
+    catch(e){
+        res.status(500).json({error: e});
+    }
+});
 
-        if (resObj) {
-            res.status(200).json(resObj);
-            // return res.redirect("/spaces/" + req.params.spaceId);
-        } else {
+router.get("/space/:id",async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    let spaceId = xss(req.params.id);
+
+    let errors = [];
+    if (!verify.validString(spaceId)){
+        errors.push('Invaild spaceId!')
+    }
+    if(errors.length > 0) {
+        return res.status(400).json(errors);
+    }
+    try{
+        const reviewList = await reviewData.getAllreviewsOfSpace(spaceId);
+        res.status(200).json(reviewList);
+    }
+    catch(e){
+        res.status(500).json({error: e});
+    }
+});
+
+router.get("/user/:id",async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    let userId = xss(req.params.id)
+    let errors = [];
+    if (!verify.validString(userId)){
+        errors.push('Invaild userId!')
+    }
+    if(errors.length > 0){
+        return res.status(400).json(errors);
+    }
+    try{
+        const reviewList = await reviewData.getAllreviewsOfUser(userId);
+        res.status(200).json(reviewList);
+    }
+    catch(e){
+        res.status(500).json({error: e});
+    }
+});
+
+router.post('/delete/:id',async function(req,res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    if(!req.params.id) {
+        res.status(400).json({ error:'You must Supply an ID!' });
+        return;
+    }
+    let reviewId = xss(req.params.id);
+    let errors = [];
+    if (!verify.validString(reviewId)){
+        errors.push('Invaild reviewId!')
+    }
+    if(errors.length > 0) {
+        return res.status(400).json(errors);
+    }
+    try{
+        let sumRating = 0;
+        sumRating = Number(sumRating);
+        let thisReview = await reviewData.getreviewById(reviewId);
+        let reviewList = await reviewData.getAllreviewsOfSpace(thisReview.spaceId.toString())
+        for(i in reviewList){
+            sumRating += reviewList[i].rating
+        }
+        let newSumRating = sumRating - thisReview.rating;
+        let avgRating = Math.round((newSumRating / (reviewList.length - 1)) * 10) / 10;
+        let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
+        if(reviewList.length == 1){
+            avgRating = 0;
+        }
+        const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
+        let deletereview = await reviewData.deletereview(reviewId);
+        if(deletereview){
+            res.redirect('http://localhost:3000/space/' + thisReview.spaceId);
+        }else{
             return res.status(404).send();
         }
-        //res.json({deleted: true, data: toBeDeletedReview});
-    } catch (e) {
+    } 
+    catch(e){
         res.status(500).json({ error: e });
     }
-
 });
 
-// this function should be added into "data/posts.js"
-async function getListOfreviewsInPost(postId) {
-    const thisPost = await post.getPost(postId);
-    const listOfreviews = thisPost.reviews; // an array of IDs
-    return listOfreviews;
-}
-
+router.post('/edit/:id', async function(req, res){
+    if(!req.session.email){
+        res.status(400).redirect('/user/login');
+        return;
+    }
+    const id = req.params.id;
+    const review = xss(req.body.review);
+    const rating = Number(xss(req.body.rating));
+    let errors = [];
+    if(!verify.validString(review)){
+        errors.push('Invaild review!')
+    }
+    if (!verify.validRating(rating)){
+        errors.push('Invaild rating!')
+    }
+    if(errors.length > 0) {
+        return res.status(400).json(errors);
+    }
+    try {
+        let sumRating = 0;
+        sumRating = Number(sumRating);
+        let thisReview = await reviewData.getreviewById(id);
+        let reviewList = await reviewData.getAllreviewsOfSpace(thisReview.spaceId.toString())
+        for(i in reviewList){
+            sumRating += reviewList[i].rating
+        }
+        let newSumRating = sumRating - thisReview.rating + rating;
+        let avgRating = Math.round((newSumRating / reviewList.length) * 10) / 10;
+        let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
+        const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
+        const newreview = await reviewData.updatereview(id, review, rating);
+        res.redirect('http://localhost:3000/space/' + thisReview.spaceId);
+    } catch(e) {
+        res.status(500).json({error: e});
+    }
+});
 
 module.exports = router;
-
-
-
-

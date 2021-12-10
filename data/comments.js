@@ -10,6 +10,8 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+        if(!verify.validId(commentId)) throw 'the commentId is invalid';
+        
         commentId = ObjectId(commentId);
         const commentCollection = await comments();
         let comment = await commentCollection.findOne({ _id: commentId});
@@ -24,9 +26,11 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
         if (!verify.validString(comment)){
             throw 'Invaild comment!'
         }
@@ -74,23 +78,26 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
+        if(!verify.validId(commentId)) throw 'the commentId is invalid';
         commentId = ObjectId(commentId);
         const commentCollection = await comments();
         const deletionInfo = await commentCollection.deleteOne({ _id: commentId});
         if (deletionInfo.deletedCount === 0){
             throw `Could not delete comment with id of ${commentId}！`;
         }
-        return 'Successfully delete!'; 
+        return true; 
     },
 
     async getAllCommentsOfSpace(spaceId) {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
 
         spaceId = ObjectId(spaceId);
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        
         
         for(i = 0; i < commentList.lenght; i++) {
             commentList[i]._id = commentList[i]._id.toString();
@@ -102,6 +109,7 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
         userId = ObjectId(userId);
         const commentCollection = await comments();
         const commentList = await commentCollection.find({'userId': { $eq: userId}}).toArray();
@@ -116,8 +124,9 @@ module.exports = {
         if (!verify.validString(id)){
             throw 'Invaild id!'
         }
+        if(!verify.validId(id)) throw 'the id is invalid';
         if (!verify.validString(comment)){
-            throw 'Invaild comment111!'
+            throw 'Invaild comment!'
         }
         let objId = ObjectId(id.trim());
         var myDate = new Date();
@@ -140,6 +149,6 @@ module.exports = {
         if (updateInfo.modifiedCount === 0) {
             throw "Error (updateComment): Failed to update comment in Database.";
         }
-        return  await this.getCommentById(id);
+        return  {commentModified: true};
     }
 }

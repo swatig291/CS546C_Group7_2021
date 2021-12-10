@@ -14,7 +14,7 @@ const constructorMethod = (app) => {
   });
 
   app.use('/user', userRoute);
-  app.use("/space", spaceData);
+  app.use('/space', spaceData);
   app.use("/comments", commentData);
   app.use("/reviews", reviewData);
   app.use("/bookings", bookingData);

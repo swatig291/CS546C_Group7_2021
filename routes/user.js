@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const userData = data.users;
+const spaceData = data.space;
+const verify = require('../data/util');
+const path = require("path");
+const fs = require('fs');
+const xss = require('xss');
 
 router.get('/login', async (req, res) => {
     try{
@@ -15,12 +20,17 @@ router.post('/login', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {email, password} = cred
+        const email = xss(cred.email);
+        const password = xss(cred.password);
         
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
+        if(password.trim().length<6 || password.indexOf(' ')>=0) throw 'The password is invalid';
+
         let authentication = await userData.checkUser(email, password);
+
         if(authentication !== null) {
             req.session.email = email;
-            req.session._id = authentication._id.toString();
+            req.session.userId = authentication._id.toString();
             res.redirect('/');
         }
         else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
@@ -41,11 +51,20 @@ router.post('/signup', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {firstName, lastName, email, password, phoneNumber, ssn} = cred
-        
+        const {firstName, lastName, email, password, phoneNumber, ssn} = xss(cred);
+
+        if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
+        if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
+        if(password.trim().length<6 || password.indexOf(' ')>=0) throw 'The password is invalid';
+        if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
+        if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
+        if(!verify.validNumber(ssn)) throw 'The SSN is invalid';
+        if(ssn.length != 9) throw 'The SSN is invalid';
+
         let authentication = await userData.createUser(firstName, lastName, email, password, phoneNumber, ssn);
         if(authentication.userInserted == true) {
-            res.redirect('/login');
+            res.redirect('/user/login');
         }
         else res.status(500).render('users/signup', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){
@@ -62,9 +81,23 @@ router.get('/logout', async (req, res) => {
     }
 })
 
+router.get('/delete', async (req, res) => {
+    try{
+        let accountDelete = await userData.deleteUser(req.session.userId);
+        if(accountDelete.userDeleted == true) {
+            req.session.destroy();
+            res.json('account deleted');
+        }
+        else res.status(500).json('server error');
+        
+    }catch(e){
+        res.json(e);
+    }
+})
+
 router.get('/profile', async (req, res) => {
     try{
-        let userDetails = await userData.getUser(req.session._id);
+        let userDetails = await userData.getUser(req.session.userId);
         res.render('users/profile', {
             pageTitle: 'Profile Page',
             firstName: userDetails.firstName,
@@ -83,9 +116,11 @@ router.post('/profile/firstName', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {firstName} = cred;
+        const {firstName} = xss(cred);
+
+        if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
         
-        let authentication = await userData.updateUserFirstName(req.session._id, firstName);
+        let authentication = await userData.updateUserFirstName(req.session.userId, firstName);
         if(authentication.userFirstNameModified == true) {
             res.render('users/profile', {userFirstNameModified: true});
         }
@@ -99,9 +134,11 @@ router.post('/profile/lastName', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {lastName} = cred;
+        const {lastName} = xss(cred);
+
+        if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
         
-        let authentication = await userData.updateUserLastName(req.session._id, lastName);
+        let authentication = await userData.updateUserLastName(req.session.userId, lastName);
         if(authentication.userLastNameModified == true) {
             res.render('users/profile', {userLastNameModified: true});
         }
@@ -115,9 +152,11 @@ router.post('/profile/email', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {email} = cred;
+        const {email} = xss(cred);
+
+        if(!verify.validEmail(email)) throw 'Email is invalid.';
         
-        let authentication = await userData.updateUserEmail(req.session._id, email);
+        let authentication = await userData.updateUserEmail(req.session.userId, email);
         if(authentication.userEmailModified == true) {
             req.session.email = email;
             res.render('users/profile', {userEmailModified: true});
@@ -132,9 +171,12 @@ router.post('/profile/phoneNumber', async (req, res) => {
     try{
         //destructuring request body details into username and password
         let cred = req.body;
-        const {phoneNumber} = cred;
+        const {phoneNumber} = xss(cred);
+
+        if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
+        if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
         
-        let authentication = await userData.updateUserPhoneNumber(req.session._id, phoneNumber);
+        let authentication = await userData.updateUserPhoneNumber(req.session.userId, phoneNumber);
         if(authentication.userPhoneNumberModified == true) {
             res.render('users/profile', {userPhoneNumberModified: true});
         }
@@ -147,9 +189,12 @@ router.post('/profile/phoneNumber', async (req, res) => {
 router.post('/profile/password', async (req, res) => {
     try{
         let cred = req.body;
-        const {oldPassword, newPassword} = cred;
+        const {oldPassword, newPassword} = xss(cred);
+
+        if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0) throw 'The password is invalid';
+        if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The password is invalid';
         
-        let authentication = await userData.updateUserPassword(req.session._id, oldPassword, newPassword);
+        let authentication = await userData.updateUserPassword(req.session.userId, oldPassword, newPassword);
         if(authentication.userPasswordModified == true) {
             res.json(true);
         }
@@ -157,5 +202,38 @@ router.post('/profile/password', async (req, res) => {
         res.json(false);
     }
 })
+
+router.get('/savedSpaces', async (req, res) => {
+    try{
+        let savedStorage = await userData.getSavedSpaces(req.session.userId);
+        
+        if(savedStorage.length == 0) {
+            res.json('There are no saved spaces');
+        }else{
+            let savedSpaces = [];
+
+            for(let i = 0 ; i < savedStorage.length ; i++){
+                if(savedStorage[i] == null) throw 'The space id is invalid';
+                let spaceDetails = await spaceData.getSpaceById(savedStorage[i]);
+                savedSpaces.push(spaceDetails);
+            }
+            console.log(savedSpaces);
+            savedSpaces.forEach(space => {
+                let folder  = path.join(__dirname, '../','public/','images/','uploads/',space._id);
+                space['photoArray'] = [];
+                if (fs.existsSync(folder)) {
+                  fs.readdirSync(folder).forEach(file => {
+                    let imgPath = 'http://localhost:3000/public/images/uploads/' + space._id + '/'+ file;
+                    space.photoArray.push(imgPath);
+                   });
+                 } 
+            })
+            console.log(savedSpaces);
+            res.render('users/savedSpaces', { savedSpaces });
+        }
+    }catch(e){
+        res.json(e);
+    }
+});
 
 module.exports = router;

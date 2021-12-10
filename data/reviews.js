@@ -1,145 +1,161 @@
 const mongoCollections = require('../config/mongoCollections');
-const { ObjectId } = require('mongodb');
 const reviews = mongoCollections.reviews;
-const space = require("./space.js");
-const users = require("./users.js");
-
-async function getReviewById(id) {
-    if (!id || typeof id !== "string")
-        throw 'You must provide an id to search for';
-    let reviewCollection = await reviews();
-    let objId = ObjectId.createFromHexString(id);
-    let reviewGoal = await reviewCollection.findOne({ _id: objId });
-    if (reviewGoal === null)
-        throw 'No review with that id';
-    return reviewGoal;
-}
-
-async function getAllReviews() {
-    let reviewCollection = await reviews();
-    let allreviews = await reviewCollection.find({}).toArray();
-    return allreviews;
-}
-
-async function addReview(spaceId, userId, content, rating) {
-
-    if (!spaceId || typeof spaceId !== "string")
-        throw 'you should input a string as the spaceId';
-    if (!userId || typeof userId !== "string")
-        throw 'you should input a string as the userId';
-    if (!content || typeof content !== "string")
-        throw 'you should input a string as the content';
-
-    let reviewCollection = await reviews();
-    let newreview = {
-        spaceId: spaceId,
-        userId: userId,
-        content: content,
-        rating: rating,
-        datetime: new Date().toLocaleDateString()
-    }
-    let insertInfo = await reviewCollection.insertOne(newreview);
-    if (insertInfo === null)
-        throw 'Something wrong when adding the review';
-    let newreviewId = insertInfo.insertedId;
-    let reviewCreated = await getReviewById(newreviewId.toHexString());
-
-    // await spacesCollection.addreviewIdTospace(spaceId, newreviewId.toHexString());
-
-    return reviewCreated;
-}
-
-
-async function getAllReviewsBySpaceId(id) {
-    try {
-        var parsedId = ObjectId(id);
-    } catch (error) {
-        throw `id  must be  a valid ObjectId`;
-    }
-    const SpacesCollection = await space();
-    const reviewsList = await SpacesCollection.findOne({ _id: parsedId }, { projection: { reviews: 1, _id: 0 } });
-    if (reviewsList === null || reviewsList.reviews.length == 0) throw `no reviews for the Space _id are found`;
-    for (let i = 0; i < reviewsList.reviews.length; i++) {
-        reviewsList.reviews[i]._id = reviewsList.reviews[i]._id.toString();
-    }
-
-    return reviewsList.reviews;
-    //Return object reviews in array.
-}
-
-
-async function getAllReviewsByUserId(id) {
-    try {
-        var parsedId = ObjectId(id);
-    } catch (error) {
-        throw `id  must be  a valid ObjectId`;
-    }
-    const usersCollection = await users();
-    const reviewsList = await usersCollection.findOne({ _id: parsedId }, { projection: { reviews: 1, _id: 0 } });
-    if (reviewsList === null || reviewsList.reviews.length == 0) throw `no reviews for the user _id are found`;
-    for (let i = 0; i < reviewsList.reviews.length; i++) {
-        reviewsList.reviews[i]._id = reviewsList.reviews[i]._id.toString();
-    }
-
-    return reviewsList.reviews;
-    //Return object reviews in array.
-}
-
-async function removeReview(id) {
-    try {
-        var parsedId = ObjectId(id);
-    } catch (error) {
-        throw `id  must be  a valid ObjectId`;
-    }
-
-
-    const spacesCollection = await space();
-    const targetspace = await spacesCollection.findOne({ 'reviews._id': parsedId });
-    //console.log(targetspace);
-    //console.log("lll");
-    if (targetspace === null) throw `cannot found `;
-
-    const reviewDeleteFromspace = await spacesCollection.updateOne({ _id: targetspace._id }, { $pull: { reviews: { _id: parsedId } } });
-
-    let spaceObj = {
-        reviewId: id,
-        deleted: true,
-        spaceId: targetspace._id
-    };
-    return spaceObj;
-}
-
-
-//  async function removeReview(id) {
-//     if (!verify.validString(id)) throw 'review id must be a valid string.';
-
-//     let objId = ObjectId(id.trim());
-
-//     let existingData = await this.getReviewById(id);
-
-//     if(existingData === null) throw 'review does not exist for the given Id'
-
-
-//     //delete reviews related to respective Id
-
-//     //check delete info.(track)
-
-//     let reviewCollection = await reviews();
-//     let deletionInfo = await reviewCollection.deleteOne({ _id: objId });
-//     if (deletionInfo.deletedCount === 0) {
-//         throw `Could not delete the review with id of ${id}`;
-//     }
-
-//     return true;
-// }
-
+const verify = require('./util');
+const userData = require('./users');
+const spaceData = require('./space');
+let {ObjectId} = require('mongodb');
 
 module.exports = {
-    getReviewById,
-    addReview,
-    removeReview,
-    getAllReviews,
-    getAllReviewsBySpaceId,
-    getAllReviewsByUserId
-}
+    async getreviewById(reviewId) {
+        if (!verify.validString(reviewId)){
+            throw 'Invaild reviewId!'
+        }
+        reviewId = ObjectId(reviewId);
+        const reviewCollection = await reviews();
+        let review = await reviewCollection.findOne({ _id: reviewId});
+        if (review === null){
+            throw 'No review with that id';
+        }
+        review._id = review._id.toString();
+        return review;
+    },
 
+    async createreview(userId, spaceId, review,rating) {
+        if (!verify.validString(userId)){
+            throw 'Invaild userId!'
+        }
+        if (!verify.validString(spaceId)){
+            throw 'Invaild spaceId!'
+        }
+        if(!verify.validId(userId)) throw 'userId is invalid';
+        if(!verify.validId(spaceId)) throw 'spaceId is invalid';
+
+        if (!verify.validString(review)){
+            throw 'Invaild review!'
+        }
+
+        if(!verify.validNumber(rating)) throw 'rating is invalid';
+        if(rating<0 || rating>5) throw 'rating is invalid';
+        
+        if(userData.getUser(userId) == null){
+            throw "No user exists with that userId!"
+        }
+        
+        if(spaceData.getSpaceById(spaceId) == null){
+            throw "No space exists with that spaceId!"
+        }
+        
+        userId = ObjectId(userId);
+        spaceId = ObjectId(spaceId);
+
+        var myDate = new Date();
+        let cyear = myDate.getFullYear().toString();
+        let cmonth = (myDate.getMonth()+1).toString();
+        let cday = myDate.getDate().toString();
+        if(cmonth.length ==1){
+            cmonth = "0" + cmonth
+        }
+        if(cday.length ==1){
+            cday = "0" + cday
+        }
+        const currentDate = cmonth + '/' + cday + '/' + cyear;
+
+        let newreview = {
+            userId: userId, 
+            spaceId: spaceId, 
+            review: review,
+            rating:rating,
+            date: currentDate
+        };
+
+        const reviewCollection = await reviews();
+        const insertInfo = await reviewCollection.insertOne(newreview);
+        if(insertInfo.insertedCount === 0){
+            throw 'Could not add review.';
+        }
+        const newId = insertInfo.insertedId;
+        const newreviews = await this.getreviewById(newId.toString());
+
+        return newreviews;
+    },
+
+    async deletereview(reviewId) {
+        if (!verify.validString(reviewId)){
+            throw 'Invaild reviewId!'
+        }
+        if(!verify.validId(reviewId)) throw 'the reviewId is invalid';
+        reviewId = ObjectId(reviewId);
+        const reviewCollection = await reviews();
+        const deletionInfo = await reviewCollection.deleteOne({ _id: reviewId});
+        if (deletionInfo.deletedCount === 0){
+            throw `Could not delete review with id of ${reviewId}！`;
+        }
+        return true; 
+    },
+
+    async getAllreviewsOfSpace(spaceId) {
+        if (!verify.validString(spaceId)){
+            throw 'Invaild spaceId!'
+        }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
+
+        spaceId = ObjectId(spaceId);
+        const reviewCollection = await reviews();
+        const reviewList = await reviewCollection.find({'spaceId': { $eq: spaceId}}).toArray();
+        
+        for(i = 0; i < reviewList.lenght; i++) {
+            reviewList[i]._id = reviewList[i]._id.toString();
+        }
+        return reviewList; 
+    },
+
+    async getAllreviewsOfUser(userId) {
+        if (!verify.validString(userId)){
+            throw 'Invaild userId!'
+        }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
+
+        userId = ObjectId(userId);
+        const reviewCollection = await reviews();
+        const reviewList = await reviewCollection.find({'userId': { $eq: userId}}).toArray();
+        
+        for(i = 0; i < reviewList.lenght; i++) {
+            reviewList[i]._id = reviewList[i]._id.toString();
+        }
+        return reviewList; 
+    },
+
+    async updatereview(id, review, rating) {
+        if (!verify.validString(id)){
+            throw 'Invaild id!'
+        }
+        if(!verify.validId(id)) throw 'the Id is invalid';
+        
+        if (!verify.validString(review)){
+            throw 'Invaild review'
+        }
+        let objId = ObjectId(id.trim());
+        var myDate = new Date();
+        let cyear = myDate.getFullYear().toString();
+        let cmonth = (myDate.getMonth()+1).toString();
+        let cday = myDate.getDate().toString();
+        if(cmonth.length ==1){
+            cmonth = "0" + cmonth
+        }
+        if(cday.length ==1){
+            cday = "0" + cday
+        }
+        const currentDate = cmonth + '/' + cday + '/' + cyear;
+        const reviewCollection = await reviews();
+        const updatereview = {
+            review: review,
+            rating:rating,
+            date: currentDate
+        };
+        const updateInfo = await reviewCollection.updateOne({ _id: objId }, {$set: updatereview});
+        if (updateInfo.modifiedCount === 0) {
+            throw "Error (updatereview): Failed to update review in Database.";
+        }
+        return  {reviewModified: true}
+    }
+}

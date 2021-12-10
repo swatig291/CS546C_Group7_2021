@@ -1,5 +1,9 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
+const spaces = mongoCollections.space;
+const reviews = mongoCollections.reviews;
+const comments = mongoCollections.comments;
+const bookings = mongoCollections.bookings;
 const bcrypt = require('bcryptjs');
 const verify = require('./util');
 
@@ -62,6 +66,7 @@ let createUser = async function createUser(firstName, lastName, email, password,
 let getUser = async function getUser(id){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
 
     const userData = await users();
     let parseId = ObjectId(id);
@@ -69,12 +74,27 @@ let getUser = async function getUser(id){
     const finder = await userData.findOne({_id: parseId});
     if(finder == null) throw 'There is no user with the given ID';
 
-    return verify.convertId(finder);
+    return finder;
+}
+
+let getSavedSpaces = async function getUser(id){
+
+    if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
+
+    const userData = await users();
+    let parseId = ObjectId(id);
+
+    const finder = await userData.findOne({_id: parseId});
+    if(finder == null) throw 'There is no user with the given ID';
+
+    return finder['savedStorages'];
 }
 
 let updateUser = async function updateUser(id, firstName, lastName, email, phoneNumber){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
     if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
 
@@ -115,6 +135,7 @@ let updateUser = async function updateUser(id, firstName, lastName, email, phone
 let updateUserFirstName = async function updateUserFirstName(id, firstName){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
     
     const userData = await users();
@@ -140,6 +161,7 @@ let updateUserFirstName = async function updateUserFirstName(id, firstName){
 let updateUserLastName = async function updateUserLastName(id, lastName){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
     
     const userData = await users();
@@ -165,6 +187,7 @@ let updateUserLastName = async function updateUserLastName(id, lastName){
 let updateUserEmail = async function updateUserLastName(id, email){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(!verify.validEmail(email)) throw 'Email must be a valid string.';
     
     const userData = await users();
@@ -193,6 +216,7 @@ let updateUserEmail = async function updateUserLastName(id, email){
 let updateUserPhoneNumber = async function updateUserPhoneNumber(id, phoneNumber){
 
     if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
     if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
 
@@ -221,6 +245,8 @@ let updateUserPhoneNumber = async function updateUserPhoneNumber(id, phoneNumber
 
 let updateUserPassword = async function updateUserPassword(id, oldPassword, newPassword){
 
+    if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
     if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0) throw 'The Old Password is invalid.';
     if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The New Password is invalid.';
     
@@ -254,7 +280,6 @@ let updateUserPassword = async function updateUserPassword(id, oldPassword, newP
 let checkUser = async function checkUser(email, password){
 
     if(!verify.validEmail(email)) throw 'Either Email or password is invalid.';
-
     if(password.trim().length<6 || password.indexOf(' ')>=0) throw 'Either Email or password is invalid.';
 
     const userData = await users();
@@ -269,14 +294,41 @@ let checkUser = async function checkUser(email, password){
 
 }
 
+let deleteUser = async function deleteUser(id){
+    
+    if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
+
+    const userData = await users();
+    const spaceData = await spaces();
+    const commentData = await comments();
+    const reviewData = await reviews();
+    const bookingData = await bookings();
+
+    let parseId = ObjectId(id);
+
+    const delUser = await userData.deleteOne({_id: parseId});
+    const delUserSpaces = await spaceData.deleteMany({UserId: id});
+    const delUserComments = await commentData.deleteMany({UserId: parseId});
+    const delUserReviews = await reviewData.deleteMany({UserId: parseId});
+    const delUserBookings = await bookingData.deleteMany({UserId: id});
+
+    console.log(delUserSpaces);
+    if(delUser.deletedCount === 0) throw 'unable to delete user with the given ID';
+
+    return {userDeleted: true};
+}
+
 module.exports = {
     createUser,
     getUser,
+    getSavedSpaces,
     updateUser,
     updateUserFirstName,
     updateUserLastName,
     updateUserEmail,
     updateUserPhoneNumber,
     updateUserPassword,
-    checkUser
+    checkUser,
+    deleteUser
 }

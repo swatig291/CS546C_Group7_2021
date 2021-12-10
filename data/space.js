@@ -174,9 +174,6 @@ module.exports = {
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
         if(!verify.validId(id)) throw 'Id is invalid';
 
-        if(!verify.validNumber(rating)) throw 'rating is invalid';
-        if(rating > 0 || rating < 5) throw 'rating is invalid';
-
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);
         if(existingData === null) throw 'Space does not exist for the given Id'

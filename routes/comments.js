@@ -158,8 +158,8 @@ router.post('/edit/:id', async function(req, res){
         errors.push('You can not edit the comment post by other person!')
     }
     console.log(comment)
-    if(!verify.validString(comment)){
-        throw 'Invaild comment!'
+    if (!verify.validString(comment)){
+        errors.push('Invaild comment!')
     }
     if(errors.length > 0){
         return res.status(400).json(errors);

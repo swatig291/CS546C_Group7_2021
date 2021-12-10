@@ -134,6 +134,9 @@ module.exports = {
         if (!verify.validString(review)){
             throw 'Invaild review'
         }
+        if(!verify.validNumber(rating)) throw 'rating is invalid';
+        if(rating<0 || rating>5) throw 'rating is invalid';
+        
         let objId = ObjectId(id.trim());
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();

@@ -57,7 +57,13 @@ function validMetrics(metrics) {
 function validNumber(num)
 {
     num = parseInt(num);
-    if (isNaN(num) || !num || (typeof num != 'number') || !Number.isInteger(num)) return false;
+    if (isNaN(num) || !num || (typeof num != 'number') || !Number.isInteger(num) || num < 0) return false;
+    return true;
+}
+function validLocation(num)
+{
+    num = parseInt(num);
+    if (isNaN(num) || !num || (typeof num != 'number')) return false;
     return true;
 }
 function validDate(date)
@@ -87,6 +93,7 @@ module.exports = {
     validAge,
     validZip,
     validNumber,
+    validLocation,
     validEmail,
     validBoolean,
     validRating,

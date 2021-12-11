@@ -51,7 +51,7 @@
                <p id="pricePerDay" hidden> {{spaceDetails.price}}</p>
                <p id="spaceId" hidden>{{spaceDetails._id}}</p>
                <h4>Space Dimension: {{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</h4>
-
+            <div class="row error"></div>
             </div>
             {{#if canBook}}
             <div class="col-sm-4">
@@ -95,7 +95,7 @@
                     <form action="/comments/edit/{{this._id}}" method="POST" name="editCommentForm" id="editCommentForm" style="display: block;">
                         <div id="editCommentText">
                             <label>
-                                <h3>Update your comment</h3>
+                                <h3>Update your comment:</h3>
                                 <textarea name="comment" class="form-control form-control-lg" id="comment" cols="20" rows="2" 
                                 placeholder="You can update this comment here." autocomplete="false" required></textarea>
                             </label>
@@ -121,7 +121,7 @@
             <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
                 <div>
                     <label>
-                        <h2>Post a new comment here</h2>
+                        <h2>Post a new comment below:</h2>
                         <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="5" 
                         placeholder="You can enter any questions you want to ask about this Space here." autocomplete="false" required></textarea>
                     </label>
@@ -152,9 +152,14 @@
                             <h3>Update your review:</h3>
                             <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2"
                                 placeholder="You can update this review here." autocomplete="false" required></textarea>
-                                Update your rating:
-                            <input type="number" name="rating" class="form-control form-control-lg" id="rating"
-                                placeholder="rating (number 1-5)" autocomplete="false" required>
+                                <label for="update-rating">Update your rating:</label>
+                                <select name="rating" id="rating-select" class="form-control">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
                         </label>
                     </div>
                     <div id="review-submit-button">
@@ -178,12 +183,18 @@
             <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
                 <div>
                     <label>
-                        <h2>Post a new review and rating below</h2>
+                        <h2>Post a new review and rating below:</h2>
                         <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
                             placeholder="You can write any reviews about this space." autocomplete="false" required></textarea>
                         <br>
-                        <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
-                        placeholder="rating (number 1-5)" autocomplete="false" required>
+                       <label for="post-rating">Select your rating:</label>
+                        <select name="rating" id="rating-select" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                     </label>
                 </div>
 
@@ -200,11 +211,10 @@
 <div id='bookings' hidden>{{booking}}</div>
  <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>
  {{!-- <script src="/public/javascript/forms.js"></script> --}}
+
 <script>
 $( document ).ready(function() {
     var check_in = {{{booking}}}
 //var check_in = [["2021-12-05","2021-12-05"], ["2021-12-15", "2021-12-20"]];
    disableDates(check_in);
 });
-
-</script>

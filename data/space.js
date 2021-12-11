@@ -7,7 +7,7 @@ const bookings = mongoCollections.bookings;
 const verify = require('./util');
 
 let { ObjectId } = require('mongodb');
-// const { comments } = require('.');
+
 // {
 //     "spaceName" : "spaceName1",
 //             "spaceDim": {
@@ -66,8 +66,8 @@ module.exports = {
         if (price<0) throw 'price cannot be negative';
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(newDesc)) throw 'Image Path must be valid string';
-        if (!verify.validNumber(location.longitude)) throw 'Longitude must be a number';
-        if (!verify.validNumber(location.latitude)) throw 'Latitude must be a number';
+        if (!verify.validLocation(location.longitude)) throw 'Longitude must be a number';
+        if (!verify.validLocation(location.latitude)) throw 'Latitude must be a number';
 
 
         const spaceCollection = await spaces();
@@ -128,8 +128,8 @@ module.exports = {
         if (!verify.validString(hostId)) throw 'Host id must be a valid string.';
         if(!verify.validString(description)) throw 'Image Path must be valid string';
 
-        if (!verify.validNumber(location.longitude)) throw 'Longitude must be a number';
-        if (!verify.validNumber(location.latitude)) throw 'Latitude must be a number';
+        if (!verify.validLocation(location.longitude)) throw 'Longitude must be a number';
+        if (!verify.validLocation(location.latitude)) throw 'Latitude must be a number';
 
 
         let objId = ObjectId(id.trim());
@@ -173,9 +173,6 @@ module.exports = {
     async updateSpaceRating(id, rating) {
         if (!verify.validString(id))  throw 'Space id must be a valid string.';
         if(!verify.validId(id)) throw 'Id is invalid';
-
-        if(!verify.validNumber(rating)) throw 'rating is invalid';
-        if(rating > 0 || rating < 5) throw 'rating is invalid';
 
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);

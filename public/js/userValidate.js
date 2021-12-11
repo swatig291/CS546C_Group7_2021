@@ -37,7 +37,7 @@
             $("<p/>").addClass( "error" ).text('Password must be provided').appendTo('#password');
             hasError =true;
         }
-        if(!/[^\s]/.test(password)){
+        if(/[\s]/.test(password)){
             $("<p/>").addClass( "error" ).text('Password cannot consist spaces').appendTo('#password');
             hasError =true;
         }

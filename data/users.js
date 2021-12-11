@@ -87,7 +87,6 @@ let getSavedSpaces = async function getUser(id){
 
     const finder = await userData.findOne({_id: parseId});
     if(finder == null) throw 'There is no user with the given ID';
-
     return finder['savedStorages'];
 }
 
@@ -291,9 +290,9 @@ let updateSavedSpaces = async function updateSavedSpaces(id, spaceId){
 
     const updatedUser = await userData.updateOne(
         { _id: parseId },
-        { $set: updated }
+        { $set: finder }
     );
-
+    
     if (updatedUser.modifiedCount === 0) {
         throw "could not update user's spaces successfully";
     }

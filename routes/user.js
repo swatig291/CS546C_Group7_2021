@@ -18,7 +18,6 @@ router.get('/login', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try{
-        //destructuring request body details into username and password
         let cred = req.body;
         const email = xss(cred.email);
         const password = xss(cred.password);
@@ -49,6 +48,7 @@ router.get('/signup', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
     try{
+
         //destructuring request body details into username and password
 
         let firstName = xss(req.body.firstName);
@@ -232,5 +232,17 @@ router.get('/savedSpaces', async (req, res) => {
         res.json(e);
     }
 });
+
+router.post('/savedSpaces/:id', async (req, res) => {
+    try{
+        let spaceId = req.params.id;
+
+        let favorites = await userData.updateSavedSpaces(req.session.userId, spaceId);
+        if(favorites.userSavedSpaces != true) throw "space cannot be favorited";
+
+    }catch(e){
+        res.status(400).json(e);
+    }
+})
 
 module.exports = router;

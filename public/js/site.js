@@ -81,28 +81,28 @@ function getStars(rating) {
   if(form){
       var formData = new FormData(form);
   }
-var file = document.getElementById('addImg')
+// var file = document.getElementById('addImg')
 
-// count for photos user has chosen
-var fileCount = 0;
-$('#imageCount').hide();
-//  when user choose photos
-file.onchange = function () {
-    for (let i = 0; i < this.files.length; i++) {
-        formData.append('photo' + i, this.files[i]); // add photos' path to formData
-        fileCount ++;
-    }
-    if(fileCount == 1){
-        $('#imageCount').text('You have chosen '+fileCount+' photo');
-        $('#imageCount').show();
-    } else if(fileCount > 1 && fileCount <=4){
-        $('#pimageCount').text('You have chosen '+fileCount+' photos');
-        $('#imageCount').show();
-    } else {
-        $('#pimageCount').text('You can only upload 4 photos at most');
-        $('#imageCount').show();
-    }
-};
+// // count for photos user has chosen
+// var fileCount = 0;
+// $('#imageCount').hide();
+// //  when user choose photos
+// file.onchange = function () {
+//     for (let i = 0; i < this.files.length; i++) {
+//         formData.append('photo' + i, this.files[i]); // add photos' path to formData
+//         fileCount ++;
+//     }
+//     if(fileCount == 1){
+//         $('#imageCount').text('You have chosen '+fileCount+' photo');
+//         $('#imageCount').show();
+//     } else if(fileCount > 1 && fileCount <=4){
+//         $('#pimageCount').text('You have chosen '+fileCount+' photos');
+//         $('#imageCount').show();
+//     } else {
+//         $('#pimageCount').text('You can only upload 4 photos at most');
+//         $('#imageCount').show();
+//     }
+// };
     $('#addNewPostButton').click(function () {
       var form = document.getElementById('static-form');
 
@@ -332,4 +332,29 @@ function userSpace(){
   //Some code
   window.location = 'http://localhost:3000/space/user' ;    
  
+}
+
+// $('#favorites').click(function(){
+
+//   let spaceId = $('.spaceId').text()
+//   var requestConfig = {
+//     method: 'POST',
+//     url: 'user/savedSpaces/'+spaceId,
+//   };
+
+//   $.ajax(requestConfig).then(function(responseMessage){
+    
+//   });
+// });
+
+function fav(id)
+{
+  var requestConfig = {
+    method: 'POST',
+    url: 'user/savedSpaces/'+id,
+  };
+
+  $.ajax(requestConfig).then(function(responseMessage){
+    
+  });
 }

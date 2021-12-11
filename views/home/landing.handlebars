@@ -80,12 +80,17 @@
                             <p hidden class="spaceId">{{this._id}}</p>
                             <p class="starRate">{{this.rating}}</p>                   
                         <span class='stars'></span>
-                    </div>
+                       </div>
                 </div>
-                <div onClick="divFunction('{{this._id}}')">
-                 <div >${{this.price}}/Night</div>
-                 <div >{{this.address.city}}</div>
-                <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                <div > 
+                    <div class='col-sm-8' onClick="divFunction('{{this._id}}')">
+                        <div >${{this.price}}/Night</div>
+                        <div >{{this.address.city}}</div>
+                        <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                     </div>
+                      <div class='col-sm-4'>
+                        <a type='submit' onClick="fav('{{this._id}}')" id='favorites'>fav</a>
+                      </div>
                 </div>
             </div>
     </div>

@@ -87,8 +87,31 @@
         </div>
         {{/each}}
     </div>
-    </div>
-</div>
+    <section class="py-2">
+        <div class="container-fluid">
+            <div class="row">
+                 <div>
+                        <form class="form-inline" action="/space/search" method="POST">
+                            <div class="input-group">
+                            <input type="text" name="name"class="form-control" size="50" placeholder="Enter city or state" required>
+                        
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-danger">Search</button>
+                            </div>
+                            </div>
+                        </form>
+                 </div>
+                 <div>
+
+                 </div>
+            </div>
+        </div>
+    </section>   
+
+ </div>
+
+
+
 <script>
     $(".dropdown").on("click", ".dropdown-toggle", function(e) { 
     e.preventDefault();

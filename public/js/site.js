@@ -76,7 +76,9 @@ function getStars(rating) {
   });
 
 
+
     $('#addNewPostButton').on('click',function () {
+
       var form = document.getElementById('static-form');
 
       if(form){
@@ -287,6 +289,20 @@ function userSpace(){
  
 }
 
+
+
+function fav(id)
+{
+  var requestConfig = {
+    method: 'POST',
+    url: 'user/savedSpaces/'+id,
+  };
+
+  $.ajax(requestConfig).then(function(responseMessage){
+    
+  });
+}
+
 $(".editable").each(function(i) {
   var $this = $(this);
   $this.attr("id", "orig-" + i);
@@ -343,3 +359,4 @@ $(".editable").each(function(i) {
  })
   
  
+

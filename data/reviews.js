@@ -27,16 +27,23 @@ module.exports = {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(userId)) throw 'userId is invalid';
+        if(!verify.validId(spaceId)) throw 'spaceId is invalid';
+
         if (!verify.validString(review)){
             throw 'Invaild review!'
         }
+
+        if(!verify.validRating(rating)) throw 'rating is invalid';
         
         if(userData.getUser(userId) == null){
             throw "No user exists with that userId!"
         }
+        
         if(spaceData.getSpaceById(spaceId) == null){
             throw "No space exists with that spaceId!"
         }
+        
         userId = ObjectId(userId);
         spaceId = ObjectId(spaceId);
 
@@ -75,6 +82,7 @@ module.exports = {
         if (!verify.validString(reviewId)){
             throw 'Invaild reviewId!'
         }
+        if(!verify.validId(reviewId)) throw 'the reviewId is invalid';
         reviewId = ObjectId(reviewId);
         const reviewCollection = await reviews();
         const deletionInfo = await reviewCollection.deleteOne({ _id: reviewId});
@@ -88,6 +96,7 @@ module.exports = {
         if (!verify.validString(spaceId)){
             throw 'Invaild spaceId!'
         }
+        if(!verify.validId(spaceId)) throw 'the spaceId is invalid';
 
         spaceId = ObjectId(spaceId);
         const reviewCollection = await reviews();
@@ -103,6 +112,8 @@ module.exports = {
         if (!verify.validString(userId)){
             throw 'Invaild userId!'
         }
+        if(!verify.validId(userId)) throw 'the userId is invalid';
+
         userId = ObjectId(userId);
         const reviewCollection = await reviews();
         const reviewList = await reviewCollection.find({'userId': { $eq: userId}}).toArray();
@@ -117,9 +128,13 @@ module.exports = {
         if (!verify.validString(id)){
             throw 'Invaild id!'
         }
+        if(!verify.validId(id)) throw 'the Id is invalid';
+        
         if (!verify.validString(review)){
             throw 'Invaild review'
         }
+        if(!verify.validRating(rating)) throw 'rating is invalid';
+        
         let objId = ObjectId(id.trim());
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();

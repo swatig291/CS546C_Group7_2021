@@ -74,8 +74,8 @@ router.post('/add', async (req, res) => {
           if (!verify.validNumber(newPrice)) errors.push('Length must be a number');
           if (!verify.validString(newHostId))  errors.push('Host id must be a valid string.');
 
-          if (!verify.validNumber(location.longitude)) errors.push('longitude must be a number');
-          if (!verify.validNumber(location.latitude)) errors.push('latitude must be a number');
+          if (!verify.validLocation(location.longitude)) errors.push('longitude must be a number');
+          if (!verify.validLocation(location.latitude)) errors.push('latitude must be a number');
           // if(!verify.validString(newImagePath))  errors.push('Image Path must be valid string');
          
           const allSpace = await spaceData.getAllSpace();
@@ -495,4 +495,5 @@ router.get('/filter/:filterBy',async(req,res) =>{
 
     }
 });
- module.exports = router
+
+module.exports = router

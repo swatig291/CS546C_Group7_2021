@@ -202,6 +202,7 @@ router.post('/profile/password', async (req, res) => {
 
 router.get('/savedSpaces', async (req, res) => {
     try{
+
         let savedStorage = await userData.getSavedSpaces(req.session.userId);
         
         if(savedStorage.length == 0) {
@@ -214,7 +215,6 @@ router.get('/savedSpaces', async (req, res) => {
                 let spaceDetails = await spaceData.getSpaceById(savedStorage[i]);
                 savedSpaces.push(spaceDetails);
             }
-            console.log(savedSpaces);
             savedSpaces.forEach(space => {
                 let folder  = path.join(__dirname, '../','public/','images/','uploads/',space._id);
                 space['photoArray'] = [];
@@ -225,7 +225,6 @@ router.get('/savedSpaces', async (req, res) => {
                    });
                  } 
             })
-            console.log(savedSpaces);
             res.render('users/savedSpaces', { savedSpaces });
         }
     }catch(e){

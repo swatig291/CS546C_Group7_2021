@@ -88,7 +88,7 @@ router.post('/add', async (req, res) => {
               //delete the uploaded photo's
               try{
                   if (fs.existsSync(folderName)) {
-                    fs.rmdirSync(folderName, {recursive: true})
+                    fs.rmSync(folderName, {recursive: true})
                   }
               }
               catch(e)
@@ -107,7 +107,7 @@ router.post('/add', async (req, res) => {
 
           try {
               newSpace = await spaceData.createSpace(newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc,location);
-              console.log(newSpace);
+              //console.log(newSpace);
               let id = newSpace._id.toString();
               let folderNameNew = path.join(folderName,'../',id);
               fs.renameSync(folderName, folderNameNew)

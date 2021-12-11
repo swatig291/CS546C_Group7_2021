@@ -1,54 +1,28 @@
-
-{{#if hasError}}
-<h1 class="error">{{error}}.</h1>
-{{/if}}
-
-<form action="/user/signup" method="POST" id="signup-form">
-    <div>
-        <label>
-        First Name: 
-        <input type="text" name="firstName" placeholder="Enter your First Name" class="full-width-input"/>
-        </label>
+<body>
+    <div class="login-dark">
+        <form action="/user/signup" method="POST" id="signup-form">
+            <p class="signUp">Sign Up</p>
+            <p class="signUpText">It's free and only takes a minute.!</p>
+            <div class="form-group">
+                <input type="text" name="firstName" placeholder="First Name" class="full-width-input form-control"/>
+            </div>
+            <div class="form-group">                
+                  <input type="text" name="lastName" placeholder="Last Name" class="full-width-input form-control"/>
+            </div>
+             <div class="form-group">
+                <input type="email" name="email" placeholder="Enter your Email" class="full-width-input form-control"/>
+            </div>
+             <div class="form-group">
+                  <input type="text" name="phoneNumber" placeholder="Enter your Phone Number" class="full-width-input form-control"/>
+            </div>
+            <div class="form-group">
+                  <input type="text" name="ssn" placeholder="Enter your SSN" class="full-width-input form-control"/>
+            </div>
+            <div class="form-group">
+                   <input name="password" placeholder="Enter your password" type="password" class="full-width-input form-control"/>
+            </div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button></div><a href="/user/login" class="forgot">Already a member? Log in.</a></form>
+            
     </div>
-
-    <div>
-        <label>
-        Last Name: 
-        <input type="text" name="lastName" placeholder="Enter your Last Name" class="full-width-input"/>
-        </label>
-    </div>
-
-    <div>
-        <label>
-        Email: 
-        <input type="email" name="email" placeholder="Enter your Email" class="full-width-input"/>
-        </label>
-    </div>
-
-    <div>
-        <label>
-        Password: 
-        <input name="password" placeholder="Enter your password" type="password" class="full-width-input"/>
-        </label>
-    </div>
-
-    <div>
-        <label>
-        Phone Number: 
-        <input type="text" name="phoneNumber" placeholder="Enter your Phone Number" class="full-width-input"/>
-        </label>
-    </div>
-
-    <div>
-        <label>
-        SSN Number: 
-        <input type="text" name="ssn" placeholder="Enter your SSN" class="full-width-input"/>
-        </label>
-    </div>
-
-    <div>
-        <label><input type="submit" value="Register" class="submit"/></label>
-    </div>
-</form>
-
-<a href='/user/login'>Already have an account? Click here to login</a>
+ 
+</body>

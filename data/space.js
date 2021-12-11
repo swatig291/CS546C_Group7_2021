@@ -7,7 +7,7 @@ const bookings = mongoCollections.bookings;
 const verify = require('./util');
 
 let { ObjectId } = require('mongodb');
-const { comments } = require('.');
+// const { comments } = require('.');
 // {
 //     "spaceName" : "spaceName1",
 //             "spaceDim": {

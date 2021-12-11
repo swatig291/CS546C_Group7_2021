@@ -277,6 +277,29 @@ let updateUserPassword = async function updateUserPassword(id, oldPassword, newP
     return {userPasswordModified: true};
 }
 
+let updateSavedSpaces = async function updateSavedSpaces(id, spaceId){
+    if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
+
+    const userData = await users();
+
+    let parseId = ObjectId(id);
+
+    const finder = await userData.findOne({_id: parseId});
+
+    updated = finder['savedStorages'].push(spaceId);
+
+    const updatedUser = await userData.updateOne(
+        { _id: parseId },
+        { $set: updated }
+    );
+
+    if (updatedUser.modifiedCount === 0) {
+        throw "could not update user's spaces successfully";
+    }
+    return {userSavedSpaces: true};
+}
+
 let checkUser = async function checkUser(email, password){
 
     if(!verify.validEmail(email)) throw 'Either Email or password is invalid.';
@@ -295,7 +318,7 @@ let checkUser = async function checkUser(email, password){
 }
 
 let deleteUser = async function deleteUser(id){
-    
+
     if(!verify.validString(id)) throw 'Id is invalid.';
     if(!verify.validId(id)) throw 'Id is invalid';
 
@@ -329,6 +352,7 @@ module.exports = {
     updateUserEmail,
     updateUserPhoneNumber,
     updateUserPassword,
+    updateSavedSpaces,
     checkUser,
     deleteUser
 }

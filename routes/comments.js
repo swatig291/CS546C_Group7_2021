@@ -151,7 +151,7 @@ router.post('/edit/:id', async function(req, res){
     }
     const commentId = xss(req.params.id);
     const comment = xss(req.body.comment);
-    let comment1 = await commentData.getCommentById(commentId);
+    let comment1 = await commentData.getCommentById(commentId.trim());
     let loggedUserId = comment1.userId.toString();
     errors = [];
     if(loggedUserId != req.session.userId){
@@ -165,7 +165,7 @@ router.post('/edit/:id', async function(req, res){
         return res.status(400).json(errors);
     }
     try {
-        let authentication = await commentData.updateComment(commentId, comment);
+        let authentication = await commentData.updateComment(commentId.trim(), comment);
         if(authentication.commentModified == true) {
             res.redirect('/space');
         }else{

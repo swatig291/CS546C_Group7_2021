@@ -10,7 +10,14 @@ module.exports = {
         if (!verify.validString(commentId)){
             throw 'Invaild commentId!'
         }
-        commentId = ObjectId(commentId);
+        try{
+            commentId = ObjectId(commentId);
+        }
+        catch(e)
+        {
+            throw 'Not a valid id'
+        }
+       
         const commentCollection = await comments();
         let comment = await commentCollection.findOne({ _id: commentId});
         if (comment === null){

@@ -111,9 +111,9 @@ router.post('/add', async (req, res) => {
               let id = newSpace._id.toString();
               let folderNameNew = path.join(folderName,'../',id);
               fs.renameSync(folderName, folderNameNew)
-              return res.redirect('/space/'+id);
+              // return res.redirect('/space/'+id);
            
-              // return res.json(newSpace);
+              return res.json(newSpace);
 
           } catch(e) {
               res.status(500).json({error: e});

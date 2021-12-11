@@ -1,3 +1,4 @@
+<div class="contentBox">
 <section class="py-2">
     <div class="container-fluid">
         <div class="row">
@@ -103,16 +104,33 @@
                 {{#if commentList}}
                     {{#each commentList}}
                         <div class="card mt-2">
-                            <div class="card-body">
+                            <div class="card-body commentCardBody">
                                 <div class={{this._id}}>
-                                    <p class="commentText">{{this.comment}}</p>
-                                    <div class="d-none">
-                                        <p class ='commentId'> {{this._id}}</p>
-                                        {{!-- {{#if this.sameUser}}  --}}
-                                            <p class="commentEdit editable" >{{this.comment}}</p>
-                                            <a  href='' class='deleteComment'> <span class="glyphicon glyphicon-trash"></span></a>
-                                        {{!-- {{/if}} --}}
+                                    <div class="row commentTextBox">
+                                        <div class="col-md-11">
+                                            <p class="commentText">{{this.comment}}</p>
+                                            <textarea class="editCommentBox d-none">{{this.comment}}</textarea>
+                                        </div>
+                                         <div class="col-md-1 p-0 commentIconBox">
+                                            <div class="readModeIcons">
+                                                <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
+                                                <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                            </div>
+                                            <div class="editModeIcons d-none">
+                                                <a  href='javascript:void(0)' class='saveComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
+                                            </div>                                          
+                                        </div>
                                     </div>
+                                    
+                                    <p class ='commentId' hidden> {{this._id}}</p>
+                                    {{!-- <div class="d-none editable">
+                                        
+                                        {{!-- {{#if this.sameUser}}  --}}
+                                            {{!-- <p class="commentEdit" >{{this.comment}}</p>
+                                              <input class="commentEdit" hidden>{{this.comment}}>
+                                            <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a> --}}
+                                        {{!-- {{/if}} --}}
+                                    {{!-- </div> --}} 
                                         
                                 </div>
                             </div>
@@ -135,8 +153,8 @@
                         <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
                             <h4 class="sectionTitle">Post A Comment</h4>
                             <div class="form-group">
-                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="3" 
-                                placeholder="You can enter any questions you want to ask about this Space here."></textarea>
+                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
+                                placeholder="you can post your queries here."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
                         </form>
@@ -205,12 +223,12 @@
                         <h4 class="sectionTitle">Post A Review</h4>
                         <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
                             <div class="form-group">
-                                <label>Review</label>
-                                <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
-                                        placeholder="You can write any reviews about this space."></textarea>
+                                {{!-- <label>Review</label> --}}
+                                <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="2"
+                                        placeholder="Review here."></textarea>
                              </div>
                             <div class="form-group">
-                                <label for="review">Rating:</label>
+                                {{!-- <label for="review">Rating:</label> --}}
                                 <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
                                     placeholder="rating (number 1-5)"> 
                             </div>
@@ -232,7 +250,7 @@
 <div id='bookings' hidden>{{booking}}</div>
  <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>
  {{!-- <script src="/public/javascript/forms.js"></script> --}}
-  
+</div> 
 <script>
     $( document ).ready(function() {
         var check_in = {{{booking}}}
@@ -243,4 +261,6 @@
         ).show();
         });
     });
+
+       
 </script>

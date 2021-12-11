@@ -8,6 +8,50 @@ document.addEventListener("DOMContentLoaded", function(){
       
         document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);   
      }
+
+    //  $(".editable").each(function(i) {
+    //   var $this = $(this);
+    //   $this.attr("id", "orig-" + i);
+      
+    //   var $edit = $("<i />")
+    //   .addClass('bi bi-pencil-fill')
+    //   .attr("id", "update-" + i)
+    //   .on('click',function() {
+    //       var $input = $('<input type="text" />')
+    //           .attr("id", "edit" + i)
+    //           .val($this.text());
+          
+    //       var $save = $('<a class="bi bi-check-circle-fill"></a>')
+    //           .on('click',function() {
+    //             //ajax call /comments/edit
+    //               var $new = $("<p />").text($input.val());
+    //               $input.replaceWith($new);
+    //               $(this).hide()
+    //               // ($edit).visible();
+    
+    
+    //               var commentId =  $('.commentId')[0].innerText;
+    //               var requestConfig = {
+    //                 method: 'POST',
+    //                 url: '/comments/edit/'+ commentId,
+    //                 contentType: 'application/json',
+    //                 data: JSON.stringify({
+    //                   comment: $new[0].innerHTML,
+    //                 })           
+    //               };
+    //               $.ajax(requestConfig).then(function(responseMessage) {
+    //                 alert('inserted');
+    //                 });
+    
+    //           });
+    
+    //       $(this).replaceWith($save);
+    //       $this.replaceWith($input);
+    
+    //   });
+    
+    //  $(this).after($edit)
+    // })
 });
 
 function getStars(rating) {
@@ -287,48 +331,7 @@ function userSpace(){
  
 }
 
-$(".editable").each(function(i) {
-  var $this = $(this);
-  $this.attr("id", "orig-" + i);
-  
-  var $edit = $("<i />")
-  .addClass('bi bi-pencil-fill')
-  .attr("id", "update-" + i)
-  .on('click',function() {
-      var $input = $('<input type="text" />')
-          .attr("id", "edit" + i)
-          .val($this.text());
-      
-      var $save = $('<a class="bi bi-pencil-fill"></a>')
-          .on('click',function() {
-            //ajax call /comments/edit
-              var $new = $("<p />").text($input.val());
-              $input.replaceWith($new);
-              $(this).replaceWith($edit);
 
-
-              var commentId =  $('#commentId')[0].innerText;
-              var requestConfig = {
-                method: 'POST',
-                url: '/comments/edit/'+ commentId,
-                contentType: 'application/json',
-                data: JSON.stringify({
-                  comment: $new[0].innerHTML,
-                })           
-              };
-              $.ajax(requestConfig).then(function(responseMessage) {
-                alert('inserted');
-                });
-
-          });
-
-      $(this).replaceWith($save);
-      $this.replaceWith($input);
-
-  });
-
- $(this).after($edit)
-})
  //delete comment
  $(".deleteComment").on('click',function(e){
    e.preventDefault();
@@ -341,5 +344,16 @@ $(".editable").each(function(i) {
      $('.'+commentId).hide();
     });
  })
+  //edit comment
+ $('.commentCardBody').on('click', '.editComment',function(){
+  var commentId = $(this).data('commentid')
+  var parentObj = $(this).parents('.commentTextBox')
+  $('.editCommentBox', parentObj).slideDown(function(){
+    $('.editModeIcons', parentObj).show()
+   });
+  $('.commentText', parentObj).slideUp(function(){
+      $('.readModeIcons', parentObj).hide()
+  })
   
- 
+       
+})

@@ -1,3 +1,4 @@
+<div class="contentBox">
 <section class="py-2">
     <div class="container-fluid">
         <div class="row">
@@ -30,7 +31,6 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-
             </div>
             <div class="col-sm-4">
                 
@@ -64,7 +64,6 @@
                         
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-12">
                 <p class="subTitle mt-3 mb-1">Summary:</p>
@@ -78,7 +77,6 @@
                         <div class="col-sm-12 col-md-2 subTitle border-bottom">Dimension</div>
                         <div class="col-sm-12 col-md-3 border-bottom">
                             <p>{{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</p>
-
                         </div>
                     </div>
                     <div class="row">
@@ -106,12 +104,34 @@
                 {{#if commentList}}
                     {{#each commentList}}
                         <div class="card mt-2">
-                            <div class="card-body">
+                            <div class="card-body commentCardBody">
                                 <div class={{this._id}}>
-                                    <p class="commentText">{{this.comment}}</p>
-                                    <div class="d-none">
-                                        <p class ='commentId'> {{this._id}}</p>
-                                    </div>  
+                                    <div class="row commentTextBox">
+                                        <div class="col-md-11">
+                                            <p class="commentText">{{this.comment}}</p>
+                                            <textarea class="editCommentBox d-none">{{this.comment}}</textarea>
+                                        </div>
+                                         <div class="col-md-1 p-0 commentIconBox">
+                                            <div class="readModeIcons">
+                                                <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
+                                                <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                            </div>
+                                            <div class="editModeIcons d-none">
+                                                <a  href='javascript:void(0)' class='saveComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
+                                            </div>                                          
+                                        </div>
+                                    </div>
+                                    
+                                    <p class ='commentId' hidden> {{this._id}}</p>
+                                    {{!-- <div class="d-none editable">
+                                        
+                                        {{!-- {{#if this.sameUser}}  --}}
+                                            {{!-- <p class="commentEdit" >{{this.comment}}</p>
+                                              <input class="commentEdit" hidden>{{this.comment}}>
+                                            <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a> --}}
+                                        {{!-- {{/if}} --}}
+                                    {{!-- </div> --}} 
+                                        
                                 </div>
                             </div>
                             <div class="card-footer text-muted">
@@ -119,159 +139,109 @@
                                     <p class="float-left my-0"><span class="subTitle">Posted By:</span> {{this.userName}}</p>
                                     <p class="float-right my-0"><span class="subTitle">Posted At:</span> {{this.date}}</p>
                                 </div>
+                                    
                             </div>
                         </div>
-                            {{#if this.sameUser}}
-                                <div id="judgeUserId">
-                                    <form action="/comments/edit/{{this._id}}" method="POST" name="editCommentForm" id="editCommentForm">
-                                        <div id="editCommentText">
-                                            <label>
-                                                <h3>Update your comment:</h3>
-                                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="20" rows="2" 
-                                                placeholder="You can update this comment here." autocomplete="false" required></textarea>
-                                            </label>
-                                        </div>
-                                        <div id="comment-submit-button">
-                                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update Comment</button>
-                                        </div>
-                                    </form>
-                                    <form action="/comments/delete/{{this._id}}" method="POST" id="delete">
-                                        <div id="comment-delete-button">
-                                            <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            {{/if}}
                     {{/each}}
                 {{else}}
                     <div class="alert alert-primary" role="alert">
                         There are no comments yet for this space.
                     </div>
-                    <div class="row my-5">
-                        <div class="col-sm-12">
-                            <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
-                                <h4 class="sectionTitle">Post A Comment</h4>
-                                <div class="form-group">
-                                    <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="3" 
-                                    placeholder="You can enter any questions you want to ask about this Space here."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
-                            </form>
-                        </div>
+                {{/if}}  
+                <div class="row my-5">
+                    <div class="col-sm-12">
+                        <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
+                            <h4 class="sectionTitle">Post A Comment</h4>
+                            <div class="form-group">
+                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
+                                placeholder="you can post your queries here."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
+                        </form>
                     </div>
-                {{/if}}
+                </div>
             </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div class="w-100">
-            <br>
-            <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
-                <div>
-                    <label>
-                        <h2>Post a new comment below:</h2>
-                        <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="5" 
-                        placeholder="You can enter any questions you want to ask about this Space here." autocomplete="false" required></textarea>
-                    </label>
-                </div>
 
-                <div id="comment-submit-button">
-                    <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Post</button>
-                </div>
-            </form>
-        </div>
-        
-
-        <div class="col-sm-6" id="reviewList">
-            <h4 class="sectionTitle">Reviews:</h4>
-            {{#if reviewList}}
-                {{#each reviewList}}
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card mt-2">
-                                <div class="card-header">
-                                    <p class="subTitle">Rating: {{this.rating}}</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class={{this._id}}>
-                                        <p class="commentText">{{this.review}}</p>
+            <div class="col-sm-6" id="reviewList">
+                <h4 class="sectionTitle">Reviews:</h4>
+                 {{#if reviewList}}
+              
+                    {{#each reviewList}}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card mt-2">
+                                    <div class="card-header">
+                                        <p class="subTitle">Rating: {{this.rating}}</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class={{this._id}}>
+                                            <p class="commentText">{{this.review}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <p class="float-left my-0"><span class="subTitle">Posted By:</span> {{this.userName}}</p>
+                                        <p class="float-right my-0"><span class="subTitle">Posted At:</span> {{this.date}}</p>
                                     </div>
                                 </div>
-                                <div class="card-footer text-muted">
-                                    <p class="float-left my-0"><span class="subTitle">Posted By:</span> {{this.userName}}</p>
-                                    <p class="float-right my-0"><span class="subTitle">Posted At:</span> {{this.date}}</p>
-                                </div>
+                                
+                                {{#if this.sameUser}}
+                                    <div id="judgeUserId">
+                                        <form action="/reviews/edit/{{this._id}}" method="POST" name="editreviewForm" id="editreviewForm"
+                                            style="display: block;">
+                                            <div id="editreviewText">
+                                                <div class="form-group">
+                                                    <label for="review">Update your review:</label>
+                                                    <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2" placeholder="You can update this review here."></textarea> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="review">Update your rating:</label>
+                                                    <input type="number" name="rating" class="form-control form-control-lg" id="rating" placeholder="rating (number 1-5)">  
+                                                </div>
+                                                
+                                            </div>
+                                            <div id="review-submit-button">
+                                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update review</button>
+                                            </div>
+                                        </form>
+                                        <form action="/reviews/delete/{{this._id}}" method="POST" id="delete">
+                                            <div id="review-delete-button">
+                                                <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                {{/if}}
                             </div>
-                            
-                            {{#if this.sameUser}}
-                                <div id="judgeUserId">
-                                    <form action="/reviews/edit/{{this._id}}" method="POST" name="editreviewForm" id="editreviewForm"
-                                        style="display: block;">
-                                        <div id="editreviewText">
-                                            <div class="form-group">
-                                                <label for="review">Update your review:</label>
-                                                <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2" placeholder="You can update this review here."></textarea> 
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="review">Update your rating:</label>
-                                                <select name="rating" id="rating" class="form-control form-control-lg" >
-                                                    <option value="0">Select your rating</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </div>
-                                        <div id="review-submit-button">
-                                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update review</button>
-                                        </div>
-                                    </form>
-                                    <form action="/reviews/delete/{{this._id}}" method="POST" id="delete">
-                                        <div id="review-delete-button">
-                                            <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            {{/if}}
                         </div>
+                    {{/each}}
+                {{else}}
+                    <div class="alert alert-primary" role="alert">
+                        There are no reviews yet for this space.
                     </div>
-                {{/each}}
-            {{else}}
-                <div class="alert alert-primary" role="alert">
-                    There are no reviews yet for this space.
-                </div>
-            {{/if}}
-            <div class="row my-5">
-                <div class="col-sm-12">
-                    <h4 class="sectionTitle">Post A Review</h4>
-                    <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
-                        <div class="form-group">
-                            <label>Review</label>
-                            <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
-                                    placeholder="You can write any reviews about this space."></textarea>
+                {{/if}}  
+                <div class="row my-5">
+                    <div class="col-sm-12">
+                        <h4 class="sectionTitle">Post A Review</h4>
+                        <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
+                            <div class="form-group">
+                                {{!-- <label>Review</label> --}}
+                                <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="2"
+                                        placeholder="Review here."></textarea>
+                             </div>
+                            <div class="form-group">
+                                {{!-- <label for="review">Rating:</label> --}}
+                                <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
+                                    placeholder="rating (number 1-5)"> 
                             </div>
-                        <div class="form-group">
-                            <label for="review">Select your rating:</label>
-                            <select name="rating" id="rating" class="form-control form-control-lg">
-                                <option value="0">Select your rating</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
 
-                        <div id="review-submit-button">
-                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Post</button>
-                        </div>
-                    </form>
+                            <div id="review-submit-button">
+                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton"
+                                    onclick="confirmPostreview()">Post</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+
+
         </div>
     </div>
 </section>
@@ -280,8 +250,7 @@
 <div id='bookings' hidden>{{booking}}</div>
  <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>
  {{!-- <script src="/public/javascript/forms.js"></script> --}}
-
-  
+</div> 
 <script>
     $( document ).ready(function() {
         var check_in = {{{booking}}}
@@ -292,5 +261,6 @@
         ).show();
         });
     });
-</script>
 
+       
+</script>

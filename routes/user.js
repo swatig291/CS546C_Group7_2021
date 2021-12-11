@@ -18,7 +18,6 @@ router.get('/login', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try{
-        //destructuring request body details into username and password
         let cred = req.body;
         const email = xss(cred.email);
         const password = xss(cred.password);
@@ -49,9 +48,15 @@ router.get('/signup', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
     try{
+
         //destructuring request body details into username and password
-        let cred = req.body;
-        const {firstName, lastName, email, password, phoneNumber, ssn} = xss(cred);
+
+        let firstName = xss(req.body.firstName);
+        let lastName = xss(req.body.lastName);
+        let email = xss(req.body.email);
+        let password = xss(req.body.password);
+        let phoneNumber = xss(req.body.phoneNumber);
+        let ssn = xss(req.body.ssn);
 
         if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
         if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
@@ -114,9 +119,7 @@ router.get('/profile', async (req, res) => {
 
 router.post('/profile/firstName', async (req, res) => {
     try{
-        //destructuring request body details into username and password
-        let cred = req.body;
-        const {firstName} = xss(cred);
+        let firstName = xss(req.body.firstName);
 
         if(!verify.validString(firstName)) throw 'First Name must be a valid string.';
         
@@ -132,9 +135,7 @@ router.post('/profile/firstName', async (req, res) => {
 
 router.post('/profile/lastName', async (req, res) => {
     try{
-        //destructuring request body details into username and password
-        let cred = req.body;
-        const {lastName} = xss(cred);
+        let lastName = xss(req.body.lastName);
 
         if(!verify.validString(lastName)) throw 'Last Name must be a valid string.';
         
@@ -150,9 +151,7 @@ router.post('/profile/lastName', async (req, res) => {
 
 router.post('/profile/email', async (req, res) => {
     try{
-        //destructuring request body details into username and password
-        let cred = req.body;
-        const {email} = xss(cred);
+        let email = xss(req.body.email);
 
         if(!verify.validEmail(email)) throw 'Email is invalid.';
         
@@ -169,9 +168,7 @@ router.post('/profile/email', async (req, res) => {
 
 router.post('/profile/phoneNumber', async (req, res) => {
     try{
-        //destructuring request body details into username and password
-        let cred = req.body;
-        const {phoneNumber} = xss(cred);
+        let phoneNumber = xss(req.body.phoneNumber);
 
         if(!verify.validNumber(phoneNumber)) throw 'The Phone Number is invalid';
         if(phoneNumber.length != 10) throw 'The Phone Number is invalid';
@@ -188,8 +185,8 @@ router.post('/profile/phoneNumber', async (req, res) => {
 
 router.post('/profile/password', async (req, res) => {
     try{
-        let cred = req.body;
-        const {oldPassword, newPassword} = xss(cred);
+        let oldPassword = xss(req.body.oldPassword);
+        let newPassword = xss(req.body.newPassword);
 
         if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0) throw 'The password is invalid';
         if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The password is invalid';
@@ -235,5 +232,17 @@ router.get('/savedSpaces', async (req, res) => {
         res.json(e);
     }
 });
+
+router.post('/savedSpaces/:id', async (req, res) => {
+    try{
+        let spaceId = req.params.id;
+
+        let favorites = await userData.updateSavedSpaces(req.session.userId, spaceId);
+        if(favorites.userSavedSpaces != true) throw "space cannot be favorited";
+
+    }catch(e){
+        res.status(400).json(e);
+    }
+})
 
 module.exports = router;

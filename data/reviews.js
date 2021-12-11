@@ -34,8 +34,7 @@ module.exports = {
             throw 'Invaild review!'
         }
 
-        if(!verify.validNumber(rating)) throw 'rating is invalid';
-        if(rating<0 || rating>5) throw 'rating is invalid';
+        if(!verify.validRating(rating)) throw 'rating is invalid';
         
         if(userData.getUser(userId) == null){
             throw "No user exists with that userId!"
@@ -134,6 +133,8 @@ module.exports = {
         if (!verify.validString(review)){
             throw 'Invaild review'
         }
+        if(!verify.validRating(rating)) throw 'rating is invalid';
+        
         let objId = ObjectId(id.trim());
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();

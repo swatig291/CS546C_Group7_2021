@@ -133,8 +133,10 @@ router.post('/delete/:id',async function(req,res){
     try{
         let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
+
             res.redirect('http://localhost:3000/space/' + comment.spaceId);
             //res.status(200).json(deleteComment);
+
         }else{
             return res.status(404).send();
         }
@@ -158,8 +160,8 @@ router.post('/edit/:id', async function(req, res){
         errors.push('You can not edit the comment post by other person!')
     }
     console.log(comment)
-    if(!verify.validString(comment)){
-        throw 'Invaild comment!'
+    if (!verify.validString(comment)){
+        errors.push('Invaild comment!')
     }
     if(errors.length > 0){
         return res.status(400).json(errors);

@@ -1,3 +1,5 @@
+.contentBox{width: 85% !important; margin: auto;}
+.mainContent{width: 100% !important; margin: auto;}
 /* Remove the navbar's default margin-bottom and rounded borders */ 
 .navbar {
     margin-bottom: 0;
@@ -7,7 +9,7 @@
   /* Add a gray background color and some padding to the footer */
   footer {
     background-color: #f2f2f2;
-    padding: 25px;
+    /* padding: 25px; */
   }
   
   .panel{
@@ -21,5 +23,124 @@
    margin: 0px 15px;
  }
 
+ .border-bottom {border-bottom: solid 1px #D0D0D0;}
+.pageTitle{ color: #345b8d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; padding: 15px 0;}
+.subTitle, .form-group label{
+    font-family: Inter, Roboto, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    letter-spacing: -0.007em;
+    -webkit-font-smoothing: antialiased;
+    padding: 0px;
+    margin: 0px;
+    color: rgb(52, 54, 57);
+}
+.sectionTitle {
+  font-family: Inter, Roboto, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 35px;
+  letter-spacing: -0.008em;
+  -webkit-font-smoothing: antialiased;
+  padding: 0px;
+  margin: 0px;
+  color: rgb(52, 54, 57);
+}
+
+.navbar{
+  background: #345b8d;
+}
+#navbarNav > ul > li a{
+  color: white;
+}
+#navbarNav > ul > li a:hover {
+     color:black;
+}
 
 
+/* Login Page */
+
+.login-dark {
+  height:640px;
+  background:#475d62 url(/public/images/LoginPage.jpeg);
+
+  background-size:cover;
+  position:relative;
+}
+
+.login-dark form {
+  max-width:320px;
+  width:90%;
+  background-color:whiteSmoke;
+  padding:40px;
+  border-radius:4px;
+  transform:translate(-50%, -50%);
+  position:absolute;
+  top:50%;
+  left:50%;
+  /* color:#f0f1f2; */
+  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
+}
+
+.login-dark .illustration {
+  text-align:center;
+  padding:15px 0 20px;
+  font-size:100px;
+  color:#224A80;
+}
+
+.login-dark form .form-control {
+  background:none;
+  border:none;
+  border-bottom:1px solid #434a52;
+  border-radius:0;
+  box-shadow:none;
+  outline:none;
+  /* color:inherit; */
+}
+
+.login-dark form .btn-primary {
+  background:#214a80;
+  border:none;
+  border-radius:4px;
+  padding:11px;
+  box-shadow:none;
+  margin-top:26px;
+  text-shadow:none;
+  outline:none;
+}
+
+.login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+  background:#214a80;
+  outline:none;
+}
+
+.login-dark form .forgot {
+  display:block;
+  text-align:center;
+  font-size:12px;
+  color:#6f7a85;
+  opacity:0.9;
+  text-decoration:none;
+}
+
+.login-dark form .forgot:hover, .login-dark form .forgot:active {
+  opacity:1;
+  text-decoration:none;
+}
+
+.login-dark form .btn-primary:active {
+  transform:translateY(1px);
+}
+.signUp {
+  font-size: 2rem;
+  color: #224a80;
+  text-align:center;
+  margin-bottom: 2px;
+}
+.signUpText{
+  color: #6F7A85;
+  font-size: 0.8rem;
+  text-align: center;
+}

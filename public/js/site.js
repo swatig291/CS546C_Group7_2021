@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
      for(let i = 0; i < val.length ; i++){
        let data =  document.getElementsByClassName("stars").innerHTML
       
-        document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);
-           
+        document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);   
      }
 });
 
@@ -19,14 +18,14 @@ function getStars(rating) {
     
       // Append all the filled whole stars
       for (var i = rating; i >= 1; i--)
-        output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+        output.push('<i class="bi bi-star-fill" aria-hidden="true" style="color: gold;"></i>&nbsp;');
     
       // If there is a half a star, append it
-      if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+      if (i == .5) output.push('<i class="bi bi-star-half" aria-hidden="true" style="color: gold;"></i>&nbsp;');
     
       // Fill the empty stars
       for (let i = (5 - rating); i >= 1; i--)
-        output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+        output.push('<i class="bi bi-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
     
       return output.join('');
     
@@ -76,34 +75,10 @@ function getStars(rating) {
       }
   });
 
-  var form = document.getElementById('static-form');
 
-  if(form){
-      var formData = new FormData(form);
-  }
-var file = document.getElementById('addImg')
 
-// count for photos user has chosen
-var fileCount = 0;
-$('#imageCount').hide();
-//  when user choose photos
-file.onchange = function () {
-    for (let i = 0; i < this.files.length; i++) {
-        formData.append('photo' + i, this.files[i]); // add photos' path to formData
-        fileCount ++;
-    }
-    if(fileCount == 1){
-        $('#imageCount').text('You have chosen '+fileCount+' photo');
-        $('#imageCount').show();
-    } else if(fileCount > 1 && fileCount <=4){
-        $('#pimageCount').text('You have chosen '+fileCount+' photos');
-        $('#imageCount').show();
-    } else {
-        $('#pimageCount').text('You can only upload 4 photos at most');
-        $('#imageCount').show();
-    }
-};
-    $('#addNewPostButton').click(function () {
+    $('#addNewPostButton').on('click',function () {
+
       var form = document.getElementById('static-form');
 
       if(form){
@@ -143,32 +118,12 @@ function dateCheck(from,to,check) {
   lDate = Date.parse(to);
   cDate = Date.parse(check);
 
-
-  // when user choose photos
-  // file.onchange = function () {
-  //     for (let i = 0; i < this.files.length; i++) {
-  //         formData.append('photo' + i, this.files[i]); // add photos' path to formData
-  //         fileCount ++;
-  //     }
-  //     if(fileCount == 1){
-  //         $('#picTips').text('You have chosen '+fileCount+' photo');
-  //         $('#picTips').show();
-  //     } else if(fileCount > 1 && fileCount <=4){
-  //         $('#picTips').text('You have chosen '+fileCount+' photos');
-  //         $('#picTips').show();
-  //     } else {
-  //         $('#picTips').text('You can only upload 4 photos at most');
-  //         $('#picTips').show();
-  //     }
-  // };
-
-
   if((cDate <= lDate && cDate >= fDate)) {
       return true;
   }
   return false;
 }
-  $('#booking').click( function(){
+  $('#booking').on('click',function(){
     $('.error').empty();
     var form = document.getElementById('bookingForm');
       let checkInDate =  $('#check-in').val();
@@ -306,7 +261,7 @@ $('#passwordReset').click(function(){
   $('#passwordDiv').show();
 });
 
-$('#submitPassword').click(function(){
+$('#submitPassword').on('click',function(){
   let oldPassword = $('#oldPassword').val();
   let newPassword = $('#newPassword').val();
   let newPassword1 = $('#newPassword1').val();
@@ -333,3 +288,75 @@ function userSpace(){
   window.location = 'http://localhost:3000/space/user' ;    
  
 }
+
+
+
+function fav(id)
+{
+  var requestConfig = {
+    method: 'POST',
+    url: 'user/savedSpaces/'+id,
+  };
+
+  $.ajax(requestConfig).then(function(responseMessage){
+    
+  });
+}
+
+$(".editable").each(function(i) {
+  var $this = $(this);
+  $this.attr("id", "orig-" + i);
+  
+  var $edit = $("<i />")
+  .addClass('bi bi-pencil-fill')
+  .attr("id", "update-" + i)
+  .on('click',function() {
+      var $input = $('<input type="text" />')
+          .attr("id", "edit" + i)
+          .val($this.text());
+      
+      var $save = $('<a class="bi bi-pencil-fill"></a>')
+          .on('click',function() {
+            //ajax call /comments/edit
+              var $new = $("<p />").text($input.val());
+              $input.replaceWith($new);
+              $(this).replaceWith($edit);
+
+
+              var commentId =  $('#commentId')[0].innerText;
+              var requestConfig = {
+                method: 'POST',
+                url: '/comments/edit/'+ commentId,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                  comment: $new[0].innerHTML,
+                })           
+              };
+              $.ajax(requestConfig).then(function(responseMessage) {
+                alert('inserted');
+                });
+
+          });
+
+      $(this).replaceWith($save);
+      $this.replaceWith($input);
+
+  });
+
+ $(this).after($edit)
+})
+ //delete comment
+ $(".deleteComment").on('click',function(e){
+   e.preventDefault();
+  var commentId =  $('.commentId')[0].innerText;
+  var requestConfig = {
+    method: 'post',
+    url: '/comments/delete/'+ commentId,         
+  };
+  $.ajax(requestConfig).then(function(responseMessage) {
+     $('.'+commentId).hide();
+    });
+ })
+  
+ 
+

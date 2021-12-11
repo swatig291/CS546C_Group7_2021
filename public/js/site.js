@@ -120,7 +120,9 @@ function getStars(rating) {
   });
 
 
+
     $('#addNewPostButton').on('click',function () {
+
       var form = document.getElementById('static-form');
 
       if(form){
@@ -332,6 +334,59 @@ function userSpace(){
 }
 
 
+
+function fav(id)
+{
+  var requestConfig = {
+    method: 'POST',
+    url: 'user/savedSpaces/'+id,
+  };
+
+  $.ajax(requestConfig).then(function(responseMessage){
+    
+  });
+}
+
+$(".editable").each(function(i) {
+  var $this = $(this);
+  $this.attr("id", "orig-" + i);
+  
+  var $edit = $("<i />")
+  .addClass('bi bi-pencil-fill')
+  .attr("id", "update-" + i)
+  .on('click',function() {
+      var $input = $('<input type="text" />')
+          .attr("id", "edit" + i)
+          .val($this.text());
+      
+      var $save = $('<a class="bi bi-pencil-fill"></a>')
+          .on('click',function() {
+            //ajax call /comments/edit
+              var $new = $("<p />").text($input.val());
+              $input.replaceWith($new);
+              $(this).replaceWith($edit);
+
+
+              var commentId =  $('#commentId')[0].innerText;
+              var requestConfig = {
+                method: 'POST',
+                url: '/comments/edit/'+ commentId,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                  comment: $new[0].innerHTML,
+                })           
+              };
+              $.ajax(requestConfig).then(function(responseMessage) {
+                alert('inserted');
+                });
+
+          });
+
+      $(this).replaceWith($save);
+      $this.replaceWith($input);
+
+  });
+
  //delete comment
  $(".deleteComment").on('click',function(e){
    e.preventDefault();
@@ -353,7 +408,8 @@ function userSpace(){
    });
   $('.commentText', parentObj).slideUp(function(){
       $('.readModeIcons', parentObj).hide()
-  })
-  
-       
+  })       
 })
+})
+
+

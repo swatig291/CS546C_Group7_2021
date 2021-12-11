@@ -31,6 +31,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
+
             </div>
             <div class="col-sm-4">
                 
@@ -64,6 +65,7 @@
                         
             </div>
         </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <p class="subTitle mt-3 mb-1">Summary:</p>
@@ -77,6 +79,7 @@
                         <div class="col-sm-12 col-md-2 subTitle border-bottom">Dimension</div>
                         <div class="col-sm-12 col-md-3 border-bottom">
                             <p>{{spaceDetails.spaceDim.length}} x {{spaceDetails.spaceDim.width}} x {{spaceDetails.spaceDim.height}}</p>
+
                         </div>
                     </div>
                     <div class="row">
@@ -146,6 +149,7 @@
                 {{else}}
                     <div class="alert alert-primary" role="alert">
                         There are no comments yet for this space.
+
                     </div>
                 {{/if}}  
                 <div class="row my-5">
@@ -159,6 +163,34 @@
                             <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
                         </form>
                     </div>
+
+                </form>
+            </div>
+            {{/if}}
+        </div>
+        <br>
+        {{/each}}
+        <br />
+        <br />
+        <div class="w-100">
+            <br>
+            <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
+                <div>
+                    <label>
+                        <h2>Post a new review and rating below:</h2>
+                        <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="5"
+                            placeholder="You can write any reviews about this space." autocomplete="false" required></textarea>
+                        <br>
+                       <label for="post-rating">Select your rating:</label>
+                        <select name="rating" id="rating-select" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </label>
+
                 </div>
             </div>
 
@@ -250,7 +282,12 @@
 <div id='bookings' hidden>{{booking}}</div>
  <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>
  {{!-- <script src="/public/javascript/forms.js"></script> --}}
+<<<<<<< HEAD
 </div> 
+=======
+
+  
+>>>>>>> 5a4c693d77178c4631ed4264bd9d464101453de4
 <script>
     $( document ).ready(function() {
         var check_in = {{{booking}}}
@@ -264,3 +301,4 @@
 
        
 </script>
+

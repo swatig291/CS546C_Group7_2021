@@ -13,13 +13,14 @@ const path = require("path");
 const formidable = require('formidable');
 const fs = require('fs');
 
-
+//Create a space
 router.post('/add', async (req, res) => {
   if(!req.session.email)
   {
     res.status(400).redirect('/user/login');
     return;
   }
+
     var form = new formidable.IncomingForm();
     const folderName = path.join(__dirname, '../','public/','images/','uploads/','temp/');
     let errors = [];
@@ -84,7 +85,24 @@ router.post('/add', async (req, res) => {
           }
           // Do not submit if there are errors in the form
           if (errors.length > 0) {
-              return res.status(400).json(errors);
+              //delete the uploaded photo's
+              try{
+                  if (fs.existsSync(folderName)) {
+                    fs.rmdirSync(folderName, {recursive: true})
+                  }
+              }
+              catch(e)
+              {
+                errors.push('error while uploading image');
+              }
+              // return res.status(400).json({errors,hasErrors});
+              res.status(400).render('home/hostSpace', {
+                errors: errors,
+                 hasErrors : true,
+                 fields: fields
+                                
+               });
+             return;  
           }
 
           try {
@@ -93,7 +111,9 @@ router.post('/add', async (req, res) => {
               let id = newSpace._id.toString();
               let folderNameNew = path.join(folderName,'../',id);
               fs.renameSync(folderName, folderNameNew)
-              return res.json(newSpace);
+              return res.redirect('/space/'+id);
+           
+              // return res.json(newSpace);
 
           } catch(e) {
               res.status(500).json({error: e});
@@ -108,7 +128,7 @@ catch (error) {
  
     
 });
-
+//Redirecting to hosting space page
 router.get('/host',async(req,res) =>{
     if(!req.session.email)
     {
@@ -118,6 +138,7 @@ router.get('/host',async(req,res) =>{
   res.render('home/hostSpace');  
 });
 
+//editing the space on edit click button
 router.get('/host/:id',async(req,res) =>{
   if(!req.session.email)
   {
@@ -144,6 +165,7 @@ router.get('/host/:id',async(req,res) =>{
 
 });
 
+//Loading all the spaces data for landing page
 router.get("/", async (req, res) => {
   if(!req.session.email)
   {
@@ -172,6 +194,7 @@ router.get("/", async (req, res) => {
   }  
 });
 
+//Updating the space data
 router.post('/edit', async (req, res) => {
   if(!req.session.email)
   {
@@ -179,18 +202,7 @@ router.post('/edit', async (req, res) => {
     return;
   }
     var form = new formidable.IncomingForm();
-    // const folderName = path.join(__dirname, '../','public/','images/','uploads/','temp/');
-    // try {
-    //   if (!fs.existsSync(folderName)) {
-    //        fs.mkdirSync(folderName)
-    //   }
-    // } catch (err) {
-    //   console.error(err)
-    // }
-
-    // form.uploadDir = folderName;
-    // form.keepExtensions = true;
-    // form.parse(req);
+    
     try {
     form.parse(req,async (err, fields, files) => {  
       
@@ -268,6 +280,7 @@ catch (error) {
 }
 });
 
+//deleting the space
 router.get('/remove/:id',async(req,res) => {
   if(!req.session.email)
   {
@@ -295,6 +308,7 @@ router.get('/remove/:id',async(req,res) => {
 
 });
 
+//Search functionality
 router.post("/search", async (req, res) => {
   if(!req.session.email)
   {
@@ -331,6 +345,7 @@ router.post("/search", async (req, res) => {
   }  
 });
 
+//Get all the data related space by Id
 router.get('/:id',async(req,res) =>{
   if(!req.session.email){
     res.status(400).redirect('/user/login');
@@ -352,14 +367,16 @@ router.get('/:id',async(req,res) =>{
         try
         { 
           let bookingList = await bookingData.getAllbookingsBySpaceId(spaceDetails._id);
-           for(let i = 0; i < bookingList.length ; i++)
-           {
-             bookings[i] = new Array();
-             
-              bookings[i][0]= bookingList[i].startDate;
-              bookings[i][1]= bookingList[i].endDate;
-             
-           }
+          if(bookingList !== null){
+            for(let i = 0; i < bookingList.length ; i++)
+            {
+              bookings[i] = new Array();
+              
+                bookings[i][0]= bookingList[i].startDate;
+                bookings[i][1]= bookingList[i].endDate;
+              
+            }
+          }
         }
         catch(e)
         {
@@ -367,23 +384,25 @@ router.get('/:id',async(req,res) =>{
         }
         
         let commentList =  await commentData.getAllCommentsOfSpace(spaceDetails._id);
-
-        for(i in commentList){
-          let user = await userData.getUser(commentList[i].userId.toString())
-          commentList[i].userName = user.firstName + " " +user.lastName;
-          if(commentList[i].userId == req.session.userId){
-            commentList[i].sameUser = true;
+        if(commentList !== null){
+          for(i in commentList){
+            let user = await userData.getUser(commentList[i].userId.toString())
+            commentList[i].userName = user.firstName + " " +user.lastName;
+            if(commentList[i].userId == req.session.userId){
+              commentList[i].sameUser = true;
+            }
           }
         }
 
-
-        for(i in reviewList){
-          let user = await userData.getUser(reviewList[i].userId.toString())
-          reviewList[i].userName = user.firstName + " " +user.lastName;
-          if(reviewList[i].userId == req.session.userId){
-            reviewList[i].sameUser = true;
+        if(reviewList !== null){
+          for(i in reviewList){
+            let user = await userData.getUser(reviewList[i].userId.toString())
+            reviewList[i].userName = user.firstName + " " +user.lastName;
+            if(reviewList[i].userId == req.session.userId){
+              reviewList[i].sameUser = true;
+            }
           }
-        }
+       }
 
         let folder  = path.join(__dirname, '../','public/','images/','uploads/',spaceDetails._id);
         spaceDetails['photoArray'] = [];
@@ -396,11 +415,11 @@ router.get('/:id',async(req,res) =>{
 
          //Avoid host from booking the space he hosted.
          let canBook = true;
-         if(req.session.userId === spaceDetails.userId)
+         if(req.session.userId === spaceDetails.hostId)
          {
            canBook = false;
          }
-         res.status(200).render('home/space', { spaceDetails,commentList,reviewList, canBook,booking : JSON.stringify(bookings)});          
+        return res.status(200).render('home/space', { spaceDetails,commentList,reviewList, canBook,booking : JSON.stringify(bookings)});          
        }else {
         return res.status(404).send();
       }
@@ -409,7 +428,8 @@ router.get('/:id',async(req,res) =>{
       res.status(500).json({ error: e });
     }
 });
-//get All spaces by userId
+
+//get All spaces hosted by userId
 router.get('/user/action', async (req, res) => {
   if(!req.session.email)
   {
@@ -438,6 +458,7 @@ router.get('/user/action', async (req, res) => {
   }  
 });
 
+//Filter space data based on dropdown filter
 router.get('/filter/:filterBy',async(req,res) =>{
   let errors = [];
   if(!req.session.email)

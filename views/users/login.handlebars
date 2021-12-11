@@ -3,8 +3,11 @@
 <h1 class="error">{{error}}.</h1>
 {{/if}}
 
-<body>
-    <div class="login-dark">
+
+<div class="login-dark">
+         <div  id="backgroundImage">
+              <img src="/public/images/LoginPage.jpeg" />
+         </div>
         <form action="/user/login" method="POST" id="loginForm" autocomplete="off">
             <h2 class="sr-only">Login Form</h2>
             <div class="illustration"><i class="bi bi-lock"></i></div>
@@ -13,5 +16,4 @@
             <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><a href="/user/signup" class="forgot">Not a member?Sign Up</a>
         </form>
     </div>
- 
-</body>
+    

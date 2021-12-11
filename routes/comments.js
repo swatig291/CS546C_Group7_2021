@@ -133,8 +133,10 @@ router.post('/delete/:id',async function(req,res){
     try{
         let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
+
             res.redirect('http://localhost:3000/space/' + comment.spaceId);
             //res.status(200).json(deleteComment);
+
         }else{
             return res.status(404).send();
         }

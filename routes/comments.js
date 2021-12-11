@@ -31,7 +31,7 @@ router.post('/creatComment/:id', async function(req, res){
     }
     try {
         const newComment = await commentData.createComment(userId, spaceId, comment);
-        return res.redirect('http://localhost:3000/space/' + spaceId);
+        return res.redirect('/space');
     } catch(e) {
         res.status(500).json({error: e});
     }
@@ -133,10 +133,8 @@ router.post('/delete/:id',async function(req,res){
     try{
         let deleteComment = await commentData.deleteComment(commentId);
         if(deleteComment){
-
-            res.redirect('http://localhost:3000/space/' + comment.spaceId);
-            //res.status(200).json(deleteComment);
-
+            // res.redirect('/space');
+            res.status(200).json(deleteComment);
         }else{
             return res.status(404).send();
         }
@@ -153,23 +151,23 @@ router.post('/edit/:id', async function(req, res){
     }
     const commentId = xss(req.params.id);
     const comment = xss(req.body.comment);
-    let comment1 = await commentData.getCommentById(commentId);
+    let comment1 = await commentData.getCommentById(commentId.trim());
     let loggedUserId = comment1.userId.toString();
     errors = [];
     if(loggedUserId != req.session.userId){
         errors.push('You can not edit the comment post by other person!')
     }
     console.log(comment)
-    if (!verify.validString(comment)){
-        errors.push('Invaild comment!')
+    if(!verify.validString(comment)){
+        throw 'Invaild comment!'
     }
     if(errors.length > 0){
         return res.status(400).json(errors);
     }
     try {
-        let authentication = await commentData.updateComment(commentId, comment);
+        let authentication = await commentData.updateComment(commentId.trim(), comment);
         if(authentication.commentModified == true) {
-            res.redirect('http://localhost:3000/space/' + comment1.spaceId);
+            res.redirect('/space');
         }else{
             res.status(500).render('/home/space', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
         }
@@ -177,5 +175,7 @@ router.post('/edit/:id', async function(req, res){
         res.status(400).render('/home/space', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
     }
 });
+
+
 
 module.exports = router;

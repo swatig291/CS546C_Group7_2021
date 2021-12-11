@@ -1,5 +1,5 @@
-.contentBox{width: 85% !important; margin: auto;}
-.mainContent{width: 100% !important; margin: auto;}
+.contentBox{padding: 0 5%;}
+
 /* Remove the navbar's default margin-bottom and rounded borders */ 
 .navbar {
     margin-bottom: 0;
@@ -51,10 +51,10 @@
 .navbar{
   background: #345b8d;
 }
-#navbarNav > ul > li a{
+#navbarNav ul li a{
   color: white;
 }
-#navbarNav > ul > li a:hover {
+#navbarNav ul li a:hover {
      color:black;
 }
 
@@ -63,7 +63,7 @@
 
 .login-dark {
   height:640px;
-  background:#475d62 url(/public/images/LoginPage.jpeg);
+  /*background:#475d62 url(/public/images/LoginPage.jpeg);*/
 
   background-size:cover;
   position:relative;
@@ -144,3 +144,34 @@
   font-size: 0.8rem;
   text-align: center;
 }
+
+/* host a space form*/
+#static-form{
+  display: inline-block;
+  max-width: 500px
+}
+.hostForm form .btn-primary{
+background-color: #344b8d;
+    border-color: #345B8D;
+}
+.hostForm h2{
+  color: #345B8D;
+}
+
+#backgroundImage {
+  width: 100%; 
+  height: 100%; 
+  position: fixed; 
+  left: 0px; 
+  top: 0px; 
+  z-index: -1; /* Ensure div tag stays behind content; -999 might work, too. */
+}
+
+#backgroundImage img {
+  width:100%;
+  height:100%;
+}
+.bi-menu-button-wide{
+  color: white;
+}
+.me-auto{margin-right: auto !important;}

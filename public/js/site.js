@@ -149,9 +149,9 @@ function getStars(rating) {
       xhr.onload = function () {
           console.log(xhr.responseText);
         
-          var Timeout = setTimeout(function () {
-              window.location.reload();
-          }, 500);
+          // var Timeout = setTimeout(function () {
+          //     window.location.reload();
+          // }, 500);
       }
   });
 

@@ -1,7 +1,7 @@
-<div class="contentBox">
+{{!-- <div class="contentBox">
 {{#if hasError}}
 <h1 class="error">Some error has occured.</h1>
-{{/if}}
+{{/if}} --}}
 
 <div class="container text-center">
     <div class='row'>
@@ -11,6 +11,9 @@
 
             {{#if userFirstNameModified}}
                 <div class="alert alert-success">User's First Name is successfully changed.</div>
+            {{/if}}
+            {{#if hasErrorFirstName}}
+                <div class="alert alert-danger">danger{{error}}</div>
             {{/if}}
             <div class="row">
                 <div class="col-sm-10 mx-0">
@@ -22,8 +25,7 @@
                 <div class="col-sm-2 mx-0">
                     <i class="bi bi-check-circle-fill" onclick="document.getElementById('#firstNameForm').submit()"></i>
                 </div>
-                
-            </div>
+          </div>
 
                 {{!-- <div>
                     <label>
@@ -40,9 +42,14 @@
 
             <form action="/user/profile/lastName" method="POST" class="profile-form">
 
-            {{#if userLastNameModified}}
-            <h1 class="modification">User's Last Name is successfully changed.</h1>
-            {{/if}}
+
+        {{#if userLastNameModified}}
+        <h3 class="modification">User's Last Name is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorLastName}}
+        <h4 class="error">{{error}}</h4>
+        {{/if}}
+
 
                 <div>
                     <label>
@@ -59,9 +66,14 @@
 
             <form action="/user/profile/email" method="POST" class="profile-form">
 
-            {{#if userEmailModified}}
-            <h1 class="modification">User's Email is successfully changed.</h1>
-            {{/if}}
+
+        {{#if userEmailModified}}
+        <h3 class="modification">User's Email is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorEmail}}
+        <h4 class="error">{{error}}</h4>
+        {{/if}}
+
 
                 <div>
                     <label>
@@ -78,9 +90,14 @@
 
             <form action="/user/profile/phoneNumber" method="POST" class="profile-form">
 
-            {{#if userPhoneNumberModified}}
-            <h1 class="modification">User's Phone Number is successfully changed.</h1>
-            {{/if}}
+
+        {{#if userPhoneNumberModified}}
+        <h3 class="modification">User's Phone Number is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorPhoneNumber}}
+        <h4 class="error">{{error}}</h4>
+        {{/if}}
+
 
                 <div>
                     <label>
@@ -100,29 +117,32 @@
                 <input id="passwordReset" type="button" value="Reset" > 
             </div>
 
-            <div id='passwordDiv' hidden>
-                <form id='password-form' action='POST'>
-                    <label>
-                        {{#if userPasswordModified}}
-                            <h1 class="modification">User's Password is successfully changed.</h1>
-                        {{/if}}
-                        <div>
-                            Your Old Password:
-                            <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
-                        </div>
-                        <div>
-                            Your New Password:
-                            <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
-                        </div>
-                        <div>
-                            Confirm Your New Password
-                            <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
-                        </div>
-                    </label>
-                <div>
-                    <label><input type="button" value="Update Password" id="submitPassword"/></label>
-                </div>
-                </form>
+
+        <div id='passwordDiv' hidden>
+            <form id='passwordForm' action='POST'>
+                <label>
+                    {{#if userPasswordModified}}
+                        <h3 class="modification">User's Password is successfully changed.</h3>
+                    {{/if}}
+                    {{#if hasErrorPassword}}
+                        <h4 class="error">{{error}}</h4>
+                    {{/if}}
+                    <div id='oldPasswordDiv'>
+                        Your Old Password:
+                        <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
+                    </div>
+                    <div id='newPasswordDiv'>
+                        Your New Password:
+                        <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
+                    </div>
+                    <div id='newPassword1Div'>
+                        Confirm Your New Password
+                        <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
+                    </div>
+                </label>
+            <div>
+                <label><input type="submit" value="Update Password" id="submitPassword"/></label>
+
             </div>
         </div>
     </div>

@@ -87,7 +87,6 @@ let getSavedSpaces = async function getUser(id){
 
     const finder = await userData.findOne({_id: parseId});
     if(finder == null) throw 'There is no user with the given ID';
-
     return finder['savedStorages'];
 }
 
@@ -280,6 +279,8 @@ let updateUserPassword = async function updateUserPassword(id, oldPassword, newP
 let updateSavedSpaces = async function updateSavedSpaces(id, spaceId){
     if(!verify.validString(id)) throw 'Id is invalid.';
     if(!verify.validId(id)) throw 'Id is invalid';
+    if(!verify.validString(spaceId)) throw 'spaceId is invalid.';
+    if(!verify.validId(spaceId)) throw 'spaceId is invalid';
 
     const userData = await users();
 
@@ -287,13 +288,17 @@ let updateSavedSpaces = async function updateSavedSpaces(id, spaceId){
 
     const finder = await userData.findOne({_id: parseId});
 
-    updated = finder['savedStorages'].push(spaceId);
+    for(let i=0; i<finder['savedStorages'].length; i++){
+        if(finder['savedStorages'][i] == spaceId) throw 'spaceId already exists';
+    }
 
+    updated = finder['savedStorages'].push(spaceId);
+    console.log(finder);
     const updatedUser = await userData.updateOne(
         { _id: parseId },
-        { $set: updated }
+        { $set: finder }
     );
-
+    console.log(updatedUser);
     if (updatedUser.modifiedCount === 0) {
         throw "could not update user's spaces successfully";
     }
@@ -336,10 +341,44 @@ let deleteUser = async function deleteUser(id){
     const delUserReviews = await reviewData.deleteMany({UserId: parseId});
     const delUserBookings = await bookingData.deleteMany({UserId: id});
 
-    console.log(delUserSpaces);
-    if(delUser.deletedCount === 0) throw 'unable to delete user with the given ID';
+    // console.log(delUserSpaces);
+    // console.log(delUserSpaces);
+    // console.log(delUserComments);
+    // console.log(delUserReviews);
+    // console.log(delUserBookings);
+    if(delUser.deletedCount == 0) throw 'unable to delete user with the given ID';
 
     return {userDeleted: true};
+}
+
+let deleteSavedSpaces = async function deleteSavedSpaces(id, spaceId){
+    if(!verify.validString(id)) throw 'Id is invalid.';
+    if(!verify.validId(id)) throw 'Id is invalid';
+    if(!verify.validString(spaceId)) throw 'spaceId is invalid.';
+    if(!verify.validId(spaceId)) throw 'spaceId is invalid';
+
+    const userData = await users();
+
+    let parseId = ObjectId(id);
+
+    const finder = await userData.findOne({_id: parseId});
+
+    for(let i=0; i<finder['savedStorages'].length; i++){
+        if(finder['savedStorages'][i] == spaceId) {
+            updated = finder['savedStorages'].splice(i, 1);
+        }
+    }
+
+    console.log(finder);
+    const updatedUser = await userData.updateOne(
+        { _id: parseId },
+        { $set: finder }
+    );
+    console.log(updatedUser);
+    if (updatedUser.modifiedCount === 0) {
+        throw "could not update user's spaces successfully";
+    }
+    return {userSavedSpacesDeleted: true};
 }
 
 module.exports = {
@@ -354,5 +393,6 @@ module.exports = {
     updateUserPassword,
     updateSavedSpaces,
     checkUser,
-    deleteUser
+    deleteUser,
+    deleteSavedSpaces
 }

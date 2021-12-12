@@ -1,6 +1,43 @@
 $(document).ready(function() {
 
-    $('#signup-form').on('submit', (event) => {
+
+    $('#loginForm').on('submit', (event) => {
+        event.preventDefault();
+        $('.error').empty();
+
+        let email = $('#loginEmail').find('input').val();
+        let password = $('#loginPassword').find('input').val();
+        let hasError = false;
+
+        //email validation
+        if(!email || email.trim().length==0){
+            $("<p/>").addClass( "error" ).text('Email must be provided').appendTo('#loginEmail');
+            hasError =true;
+        }
+
+        //password validation
+        if(!password || password.trim().length==0){
+            $("<p/>").addClass( "error" ).text('Password must be provided').appendTo('#loginPassword');
+            hasError =true;
+        }
+        if(/[\s]/.test(password)){
+            $("<p/>").addClass( "error" ).text('Password cannot consist spaces').appendTo('#loginPassword');
+            hasError =true;
+        }
+        if(password.length<6){
+            $("<p/>").addClass( "error" ).text('Password should consist atleast 6 characters').appendTo('#loginPassword');
+            hasError =true;
+        }
+
+        //submitting the form after validation
+        if(!hasError){
+            $('#loginForm').unbind('submit').submit();
+           
+         }
+    });
+
+    $('#signupForm').on('submit', (event) => {
+
         event.preventDefault();
         $('.error').empty();
 
@@ -38,7 +75,7 @@ $(document).ready(function() {
             $("<p/>").addClass( "error" ).text('Password must be provided').appendTo('#password');
             hasError =true;
         }
-        if(!/[^\s]/.test(password)){
+        if(/[\s]/.test(password)){
             $("<p/>").addClass( "error" ).text('Password cannot consist spaces').appendTo('#password');
             hasError =true;
         }

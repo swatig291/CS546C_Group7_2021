@@ -19,7 +19,7 @@ const constructorMethod = (app) => {
   app.use("/reviews", reviewData);
   app.use("/bookings", bookingData);
   app.use('*', (req, res) => {
-    res.status(404).json({ error12: 'Not found' });  
+    res.status(404).render('users/error', { hasError: true, error: 'Page Not Found' });  
   });
 };
 

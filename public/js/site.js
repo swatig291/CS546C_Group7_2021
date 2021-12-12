@@ -235,7 +235,6 @@ if(!hasError){
       xhr.send(formData);
 
       xhr.onload = function () {
-          
       }
     }   
   });
@@ -391,12 +390,33 @@ $('#passwordReset').click(function(){
   $('#passwordDiv').show();
 });
 
-$('#submitPassword').on('click',function(){
+$('#passwordForm').on('submit',function(event){
+  event.preventDefault();
+  $('.error').empty();
+
   let oldPassword = $('#oldPassword').val();
   let newPassword = $('#newPassword').val();
   let newPassword1 = $('#newPassword1').val();
+  let hasError = false;
 
-  if(newPassword == newPassword1){
+  if(oldPassword.trim().length<6 || oldPassword.indexOf(' ')>=0){
+    $("<p/>").addClass( "error" ).text('Old Password is invalid').appendTo('#oldPasswordDiv');
+    hasError =true;
+  }
+  if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0){
+    $("<p/>").addClass( "error" ).text('New Password is invalid').appendTo('#newPasswordDiv');
+    hasError =true;
+  }
+  if(newPassword1.trim().length<6 || newPassword1.indexOf(' ')>=0){
+    $("<p/>").addClass( "error" ).text('New Password is invalid').appendTo('#newPassword1Div');
+    hasError =true;
+  }
+  if(newPassword != newPassword1){
+    $("<p/>").addClass( "error" ).text('New Password is invalid').appendTo('#newPassword1Div');
+    hasError =true;
+  }
+  
+  if(!hasError){
     var requestConfig = {
       method: 'POST',
       url: '/user/profile/password',
@@ -408,7 +428,7 @@ $('#submitPassword').on('click',function(){
     };
   
   $.ajax(requestConfig).then(function(responseMessage){
-    if(responseMessage == true) $('#passwordDiv').hide();
+    
   });
 }
 });
@@ -419,19 +439,35 @@ function userSpace(){
  
 }
 
+$('.favorites').on('click',function () {
 
+  let id = $('.spaceId').text();
+  {
+    var requestConfig = {
+      method: 'POST',
+      url: $(this).data('href')
+    };
+  }
 
-function fav(id)
-{
-  var requestConfig = {
-    method: 'POST',
-    url: 'user/savedSpaces/'+id,
-  };
-
-  $.ajax(requestConfig).then(function(responseMessage){
+    $.ajax(requestConfig).then(function(responseMessage){
     
-  });
-}
+    });
+});
+
+$('.unfavorite').on('click',function () {
+
+  let id = $('.spaceId').text();
+  {
+    var requestConfig = {
+      method: 'POST',
+      url: $(this).data('href')
+    };
+  }
+
+    $.ajax(requestConfig).then(function(responseMessage){
+    
+    });
+});
 
 $(".editable").each(function(i) {
   var $this = $(this);

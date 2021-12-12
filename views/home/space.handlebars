@@ -103,35 +103,30 @@
                 
                 {{#if commentList}}
                     {{#each commentList}}
-                        <div class="card mt-2">
-                            <div class="card-body commentCardBody">
+                        <div class="card mt-2 commentCardBody">
+                            <div class="card-body">
                                 <div class={{this._id}}>
                                     <div class="row commentTextBox">
                                         <div class="col-md-11">
-                                            <p class="commentText">{{this.comment}}</p>
-                                            <textarea class="editCommentBox d-none">{{this.comment}}</textarea>
-                                        </div>
-                                         <div class="col-md-1 p-0 commentIconBox">
-                                            <div class="readModeIcons">
-                                                <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
-                                                <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                            <div class="readModeBox">
+                                                <p class="commentText">{{this.comment}}</p>
                                             </div>
-                                            <div class="editModeIcons d-none">
-                                                <a  href='javascript:void(0)' class='saveComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
-                                            </div>                                          
+                                            <div class="editModeBox" style="display:none">
+                                                <textarea class="editCommentBox" >{{this.comment}}</textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <p class ='commentId' hidden> {{this._id}}</p>
-                                    {{!-- <div class="d-none editable">
-                                        
-                                        {{!-- {{#if this.sameUser}}  --}}
-                                            {{!-- <p class="commentEdit" >{{this.comment}}</p>
-                                              <input class="commentEdit" hidden>{{this.comment}}>
-                                            <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a> --}}
-                                        {{!-- {{/if}} --}}
-                                    {{!-- </div> --}} 
-                                        
+                                        {{#if this.sameUser}}
+                                            <div class="col-md-1 p-0 commentIconBox">
+                                                <div class="readModeIcons">
+                                                    <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
+                                                    <a  href='javascript:void(0)' class='deleteCardItem' data-commentid="{{this._id}}" data-href="/comments/delete/{{this._id}}"> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                                </div>
+                                                <div class="editModeIcons" style="display:none">
+                                                    <a  href='javascript:void(0)' class='saveComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
+                                                </div>                                          
+                                            </div>
+                                        {{/if}}
+                                    </div>   
                                 </div>
                             </div>
                             <div class="card-footer text-muted">
@@ -170,47 +165,47 @@
                     {{#each reviewList}}
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="card mt-2">
+                                <div class="card mt-2 commentCardBody">
                                     <div class="card-header">
-                                        <p class="subTitle">Rating: {{this.rating}}</p>
+                                        <p class="subTitle float-right readRating">Rating: {{this.rating}}</p>
                                     </div>
                                     <div class="card-body">
                                         <div class={{this._id}}>
-                                            <p class="commentText">{{this.review}}</p>
+                                            <div class="row commentTextBox">
+                                                <div class="col-md-11">
+                                                    <div class="readModeBox">
+                                                        <p class="commentText">{{this.review}}</p>
+                                                    </div>
+                                                    <div class="editModeBox" style="display:none">
+                                                        <div class="form-group">
+                                                            <label for="review">Update your review:</label>
+                                                            <textarea class="editCommentBox">{{this.review}}</textarea> 
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="review">Update your rating:</label>
+                                                            <input type="number" name="rating" class="starRating form-control form-control-lg" value="{{this.rating}}">  
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{#if this.sameUser}}
+                                                    <div class="col-md-1 p-0 commentIconBox">
+                                                        <div class="readModeIcons">
+                                                            <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
+                                                            <a  href='javascript:void(0)' class='deleteCardItem' data-commentid="{{this._id}}" data-href="/reviews/delete/{{this._id}}"> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                                        </div>
+                                                        <div class="editModeIcons" style="display:none">
+                                                            <a  href='javascript:void(0)' class='saveReview' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
+                                                        </div>                                          
+                                                    </div>
+                                                {{/if}}
+                                            </div>   
                                         </div>
                                     </div>
                                     <div class="card-footer text-muted">
                                         <p class="float-left my-0"><span class="subTitle">Posted By:</span> {{this.userName}}</p>
                                         <p class="float-right my-0"><span class="subTitle">Posted At:</span> {{this.date}}</p>
                                     </div>
-                                </div>
-                                
-                                {{#if this.sameUser}}
-                                    <div id="judgeUserId">
-                                        <form action="/reviews/edit/{{this._id}}" method="POST" name="editreviewForm" id="editreviewForm"
-                                            style="display: block;">
-                                            <div id="editreviewText">
-                                                <div class="form-group">
-                                                    <label for="review">Update your review:</label>
-                                                    <textarea name="review" class="form-control form-control-lg" id="review" cols="20" rows="2" placeholder="You can update this review here."></textarea> 
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="review">Update your rating:</label>
-                                                    <input type="number" name="rating" class="form-control form-control-lg" id="rating" placeholder="rating (number 1-5)">  
-                                                </div>
-                                                
-                                            </div>
-                                            <div id="review-submit-button">
-                                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Update review</button>
-                                            </div>
-                                        </form>
-                                        <form action="/reviews/delete/{{this._id}}" method="POST" id="delete">
-                                            <div id="review-delete-button">
-                                                <button type="submit" class="btn btn-primary" name="deleteButton" id="deleteButton">delete</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                {{/if}}
+                                </div>                               
                             </div>
                         </div>
                     {{/each}}
@@ -224,13 +219,11 @@
                         <h4 class="sectionTitle">Post A Review</h4>
                         <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
                             <div class="form-group">
-                                {{!-- <label>Review</label> --}}
                                 <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="2"
                                         placeholder="Review here."></textarea>
                              </div>
                             <div class="form-group">
-                                {{!-- <label for="review">Rating:</label> --}}
-                                <input type="number" name="rating" cols="5" rows="2" class="form-control form-control-lg" id="rating"
+                                <input type="number" name="rating" cols="5" rows="2" min="1" max="5" class="form-control form-control-lg" id="rating"
                                     placeholder="rating (number 1-5)"> 
                             </div>
 
@@ -261,7 +254,5 @@
             $("#commentEdit").hide().text()
         ).show();
         });
-    });
-
-       
+    }); 
 </script>

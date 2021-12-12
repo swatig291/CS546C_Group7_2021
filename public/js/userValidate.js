@@ -1,3 +1,5 @@
+$(document).ready(function() {
+
 
     $('#loginForm').on('submit', (event) => {
         event.preventDefault();
@@ -35,6 +37,7 @@
     });
 
     $('#signupForm').on('submit', (event) => {
+
         event.preventDefault();
         $('.error').empty();
 
@@ -108,5 +111,7 @@
           }
         
     });
+
+} ) 
 
   

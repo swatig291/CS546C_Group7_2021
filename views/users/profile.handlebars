@@ -3,162 +3,152 @@
 <h1 class="error">Some error has occured.</h1>
 {{/if}} --}}
 
-<div class="container text-center">
+<div class="container mt-3">
     <div class='row'>
         <div class="col-md-3">&nbsp;</div>
         <div class="col-md-6">
-            <form action="/user/profile/firstName" method="POST" class="profile-form" id="firstNameForm">
-
-            {{#if userFirstNameModified}}
-                <div class="alert alert-success">User's First Name is successfully changed.</div>
-            {{/if}}
-            {{#if hasErrorFirstName}}
-                <div class="alert alert-danger">danger{{error}}</div>
-            {{/if}}
-            <div class="row">
-                <div class="col-sm-10 mx-0">
-                    <div class="form-group">
-                        <label class="form-label">First Name:</label>
-                        <input type="text" name="firstName" placeholder="New First Name" class="form-control full-width-input" value="{{firstName}}"/>
+            <form action="/user/profile/firstName" method="POST" class="profile-form">
+                {{#if userFirstNameModified}}
+                    <div class="alert alert-success">User's First Name is successfully changed.</div>
+                {{/if}}
+                {{#if hasErrorFirstName}}
+                    <div class="alert alert-danger">danger{{error}}</div>
+                {{/if}}
+                <div class="row">
+                    <div class="col-sm-10 mx-0">
+                        <div class="form-group">
+                            <label class="form-label">First Name:</label>
+                            <input type="text" name="firstName" placeholder="New First Name" class="form-control full-width-input" value="{{firstName}}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mx-0">
+                        <div class="form-group">
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn-sm bg-transparent border-0"><i class="bi bi-check-circle-fill" ></i></button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-2 mx-0">
-                    <i class="bi bi-check-circle-fill" onclick="document.getElementById('#firstNameForm').submit()"></i>
-                </div>
-          </div>
-
-                {{!-- <div>
-                    <label>
-                    Your First Name:
-                    <h4>{{firstName}}</h4> 
-                    <input type="text" name="firstName" placeholder="New First Name" class="full-width-input"/>
-                    </label>
-                </div>
-
-                <div>
-                    <label><input type="submit" value="Update First Name" class="submit"/></label>
-                </div> --}}
             </form>
 
             <form action="/user/profile/lastName" method="POST" class="profile-form">
-
-
-        {{#if userLastNameModified}}
-        <h3 class="modification">User's Last Name is successfully changed.</h3>
-        {{/if}}
-        {{#if hasErrorLastName}}
-        <h4 class="error">{{error}}</h4>
-        {{/if}}
-
-
-                <div>
-                    <label>
-                    Your Last Name: 
-                    <h4>{{lastName}}</h4>
-                    <input type="text" name="lastName" placeholder="New Last Name" class="full-width-input"/>
-                    </label>
-                </div>
-
-                <div>
-                    <label><input type="submit" value="Update Last Name" class="submit"/></label>
+                {{#if userLastNameModified}}
+                    <div class="alert alert-success">User's Last Name is successfully changed.</div>
+                {{/if}}
+                {{#if hasErrorLastName}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+                <div class="row">
+                    <div class="col-sm-10 mx-0">
+                        <div class="form-group">
+                            <label class="form-label">Last Name:</label>
+                            <input type="text" name="lastName" placeholder="New Last Name" class="form-control full-width-input" value="{{lastName}}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mx-0">
+                        <div class="form-group">
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn-sm bg-transparent border-0"><i class="bi bi-check-circle-fill" ></i></button>
+                        </div>
+                    </div>
                 </div>
             </form>
 
             <form action="/user/profile/email" method="POST" class="profile-form">
-
-
-        {{#if userEmailModified}}
-        <h3 class="modification">User's Email is successfully changed.</h3>
-        {{/if}}
-        {{#if hasErrorEmail}}
-        <h4 class="error">{{error}}</h4>
-        {{/if}}
-
-
-                <div>
-                    <label>
-                    Your Email: 
-                    <h4>{{email}}</h4>
-                    <input type="email" name="email" placeholder="New Email" class="full-width-input"/>
-                    </label>
-                </div>
-
-                <div>
-                    <label><input type="submit" value="Update Email" class="submit"/></label>
+                {{#if userEmailModified}}
+                    <div class="alert alert-success">User's Email is successfully changed.</div>
+                {{/if}}
+                {{#if hasErrorEmail}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+                <div class="row">
+                    <div class="col-sm-10 mx-0">
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <input type="email" name="email" placeholder="New Email" class="form-control full-width-input" value="{{email}}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mx-0">
+                        <div class="form-group">
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn-sm bg-transparent border-0"><i class="bi bi-check-circle-fill" ></i></button>
+                        </div>
+                    </div>
                 </div>
             </form>
 
             <form action="/user/profile/phoneNumber" method="POST" class="profile-form">
-
-
-        {{#if userPhoneNumberModified}}
-        <h3 class="modification">User's Phone Number is successfully changed.</h3>
-        {{/if}}
-        {{#if hasErrorPhoneNumber}}
-        <h4 class="error">{{error}}</h4>
-        {{/if}}
-
-
-                <div>
-                    <label>
-                    Your Phone Number: 
-                    <h4>{{phoneNumber}}</h4>
-                    <input type="text" name="phoneNumber" placeholder="New Phone Number" class="full-width-input"/>
-                    </label>
+                {{#if userPhoneNumberModified}}
+                    <div class="alert alert-success">User's Phone Number is successfully changed.</div>
+                {{/if}}
+                {{#if hasErrorPhoneNumber}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+                <div class="row">
+                    <div class="col-sm-10 mx-0">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number:</label>
+                            <input type="text" name="phoneNumber" placeholder="New Email" class="form-control full-width-input" value="{{phoneNumber}}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mx-0">
+                        <div class="form-group">
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn-sm bg-transparent border-0"><i class="bi bi-check-circle-fill" ></i></button>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label><input type="submit" value="Update Phone Number" class="submit"/></label>
-                </div>
+
             </form>
 
             <div id='resetting-password'>
-                <p>Need to reset your password?</p>
-                <input id="passwordReset" type="button" value="Reset" > 
+                <p>
+                    Need to reset your password?
+                    <button class="btn-sm btn-info" id="passwordReset">Reset</button>
+                </p>
+                
             </div>
-
-
-        <div id='passwordDiv' hidden>
-            <form id='passwordForm' action='POST'>
-                <label>
-                    {{#if userPasswordModified}}
-                        <h3 class="modification">User's Password is successfully changed.</h3>
-                    {{/if}}
-                    {{#if hasErrorPassword}}
-                        <h4 class="error">{{error}}</h4>
-                    {{/if}}
-                    <div id='oldPasswordDiv'>
-                        Your Old Password:
-                        <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
+            <div id='passwordDiv' hidden>
+                {{#if userPasswordModified}}
+                    <div class="alert alert-success">User's Password is successfully changed.</div>
+                {{/if}}
+                {{#if hasErrorPassword}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+                <form id='passwordForm' action='POST'>
+                    <div class="col-sm-10 p-0">
+                        <div class="form-group">
+                            <label class="form-label">Old Password:</label>
+                            <input type='password' name='oldPassword' placeholder="Old Password" class="form-control full-width-input" id='oldPassword'/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">New Password:</label>
+                            <input type='password' name='newPassword' placeholder="New Password" class="form-control full-width-input" id='newPassword'/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm New Password:</label>
+                            <input type='password' name='newPassword' placeholder="New Password" class="form-control full-width-input" id='newPassword1'/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-sm btn-primary">Update Password</button>
+                        </div>
                     </div>
-                    <div id='newPasswordDiv'>
-                        Your New Password:
-                        <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
+                </form>
+            </div>
+            <div class="pt-3 border-top">
+                <div class="row">
+                    <div class="col-md-4 text-center p-0">
+                        <a class="btn btn-primary" href="/space/user/action">Spaces hosted by you.</a>
                     </div>
-                    <div id='newPassword1Div'>
-                        Confirm Your New Password
-                        <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
+                    <div class="col-md-4 text-center p-0">
+                        <a class="btn btn-success" href="/bookings/user/action">Booking by user</a>
                     </div>
-                </label>
-            <div>
-                <label><input type="submit" value="Update Password" id="submitPassword"/></label>
-
+                    <div class="col-md-4 text-center p-0">
+                        <a class="btn btn-danger" href="/user/delete">Delete the account</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-4 text-center">
-        <a class="btn-sm btn-primary" href="http://localhost:3000/space/user/action">Spaces hosted by you.</a>
-    </div>
-    <div class="col-md-4 text-center">
-        <a class="btn-sm btn-success" href="http://localhost:3000/bookings/user/action">Booking by user</a>
-    </div>
-    <div class="col-md-4 text-center">
-        <a class="btn-sm btn-danger" href="http://localhost:3000/user/delete">Delete the account</a>
-    </div>
-
-
-</div>
 </div>
 

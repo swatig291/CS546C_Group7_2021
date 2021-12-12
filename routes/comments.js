@@ -5,6 +5,7 @@ const commentData = data.comments;
 const verify = data.util;
 const xss = require('xss');
 
+
 router.post('/creatComment/:id', async function(req, res){
     if(!req.session.email){
         res.status(400).redirect('/user/login');
@@ -172,7 +173,13 @@ router.post('/edit/:id', async function(req, res){
             res.status(500).render('/home/space', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
         }
     } catch(e) {
-        res.status(400).render('/home/space', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
+        if(e == 'Nothing to update')
+        {
+            errors.push(e);
+            res.redirect('/space');
+        }
+        else 
+            res.status(400).render('/home/space', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
     }
 });
 

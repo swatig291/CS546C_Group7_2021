@@ -134,6 +134,13 @@ function getStars(rating) {
       xhr.send(formData);
   
       xhr.onload = function () {
+        var data = JSON.parse(this.responseText);
+        if(data.hasErrors)
+        {
+         $.each(data.errors, function( k, v ) {
+           $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
+         });
+        }
       } 
      }
 });
@@ -237,6 +244,15 @@ if(!hasError){
       xhr.send(formData);
 
       xhr.onload = function () {
+         var data = JSON.parse(this.responseText);
+         if(data.hasErrors)
+         {
+          $.each(data.errors, function( k, v ) {
+            $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
+          });
+         }
+        
+       
       }
     }   
   });

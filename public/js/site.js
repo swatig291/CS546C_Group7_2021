@@ -95,7 +95,7 @@ function getStars(rating) {
           $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
           hasError = true;
       }
-      if (!description) {
+      if (!description ||description.trim().length == 0) {
           $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
           hasError = true;
       }
@@ -192,10 +192,6 @@ if (!state || state.trim().length == 0) {
 }
 if (!zip || zip.trim().length == 0) {
     $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
-    hasError = true;
-}
-if (!description) {
-    $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
     hasError = true;
 }
 if (!longitude || longitude.trim().length == 0) {

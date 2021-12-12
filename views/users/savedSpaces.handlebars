@@ -21,9 +21,17 @@
                  <span class='stars'></span>
                 </div>
                 </div>
-                 <div >${{this.price}}/Night</div>
-                  <div >{{this.address.city}}</div>
-                  <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                <div class="row">
+                  <div class="col-sm-8 dimensions">
+                    <div >${{this.price}}/Night</div>
+                    <div >{{this.address.city}}</div>
+                    <div>Space Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</div>
+                  </div>
+                  <div class="col-sm-4 unfavorite">
+                    <a href='javascript:void(0)'  class='unfavorite' data-href='/user/savedSpacesDelete/{{this._id}}'>unf</a>
+                  </div>
+                </div>
+                 
             </div>
     </div>
        {{/each}}

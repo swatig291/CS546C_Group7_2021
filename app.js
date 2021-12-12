@@ -44,7 +44,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-  
+
+app.use(function(req, res, next){
+  res.locals.session = req.session;
+  // console.log(res.locals.session);
+  next();
+});
 app.get('/', (req, res,next) => {
     if (req.session.email) {
        res.redirect('/space');
@@ -92,11 +97,6 @@ app.get('/user/profile/phoneNumber', async(req, res, next) => {
   if(!req.session.email) return res.redirect('/user/login');
   next();
 })
-
-// app.get('/private', async(req, res, next) => {
-//     if(!req.session.username) return res.status(403).render('Individual/error');
-//     next();
-// });
 
 // To know the status of the request method, request route and whether the user is authenticated
 app.use(async(req, res, next) => {

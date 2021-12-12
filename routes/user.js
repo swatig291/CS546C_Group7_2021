@@ -30,6 +30,7 @@ router.post('/login', async (req, res) => {
         if(authentication !== null) {
             req.session.email = email;
             req.session.userId = authentication._id.toString();
+            req.session.userName = authentication.firstName + ' ' + authentication.lastName;
             res.redirect('/');
         }
         else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});

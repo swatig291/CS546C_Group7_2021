@@ -4,52 +4,52 @@
         <h2>Add your space here.</h2>
         <form id="static-form" method="POST" enctype="multipart/form-data" action="/space/add" >
             <div class='form-row'>
-                <div class="form-group  col-md-12">
+                <div class="form-group col-md-12" id="spaceNameD">
                     <input name="spaceName" id="spaceName" type="text"  class="full-width-input form-control" placeholder="Space name" value="" aria-describedby="basic-addon1">
                 </div>  
             </div>  
              <div class='form-row'>
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="lengthD">
                      <input name="length" id="length" type="number"   class="full-width-input form-control" placeholder="Length" value="" aria-describedby="basic-addon1">        
                 </div>  
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="widthD">
                     <input name="width"  id="width" type="number"  class="full-width-input form-control" placeholder="Width" value="" aria-describedby="basic-addon1">
                 </div>  
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="heightD">
                     <input name="height" id="height" type="number"   class="full-width-input form-control" placeholder="Height" value="" aria-describedby="basic-addon1">
                 </div>  
             </div>  
              <div class='form-row'>
-                <div class="form-group  col-md-12">
+                <div class="form-group  col-md-12"  id="priceD">
                      <input name="price" id="price" type="number"   class="full-width-input form-control" placeholder="price" value="" aria-describedby="basic-addon1">
                 </div>  
             </div> 
             <div class='form-row'>
-                <div class="form-group  col-md-12">
+                <div class="form-group  col-md-12" id="streetAddressD">
                      <input type="text" class="full-width-input form-control"  name="streetAddress" id="streetAddress" placeholder="Enter street address">
                 </div>  
             </div> 
              <div class='form-row'>
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="cityD">
                     <input type="text" class="full-width-input form-control"  name="city" id="city" placeholder="Enter city">
                 </div>  
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="stateD">
                    <input type="text" class="full-width-input form-control"  name="state" id="state" placeholder="state">
                 </div>  
-                <div class="form-group  col-md-4">
+                <div class="form-group  col-md-4" id="zipD">
                     <input type="number" class="full-width-input form-control"  name="zip" id="zip" placeholder="zip">
                 </div>  
             </div>  
              <div class='form-row'>
-                <div class="form-group  col-md-6">
+                <div class="form-group  col-md-6" id="longitudeD">
                     <input type="text" class="full-width-input form-control"  name="longitude" id="longitude" placeholder="Enter longitude">
                 </div>  
-                <div class="form-group  col-md-6">
+                <div class="form-group  col-md-6" id="latitudeD">
                     <input type="text" class="full-width-input form-control"  name="latitude" id="latitude" placeholder="Enter latitude">
                 </div>                 
             </div>  
              <div class='form-row'>
-                <div class="form-group  col-md-12">
+                <div class="form-group  col-md-12" id="descriptionD">
                    <textarea name="description" class="form-control" id="description" cols="74" rows="6" placeholder="Say something..." value=""></textarea>
                 </div>  
             </div>  
@@ -66,7 +66,7 @@
 
                 <button id="addNewPostButton" name="submit" value="Submit" class="btn btn-primary btn-block" type="button">Add space</button>
                 </div>
-            </form>       
+        </form>       
                   
 
     </div>

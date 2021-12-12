@@ -3,31 +3,45 @@
 <h1 class="error">Some error has occured.</h1>
 {{/if}} --}}
 
-<div class='row'>
-    <div class="col-md-8">
-        <form action="/user/profile/firstName" method="POST" class="profile-form">
+<div class="container text-center">
+    <div class='row'>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-6">
+            <form action="/user/profile/firstName" method="POST" class="profile-form" id="firstNameForm">
 
-        {{#if userFirstNameModified}}
-        <h3 class="modification">User's First Name is successfully changed.</h3>
-        {{/if}}
-        {{#if hasErrorFirstName}}
-        <h4 class="error">{{error}}</h4>
-        {{/if}}
+            {{#if userFirstNameModified}}
+                <div class="alert alert-success">User's First Name is successfully changed.</div>
+            {{/if}}
+            {{#if hasErrorFirstName}}
+                <div class="alert alert-danger">danger{{error}}</div>
+            {{/if}}
+            <div class="row">
+                <div class="col-sm-10 mx-0">
+                    <div class="form-group">
+                        <label class="form-label">First Name:</label>
+                        <input type="text" name="firstName" placeholder="New First Name" class="form-control full-width-input" value="{{firstName}}"/>
+                    </div>
+                </div>
+                <div class="col-sm-2 mx-0">
+                    <i class="bi bi-check-circle-fill" onclick="document.getElementById('#firstNameForm').submit()"></i>
+                </div>
+          </div>
 
-            <div>
-                <label>
-                Your First Name:
-                <h4>{{firstName}}</h4> 
-                <input type="text" name="firstName" placeholder="New First Name" class="full-width-input"/>
-                </label>
-            </div>
+                {{!-- <div>
+                    <label>
+                    Your First Name:
+                    <h4>{{firstName}}</h4> 
+                    <input type="text" name="firstName" placeholder="New First Name" class="full-width-input"/>
+                    </label>
+                </div>
 
-            <div>
-                <label><input type="submit" value="Update First Name" class="submit"/></label>
-            </div>
-        </form>
+                <div>
+                    <label><input type="submit" value="Update First Name" class="submit"/></label>
+                </div> --}}
+            </form>
 
-        <form action="/user/profile/lastName" method="POST" class="profile-form">
+            <form action="/user/profile/lastName" method="POST" class="profile-form">
+
 
         {{#if userLastNameModified}}
         <h3 class="modification">User's Last Name is successfully changed.</h3>
@@ -36,20 +50,22 @@
         <h4 class="error">{{error}}</h4>
         {{/if}}
 
-            <div>
-                <label>
-                Your Last Name: 
-                <h4>{{lastName}}</h4>
-                <input type="text" name="lastName" placeholder="New Last Name" class="full-width-input"/>
-                </label>
-            </div>
 
-            <div>
-                <label><input type="submit" value="Update Last Name" class="submit"/></label>
-            </div>
-        </form>
+                <div>
+                    <label>
+                    Your Last Name: 
+                    <h4>{{lastName}}</h4>
+                    <input type="text" name="lastName" placeholder="New Last Name" class="full-width-input"/>
+                    </label>
+                </div>
 
-        <form action="/user/profile/email" method="POST" class="profile-form">
+                <div>
+                    <label><input type="submit" value="Update Last Name" class="submit"/></label>
+                </div>
+            </form>
+
+            <form action="/user/profile/email" method="POST" class="profile-form">
+
 
         {{#if userEmailModified}}
         <h3 class="modification">User's Email is successfully changed.</h3>
@@ -58,20 +74,22 @@
         <h4 class="error">{{error}}</h4>
         {{/if}}
 
-            <div>
-                <label>
-                Your Email: 
-                <h4>{{email}}</h4>
-                <input type="email" name="email" placeholder="New Email" class="full-width-input"/>
-                </label>
-            </div>
 
-            <div>
-                <label><input type="submit" value="Update Email" class="submit"/></label>
-            </div>
-        </form>
+                <div>
+                    <label>
+                    Your Email: 
+                    <h4>{{email}}</h4>
+                    <input type="email" name="email" placeholder="New Email" class="full-width-input"/>
+                    </label>
+                </div>
 
-        <form action="/user/profile/phoneNumber" method="POST" class="profile-form">
+                <div>
+                    <label><input type="submit" value="Update Email" class="submit"/></label>
+                </div>
+            </form>
+
+            <form action="/user/profile/phoneNumber" method="POST" class="profile-form">
+
 
         {{#if userPhoneNumberModified}}
         <h3 class="modification">User's Phone Number is successfully changed.</h3>
@@ -80,23 +98,25 @@
         <h4 class="error">{{error}}</h4>
         {{/if}}
 
-            <div>
-                <label>
-                Your Phone Number: 
-                <h4>{{phoneNumber}}</h4>
-                <input type="text" name="phoneNumber" placeholder="New Phone Number" class="full-width-input"/>
-                </label>
+
+                <div>
+                    <label>
+                    Your Phone Number: 
+                    <h4>{{phoneNumber}}</h4>
+                    <input type="text" name="phoneNumber" placeholder="New Phone Number" class="full-width-input"/>
+                    </label>
+                </div>
+
+                <div>
+                    <label><input type="submit" value="Update Phone Number" class="submit"/></label>
+                </div>
+            </form>
+
+            <div id='resetting-password'>
+                <p>Need to reset your password?</p>
+                <input id="passwordReset" type="button" value="Reset" > 
             </div>
 
-            <div>
-                <label><input type="submit" value="Update Phone Number" class="submit"/></label>
-            </div>
-        </form>
-
-        <div id='resetting-password'>
-            <p>Need to reset your password?</p>
-            <input id="passwordReset" type="button" value="Reset" > 
-        </div>
 
         <div id='passwordDiv' hidden>
             <form id='passwordForm' action='POST'>
@@ -122,22 +142,23 @@
                 </label>
             <div>
                 <label><input type="submit" value="Update Password" id="submitPassword"/></label>
+
             </div>
-            </form>
         </div>
-   </div>
-   <div class="col-md-4">
-       <div class="row">
-            <a href="http://localhost:3000/space/user/action">Spaces hosted by you.</a>
-            <a href="http://localhost:3000/bookings/user/action">Booking by user</a>
-            <a href="http://localhost:3000/user/delete">Delete the account</a>
-       </div>
-       <div class='row'>
-           <div id='userBookings'>
-                  
-           </div>
-       </div>
-   </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-center">
+        <a class="btn-sm btn-primary" href="http://localhost:3000/space/user/action">Spaces hosted by you.</a>
+    </div>
+    <div class="col-md-4 text-center">
+        <a class="btn-sm btn-success" href="http://localhost:3000/bookings/user/action">Booking by user</a>
+    </div>
+    <div class="col-md-4 text-center">
+        <a class="btn-sm btn-danger" href="http://localhost:3000/user/delete">Delete the account</a>
+    </div>
+
+
 </div>
 </div>
 

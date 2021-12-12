@@ -8,50 +8,6 @@ document.addEventListener("DOMContentLoaded", function(){
       
         document.getElementsByClassName("stars")[i].innerHTML  = getStars(val[i].innerText);   
      }
-
-    //  $(".editable").each(function(i) {
-    //   var $this = $(this);
-    //   $this.attr("id", "orig-" + i);
-      
-    //   var $edit = $("<i />")
-    //   .addClass('bi bi-pencil-fill')
-    //   .attr("id", "update-" + i)
-    //   .on('click',function() {
-    //       var $input = $('<input type="text" />')
-    //           .attr("id", "edit" + i)
-    //           .val($this.text());
-          
-    //       var $save = $('<a class="bi bi-check-circle-fill"></a>')
-    //           .on('click',function() {
-    //             //ajax call /comments/edit
-    //               var $new = $("<p />").text($input.val());
-    //               $input.replaceWith($new);
-    //               $(this).hide()
-    //               // ($edit).visible();
-    
-    
-    //               var commentId =  $('.commentId')[0].innerText;
-    //               var requestConfig = {
-    //                 method: 'POST',
-    //                 url: '/comments/edit/'+ commentId,
-    //                 contentType: 'application/json',
-    //                 data: JSON.stringify({
-    //                   comment: $new[0].innerHTML,
-    //                 })           
-    //               };
-    //               $.ajax(requestConfig).then(function(responseMessage) {
-    //                 alert('inserted');
-    //                 });
-    
-    //           });
-    
-    //       $(this).replaceWith($save);
-    //       $this.replaceWith($input);
-    
-    //   });
-    
-    //  $(this).after($edit)
-    // })
 });
 
 function getStars(rating) {
@@ -87,6 +43,76 @@ function getStars(rating) {
     // if(form){
     //   var formData = new FormData(form);
     $('#updateSpace').click(function () {
+     
+      let spaceName = $('#spaceName').val();
+      let length = $('#length').val();
+      let width = $('#width').val();
+      let height = $('#height').val();
+      let price = $('#price').val();
+      let streetAddress = $('#streetAddress').val();
+      let city = $('#city').val();
+      let state = $('#state').val();
+      let zip = $('#zip').val();
+      let longitude = $('#longitude').val();
+      let latitude = $('#latitude').val();
+      let description = $('#description').val();
+     
+      let hasError = false;
+      //firstName validation
+      if (!spaceName || spaceName.trim().length == 0) {
+          $("<p/>").addClass("error").text('spaceName cannnot be empty.').appendTo('#spaceNameD');
+          hasError = true;
+      }
+      if (!length || length.trim().length == 0 ||length < 0) {
+          $("<p/>").addClass("error").text('Invalid length').appendTo('#lengthD');
+          hasError = true;
+      }
+      if (!width || width.trim().length == 0 || width < 0) {
+          $("<p/>").addClass("error").text('Invalid width').appendTo('#widthD');
+          hasError = true;
+      }
+      if (!height || height.trim().length == 0 || height < 0) {
+          $("<p/>").addClass("error").text('Invalid height').appendTo('#heightD');
+          hasError = true;
+      }
+      if (!price || price.trim().length == 0 || price < 1) {
+          $("<p/>").addClass("error").text('price cannnot be empty or less than 1.').appendTo('#priceD');
+          hasError = true;
+      }
+      if (!streetAddress || streetAddress.trim().length == 0) {
+          $("<p/>").addClass("error").text('streetAddress cannnot be empty.').appendTo('#streetAddressD');
+          hasError = true;
+      }
+      if (!city || city.trim().length == 0) {
+          $("<p/>").addClass("error").text('city cannnot be empty.').appendTo('#cityD');
+          hasError = true;
+      }
+      if (!state || state.trim().length == 0) {
+          $("<p/>").addClass("error").text('state cannnot be empty.').appendTo('#stateD');
+          hasError = true;
+      }
+      if (!zip || zip.trim().length == 0) {
+          $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
+          hasError = true;
+      }
+      if (!description) {
+          $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
+          hasError = true;
+      }
+      if (!longitude || longitude.trim().length == 0) {
+          $("<p/>").addClass("error").text('longitude cannnot be empty.').appendTo('#longitudeD');
+          hasError = true;
+      }
+      if (!latitude || latitude.trim().length == 0) {
+          $("<p/>").addClass("error").text('latitude cannnot be empty.').appendTo('#latitudeD');
+          hasError = true;
+      }
+      if (!description || description.trim().length == 0) {
+        $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
+        hasError = true;
+    }
+      if(!hasError){
+          
       var form = document.getElementById('static-update-form');
   
       if(form){
@@ -111,14 +137,80 @@ function getStars(rating) {
       xhr.send(formData);
   
       xhr.onload = function () {
-         
-      }
-  });
+      } 
+     }
+});
 
 
 
-    $('#addNewPostButton').on('click',function () {
+$('#addNewPostButton').on('click',function () {
+//validation
 
+// event.preventDefault();
+let spaceName = $('#spaceName').val();
+let length = $('#length').val();
+let width = $('#width').val();
+let height = $('#height').val();
+let price = $('#price').val();
+let streetAddress = $('#streetAddress').val();
+let city = $('#city').val();
+let state = $('#state').val();
+let zip = $('#zip').val();
+let longitude = $('#longitude').val();
+let latitude = $('#latitude').val();
+let hasError = false;
+//firstName validation
+if (!spaceName || spaceName.trim().length == 0) {
+    $("<p/>").addClass("error").text('spaceName cannnot be empty.').appendTo('#spaceNameD');
+    hasError = true;
+}
+if (!length || length.trim().length == 0 ||length < 0) {
+    $("<p/>").addClass("error").text('Invalid length').appendTo('#lengthD');
+    hasError = true;
+}
+if (!width || width.trim().length == 0 || width < 0) {
+    $("<p/>").addClass("error").text('Invalid width').appendTo('#widthD');
+    hasError = true;
+}
+if (!height || height.trim().length == 0 || height < 0) {
+    $("<p/>").addClass("error").text('Invalid height').appendTo('#heightD');
+    hasError = true;
+}
+if (!price || price.trim().length == 0 || price < 1) {
+    $("<p/>").addClass("error").text('price cannnot be empty or less than 1.').appendTo('#priceD');
+    hasError = true;
+}
+if (!streetAddress || streetAddress.trim().length == 0) {
+    $("<p/>").addClass("error").text('streetAddress cannnot be empty.').appendTo('#streetAddressD');
+    hasError = true;
+}
+if (!city || city.trim().length == 0) {
+    $("<p/>").addClass("error").text('city cannnot be empty.').appendTo('#cityD');
+    hasError = true;
+}
+if (!state || state.trim().length == 0) {
+    $("<p/>").addClass("error").text('state cannnot be empty.').appendTo('#stateD');
+    hasError = true;
+}
+if (!zip || zip.trim().length == 0) {
+    $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
+    hasError = true;
+}
+if (!description) {
+    $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
+    hasError = true;
+}
+if (!longitude || longitude.trim().length == 0) {
+    $("<p/>").addClass("error").text('longitude cannnot be empty.').appendTo('#longitudeD');
+    hasError = true;
+}
+if (!latitude || latitude.trim().length == 0) {
+    $("<p/>").addClass("error").text('latitude cannnot be empty.').appendTo('#latitudeD');
+    hasError = true;
+}
+if(!hasError){
+   
+      // validation end
       var form = document.getElementById('static-form');
 
       if(form){
@@ -145,7 +237,9 @@ function getStars(rating) {
       xhr.onload = function () {
           
       }
+    }   
   });
+
 
 function dateCheck(from,to,check) {
 
@@ -379,29 +473,87 @@ $(".editable").each(function(i) {
 
   });
 
- //delete comment
- $(".deleteComment").on('click','.commentIconBox',function(e){
-   e.preventDefault();
-  var commentId =  $('.commentId')[0].innerText;
-  var requestConfig = {
-    method: 'post',
-    url: '/comments/delete/'+ commentId,         
-  };
-  $.ajax(requestConfig).then(function(responseMessage) {
-     $('.'+commentId).hide();
-    });
- })
-  //edit comment
- $('.commentCardBody').on('click', '.editComment',function(){
-  var commentId = $(this).data('commentid')
-  var parentObj = $(this).parents('.commentTextBox')
-  $('.editCommentBox', parentObj).slideDown(function(){
-    $('.editModeIcons', parentObj).show()
-   });
-  $('.commentText', parentObj).slideUp(function(){
-      $('.readModeIcons', parentObj).hide()
-  })       
+ 
+ 
 })
+$( document ).ready(function() {
+    //delete comment
+    $(".commentCardBody").on('click','.deleteCardItem',function(e){
+        e.preventDefault();
+        var confrimDelete = confirm("Are you sure, you want to delete this comment?");
+        if (confrimDelete == true) {
+            var parentObj = $(this).parents('.commentCardBody')
+            var requestConfig = {
+                method: 'post',
+                url: $(this).data('href'),         
+            };
+            $.ajax(requestConfig).then(function(responseMessage) {
+                $(parentObj).remove()
+            });
+        }
+    })
+
+    //edit comment
+    $('.commentCardBody').on('click', '.editComment',function(){
+        var commentId = $(this).data('commentid')
+        var parentObj = $(this).parents('.commentCardBody')
+        $('.readModeBox', parentObj).slideUp(function(){
+            $('.readModeIcons', parentObj).hide()
+        })
+        $('.editModeBox', parentObj).slideDown(function(){
+            $('.editModeIcons', parentObj).show()
+        });       
+    })
+
+    $('.commentCardBody').on('click', '.saveComment',function(){
+        var commentId = $(this).data('commentid')
+        var parentObj = $(this).parents('.commentCardBody')
+        var commentText = $.trim($(".editCommentBox").val())
+        console.log(commentText)
+        var requestConfig = {
+            method: 'post',
+            url: '/comments/edit/'+ commentId, 
+            contentType: 'application/json',
+            data: JSON.stringify({
+                comment: commentText
+            })        
+        };
+        $.ajax(requestConfig).then(function(responseMessage) {
+            $('.commentText', parentObj).text(commentText)
+            $('.editModeBox', parentObj).slideUp(function(){
+                $('.editModeIcons', parentObj).hide()
+            });
+            $('.readModeBox', parentObj).slideDown(function(){
+                $('.readModeIcons', parentObj).show()
+            })
+        });
+
+        
+    })
+
+    $('.commentCardBody').on('click', '.saveReview',function(){
+        var commentId = $(this).data('commentid')
+        var parentObj = $(this).parents('.commentTextBox')
+        var commentText = $('.editCommentBox', parentObj).text()
+        var requestConfig = {
+            method: 'post',
+            url: '/reviews/edit/'+ commentId, 
+            contentType: 'application/json',
+            data: JSON.stringify({
+                comment: commentText,
+                rating: $('.starRating').val()
+            })        
+        };
+        $.ajax(requestConfig).then(function(responseMessage) {
+            $('.commentText', parentObj).text(commentText)
+            $('.editModeBox', parentObj).slideUp(function(){
+                $('.editModeIcons', parentObj).hide()
+            });
+            $('.readModeBox', parentObj).slideDown(function(){
+                $('.readModeIcons', parentObj).show()
+            })
+        });
+    })
 })
 
 

@@ -104,7 +104,7 @@ router.post('/add', async (req, res) => {
                 errors.push('error while uploading image');
               }
               // return res.status(400).json({errors,hasErrors});
-              res.status(400).render('home/hostSpace', {
+              res.status(400).json ({
                 errors: errors,
                  hasErrors : true,
                  fields: fields
@@ -259,7 +259,12 @@ router.post('/edit', async (req, res) => {
           // }
           // Do not submit if there are errors in the form
           if (errors.length > 0) {
-              return res.status(400).json(errors);
+            res.status(400).json ({
+              errors: errors,
+               hasErrors : true,
+               fields: fields
+                              
+             });
           }
           try {
             const newSpace = await spaceData.updateSpace(id,newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);

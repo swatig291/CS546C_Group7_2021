@@ -1,14 +1,17 @@
-<div class="contentBox">
+{{!-- <div class="contentBox">
 {{#if hasError}}
 <h1 class="error">Some error has occured.</h1>
-{{/if}}
+{{/if}} --}}
 
 <div class='row'>
     <div class="col-md-8">
         <form action="/user/profile/firstName" method="POST" class="profile-form">
 
         {{#if userFirstNameModified}}
-        <h1 class="modification">User's First Name is successfully changed.</h1>
+        <h3 class="modification">User's First Name is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorFirstName}}
+        <h4 class="error">{{error}}</h4>
         {{/if}}
 
             <div>
@@ -27,7 +30,10 @@
         <form action="/user/profile/lastName" method="POST" class="profile-form">
 
         {{#if userLastNameModified}}
-        <h1 class="modification">User's Last Name is successfully changed.</h1>
+        <h3 class="modification">User's Last Name is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorLastName}}
+        <h4 class="error">{{error}}</h4>
         {{/if}}
 
             <div>
@@ -46,7 +52,10 @@
         <form action="/user/profile/email" method="POST" class="profile-form">
 
         {{#if userEmailModified}}
-        <h1 class="modification">User's Email is successfully changed.</h1>
+        <h3 class="modification">User's Email is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorEmail}}
+        <h4 class="error">{{error}}</h4>
         {{/if}}
 
             <div>
@@ -65,7 +74,10 @@
         <form action="/user/profile/phoneNumber" method="POST" class="profile-form">
 
         {{#if userPhoneNumberModified}}
-        <h1 class="modification">User's Phone Number is successfully changed.</h1>
+        <h3 class="modification">User's Phone Number is successfully changed.</h3>
+        {{/if}}
+        {{#if hasErrorPhoneNumber}}
+        <h4 class="error">{{error}}</h4>
         {{/if}}
 
             <div>
@@ -87,26 +99,29 @@
         </div>
 
         <div id='passwordDiv' hidden>
-            <form id='password-form' action='POST'>
+            <form id='passwordForm' action='POST'>
                 <label>
                     {{#if userPasswordModified}}
-                        <h1 class="modification">User's Password is successfully changed.</h1>
+                        <h3 class="modification">User's Password is successfully changed.</h3>
                     {{/if}}
-                    <div>
+                    {{#if hasErrorPassword}}
+                        <h4 class="error">{{error}}</h4>
+                    {{/if}}
+                    <div id='oldPasswordDiv'>
                         Your Old Password:
                         <input type='password' name='oldPassword' placeholder="Old Password" class="full-width-input" id='oldPassword'/>
                     </div>
-                    <div>
+                    <div id='newPasswordDiv'>
                         Your New Password:
                         <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword'/>
                     </div>
-                    <div>
+                    <div id='newPassword1Div'>
                         Confirm Your New Password
                         <input type='password' name='newPassword' placeholder="New Password" class="full-width-input" id='newPassword1'/>
                     </div>
                 </label>
             <div>
-                <label><input type="button" value="Update Password" id="submitPassword"/></label>
+                <label><input type="submit" value="Update Password" id="submitPassword"/></label>
             </div>
             </form>
         </div>

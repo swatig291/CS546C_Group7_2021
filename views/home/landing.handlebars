@@ -74,7 +74,8 @@
                                                 <div ><p>{{this.address.city}}, {{this.address.state}}</p></div>
                                             </div>
                                             <div class='col-sm-4 '>
-                                                <a type='submit' onClick="fav('{{this._id}}')" id='favorites'>fav</a>
+                                                <a href='javascript:void(0)'  class='favorites' data-href='/user/savedSpaces/{{this._id}}'>fav</a>
+                                                {{!-- onClick="fav('{{this._id}}')" --}}
                                             </div>
                                         </div>
                                 </div>

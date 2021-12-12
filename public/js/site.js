@@ -95,7 +95,7 @@ function getStars(rating) {
           $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
           hasError = true;
       }
-      if (!description) {
+      if (!description ||description.trim().length == 0) {
           $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
           hasError = true;
       }
@@ -134,6 +134,13 @@ function getStars(rating) {
       xhr.send(formData);
   
       xhr.onload = function () {
+        var data = JSON.parse(this.responseText);
+        if(data.hasErrors)
+        {
+         $.each(data.errors, function( k, v ) {
+           $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
+         });
+        }
       } 
      }
 });
@@ -194,10 +201,6 @@ if (!zip || zip.trim().length == 0) {
     $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
     hasError = true;
 }
-if (!description) {
-    $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
-    hasError = true;
-}
 if (!longitude || longitude.trim().length == 0) {
     $("<p/>").addClass("error").text('longitude cannnot be empty.').appendTo('#longitudeD');
     hasError = true;
@@ -237,6 +240,15 @@ if(!hasError){
       xhr.send(formData);
 
       xhr.onload = function () {
+         var data = JSON.parse(this.responseText);
+         if(data.hasErrors)
+         {
+          $.each(data.errors, function( k, v ) {
+            $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
+          });
+         }
+        
+       
       }
     }   
   });

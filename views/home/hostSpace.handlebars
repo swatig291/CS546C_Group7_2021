@@ -1,5 +1,16 @@
 
 <div class="contentBox text-center  my-2 bg-light">
+       <div>
+         
+         {{#if errors}}
+         <p>ok</p>
+           {{!-- <ul class="errors">
+               {{#each errors}}
+                 <li>{{this}}</li>
+                {{/each}}
+           </ul> --}}
+         {{/if}}
+        </div>
     <div class="hostForm" >
         <h2>Add your space here.</h2>
         <form id="static-form" method="POST" enctype="multipart/form-data" action="/space/add" >
@@ -70,7 +81,7 @@
                   
 
     </div>
-   
+    
 </div>
   <script>
       

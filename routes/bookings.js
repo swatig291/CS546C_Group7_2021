@@ -19,7 +19,7 @@ router.get("/:id", async function (req, res) {
         res.json(bookingInfo);
     }
     catch (e) {
-        res.status(404).json({ message: "'booking' item not found!" });
+        res.status(404).render('users/error', { error: "'booking' item not found!" });
     }
 });
 
@@ -44,8 +44,7 @@ router.get("/user/action", async function (req, res) {
          res.render('home/userBooking', { bookingInfo});
     }
     catch (e) {
-        console.log(req.params.id)
-        res.status(404).json({ message: "'booking' " });
+        res.status(404).render('users/error', { error: "'booking' " });
     }
 });
 
@@ -62,7 +61,7 @@ router.get("/spaceId/:id", async function (req, res) {
         res.json(bookingInfo);
     }
     catch (e) {
-        res.status(404).json({ message: "'booking' item not found!" });
+        res.status(404).render('users/error', { error: "'booking' item not found!" });
     }
 });
 
@@ -70,7 +69,7 @@ router.get("/spaceId/:id", async function (req, res) {
 router.get("/", async function (req, res) {
     if(!req.session.email)
     {
-      res.status(401).redirect("/user/login")
+      res.status(400).redirect("/user/login")
 
     }
     try {
@@ -117,7 +116,7 @@ router.post("/:id", async (req, res) => {
         
         res.status(200).send(newbooking)
     } catch (e) {
-        res.status(500).json({ error: e })
+        res.status(500).render('users/error', { error: e })
     }
 });
 
@@ -138,7 +137,7 @@ router.get('/remove/:id', async (req, res) => {
         res.json(spaceById);
     } catch (error) {
         //console.log(error);
-        res.status(404).json({ error: 'booking not found' });
+        res.status(404).render('users/error', { error: 'booking not found' });
     }
 });
 

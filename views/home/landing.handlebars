@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="row">
-                                        <div class="col-md-3"><a type='submit' onClick="fav('{{this._id}}')" id='favorites'>fav</a></div>
+                                        <div class="col-md-3"><a href='javascript:void(0)' type='submit' data-href='/user/savedSpaces/{{this._id}}' class='favorites'>fav</a></div>
                                         <div class="col-md-5" style="text-align:right;">
                                             <p hidden class="spaceId">{{this._id}}</p>
                                             <p class="starRate" hidden>{{this.rating}}</p>                   
@@ -116,7 +116,7 @@
                                             </div>
                                             <div class='col-sm-4 '>
                                                 <a href='javascript:void(0)'  class='favorites' data-href='/user/savedSpaces/{{this._id}}'>fav</a>
-                                                {{!-- onClick="fav('{{this._id}}')" --}}
+                                                {{!-- onClick="fav('{{this._id}}')" 
                                             </div>
                                         </div>
                                 </div>

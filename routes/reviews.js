@@ -5,6 +5,7 @@ const reviewData = data.reviews;
 const spaceData = data.space;
 const verify = data.util;
 const xss = require('xss');
+const { space } = require('../data');
 
 router.post('/creatreview/:id', async function(req, res){
     if(!req.session.email){
@@ -13,6 +14,7 @@ router.post('/creatreview/:id', async function(req, res){
     }
     let errors = [];
     const spaceId = req.params.id;
+    console.log(spaceId);
     const userId = req.session.userId;
     const review = xss(req.body.review);
     const rating = Number(xss(req.body.rating));
@@ -37,7 +39,7 @@ router.post('/creatreview/:id', async function(req, res){
         errors.push('Invaild rating!')
     }
     if (errors.length > 0) {
-        return res.status(400).json(errors);
+        return res.render('home/space', {errors: errors, hasError: true});
     }
     try {
         let reviewList = await reviewData.getAllreviewsOfSpace(spaceId);

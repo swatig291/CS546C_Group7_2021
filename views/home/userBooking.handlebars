@@ -1,23 +1,24 @@
+
 <div class="contentBox">
-<div class='row'>
-   <h4>Spaces booked by you</h4>
-   {{#each bookingInfo}}
-   <div class='col-sm-3'>
-      <div class='panel'>
-        <div>
-            <p>{{this.SpaceName}}</p>
-        </div>
-        <div>
-           <p>your booking is from {{this.startDate}} to {{endDate}}</p>
-        </div>
-        <div>
-         <p>Price for this booking is ${{this.totalPrice}}</p>
-        </div>
-        <div>
-            <a href="/bookings/remove/{{this._id}}"> <span class="glyphicon glyphicon-trash"></span></a>
-        </div>
-        </div>
-   </div>
-   {{/each}}
-</div>
+
+    <section class="py-2">
+        <h4>Spaces booked by you</h4>
+
+        <div class="row"></div>
+           {{#each bookingInfo}}
+               <div class='col-sm-6'>
+                  <div class='panel my-2 px-4 py-4'>
+                        <p>{{this.SpaceName}}</p>
+                    
+                        <p>your booking is from {{this.startDate}} to {{endDate}}</p>
+                     
+                        <p>Price for this booking is ${{this.totalPrice}}</p>
+                    
+                        <a href="/bookings/remove/{{this._id}}"> <span class="bi bi-trash-fill"></span></a> 
+                  </div>
+               </div>
+           {{/each}}
+            </div>
+       </section>
+      
 </div>

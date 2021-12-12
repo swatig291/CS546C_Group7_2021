@@ -111,11 +111,7 @@ function getStars(rating) {
       xhr.send(formData);
   
       xhr.onload = function () {
-          console.log(xhr.responseText);
-        
-          var Timeout = setTimeout(function () {
-              window.location.reload();
-          }, 500);
+         
       }
   });
 
@@ -147,11 +143,7 @@ function getStars(rating) {
       xhr.send(formData);
 
       xhr.onload = function () {
-          console.log(xhr.responseText);
-        
-          var Timeout = setTimeout(function () {
-              window.location.reload();
-          }, 500);
+          
       }
   });
 

@@ -143,7 +143,6 @@ function getStars(rating) {
       xhr.send(formData);
 
       xhr.onload = function () {
-          
       }
   });
 

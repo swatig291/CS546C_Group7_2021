@@ -12,11 +12,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://icons.getbootstrap.com/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
     {{!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> --}}
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+    
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -28,15 +29,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item active"><a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a></li>
+                <li class="nav-item active"><a class="nav-link py-0" href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/space/host">Host a space</a>
+                    <a class="nav-link py-0" href="/space/host">Host a space</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link py-0" href="#">About</a>
                 </li>
                 <li>
-                    <a  class="nav-link" href="/user/savedSpaces">
+                    <a  class="nav-link py-0" href="/user/savedSpaces">
                     <i class="bi bi-heart-fill"></i>
                     </a>
                 </li>
@@ -45,22 +46,22 @@
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav">
-                    <li><a class="nav-link"  href="/user/logout">
+                    <li><a class="nav-link py-0"  href="/user/logout">
                     <i class="bi bi-power"></i>
                     </a>
                     </li>
-                    <li><a class="nav-link"  href="/user/profile">
+                    <li><a class="nav-link py-0"  href="/user/profile">
                     <i class="bi bi-person-circle"></i>
                     </a>
                     </li>
                     {{#if session.userId}}
-                         <li><p class="userName">{{session.userName}}</p></li>
+                         <li><p class="userName mb-0">{{session.userName}}</p></li>
                      {{else}}
-                         <li><a class="nav-link"  href="/user/login">
+                         <li><a class="nav-link py-0"  href="/user/login">
                         Login
                         </a>
                         </li>
-                        <li><a class="nav-link"  href="/user/signup">
+                        <li><a class="nav-link py-0"  href="/user/signup">
                         Sign Up
                         </a>
                         </li>
@@ -77,9 +78,10 @@
 
 <footer class="container-fluid text-center">
   <p>Swati Gunari | Dongya Li | Haolei Wang | Anirudh Varma</p>
-  <script src="/public/js/site.js"></script>
-  <script src="/public/js/userValidate.js"></script>
+   <script src="/public/js/userValidate.js"></script>
   <script src='/public/js/space.js'></script>
+  <script src="/public/js/site.js"></script>
+ 
 </footer>
 
 </body>

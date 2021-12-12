@@ -136,6 +136,12 @@ module.exports = {
         if (!verify.validString(comment)){
             throw 'Invaild comment!'
         }
+
+        let existingCommnet = this.getCommentById(id.trim());
+        if(existingCommnet.comment === comment.trim())
+        {
+            throw 'Nothing to update'
+        }
         let objId = ObjectId(id.trim());
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();

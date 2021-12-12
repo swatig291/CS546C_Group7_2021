@@ -1,5 +1,6 @@
+$(document).ready(function() {
 
-    $('#signupForm').on('submit', (event) => {
+    $('#signup-form').on('submit', (event) => {
         event.preventDefault();
         $('.error').empty();
 
@@ -73,5 +74,7 @@
           }
         
     });
+
+} ) 
 
   

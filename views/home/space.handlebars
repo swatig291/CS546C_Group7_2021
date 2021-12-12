@@ -114,7 +114,7 @@
                                          <div class="col-md-1 p-0 commentIconBox">
                                             <div class="readModeIcons">
                                                 <a  href='javascript:void(0)' class='editComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-pencil-fill"></i></span></a>
-                                                <a  href='' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a>
+                                                <a  href='javascript:void(0)' class='deleteComment'> <span> <i class="bi bi-trash-fill"></i></span></a>
                                             </div>
                                             <div class="editModeIcons d-none">
                                                 <a  href='javascript:void(0)' class='saveComment' data-commentid="{{this._id}}"> <span> <i class="bi bi-check-circle-fill"></i></span></a>
@@ -260,7 +260,5 @@
             $("#commentEdit").hide().text()
         ).show();
         });
-    });
-
-       
+    }); 
 </script>

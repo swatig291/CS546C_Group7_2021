@@ -380,7 +380,7 @@ $(".editable").each(function(i) {
   });
 
  //delete comment
- $(".deleteComment").on('click',function(e){
+ $(".deleteComment").on('click','.commentIconBox',function(e){
    e.preventDefault();
   var commentId =  $('.commentId')[0].innerText;
   var requestConfig = {

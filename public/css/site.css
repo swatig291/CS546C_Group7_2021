@@ -175,3 +175,8 @@ background-color: #344b8d;
   color: white;
 }
 .me-auto{margin-right: auto !important;}
+
+#static-update-form{
+  display: inline-block;
+    max-width: 500px
+}

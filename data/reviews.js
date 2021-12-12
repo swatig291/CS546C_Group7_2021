@@ -135,6 +135,13 @@ module.exports = {
         }
         if(!verify.validRating(rating)) throw 'rating is invalid';
         
+        let exitsingData = await this.getreviewById(id);
+          if(exitsingData.review == review && exitsingData.rating == rating)
+          {
+              throw 'Nothing to change';
+          }
+
+
         let objId = ObjectId(id.trim());
         var myDate = new Date();
         let cyear = myDate.getFullYear().toString();

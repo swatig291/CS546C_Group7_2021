@@ -544,7 +544,7 @@ $( document ).ready(function() {
     $('.commentCardBody').on('click', '.saveComment',function(){
         var commentId = $(this).data('commentid')
         var parentObj = $(this).parents('.commentCardBody')
-        var commentText = $.trim($(".editCommentBox").val())
+        var commentText = $.trim($(".editCommentBox", parentObj).val())
         console.log(commentText)
         var requestConfig = {
             method: 'post',
@@ -562,25 +562,42 @@ $( document ).ready(function() {
             $('.readModeBox', parentObj).slideDown(function(){
                 $('.readModeIcons', parentObj).show()
             })
-        });
-
-        
+        });   
     })
+    //cancel comment
+    $('.commentCardBody').on('click', '.cancelComment',function(){
+   
+      var parentObj = $(this).parents('.commentCardBody')
+      var commentText = $.trim($(".editCommentBox", parentObj).val())
+      
+    
+          $('.commentText', parentObj).text(commentText)
+          $('.editModeBox', parentObj).slideUp(function(){
+              $('.editModeIcons', parentObj).hide()
+          });
+          $('.readModeBox', parentObj).slideDown(function(){
+              $('.readModeIcons', parentObj).show()
+          })
+       
+  })
 
     $('.commentCardBody').on('click', '.saveReview',function(){
         var commentId = $(this).data('commentid')
-        var parentObj = $(this).parents('.commentTextBox')
+        var parentObj = $(this).parents('.commentCardBody')
         var commentText = $('.editCommentBox', parentObj).text()
+        var rating = $('.rating option:selected', parentObj).text()
         var requestConfig = {
             method: 'post',
             url: '/reviews/edit/'+ commentId, 
             contentType: 'application/json',
             data: JSON.stringify({
-                comment: commentText,
-                rating: $('.starRating').val()
+              review: commentText,
+                rating: rating
+                // rating: $('.starRating').val()
             })        
         };
         $.ajax(requestConfig).then(function(responseMessage) {
+            $('readRating',parentObj).text(rating)
             $('.commentText', parentObj).text(commentText)
             $('.editModeBox', parentObj).slideUp(function(){
                 $('.editModeIcons', parentObj).hide()
@@ -589,7 +606,22 @@ $( document ).ready(function() {
                 $('.readModeIcons', parentObj).show()
             })
         });
+      //cancel Review
+          
+
+
     })
+    $('.commentCardBody').on('click', '.cancelReview',function(){                        
+      var parentObj = $(this).parents('.commentCardBody')
+      
+      $('.editModeBox', parentObj).slideUp(function(){
+          $('.editModeIcons', parentObj).hide()
+      });
+      $('.readModeBox', parentObj).slideDown(function(){
+          $('.readModeIcons', parentObj).show()
+      })
+  
+})
 })
 
 

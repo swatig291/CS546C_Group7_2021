@@ -91,7 +91,7 @@
                                             <p class="starRate" hidden>{{this.rating}}</p>                   
                                             <span class='stars'></span>
                                         </div> 
-                                        <div class="col-md-3"><a type='submit' class="btn btn-info"  onClick="divFunction('{{this._id}}')">Details</a></div>
+                                        <div class="col-md-3"><a type='submit' class="btn-sm btn-info"  onClick="divFunction('{{this._id}}')">Details</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                             </div>
                                             <div class='col-sm-4 '>
                                                 <a href='javascript:void(0)'  class='favorites' data-href='/user/savedSpaces/{{this._id}}'>fav</a>
-                                                {{!-- onClick="fav('{{this._id}}')" --}}
+                                                onClick="fav('{{this._id}}')" 
                                             </div>
                                         </div>
                                 </div>

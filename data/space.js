@@ -177,7 +177,7 @@ module.exports = {
         let objId = ObjectId(id.trim());
         let existingData = await this.getSpaceById(id);
         if(existingData === null) throw 'Space does not exist for the given Id'
-    
+      
         const spaceCollection = await spaces();
             const updateSpace = {
                 rating: rating

@@ -545,6 +545,13 @@ $( document ).ready(function() {
         var commentId = $(this).data('commentid')
         var parentObj = $(this).parents('.commentCardBody')
         var commentText = $.trim($(".editCommentBox").val())
+        let hasError = false;
+        //
+        if(!commentText || commentText.length ==0){
+          $("<p/>").addClass( "error" ).text('Comment is empty. Nothing to post').appendTo('#editCommentBox');
+          hasError = true;
+        }
+        //
         console.log(commentText)
         var requestConfig = {
             method: 'post',
@@ -566,6 +573,7 @@ $( document ).ready(function() {
 
         
     })
+    //Review
 
     $('.commentCardBody').on('click', '.saveReview',function(){
         var commentId = $(this).data('commentid')
@@ -590,6 +598,24 @@ $( document ).ready(function() {
             })
         });
     })
+
+    //comments and review validation
+    $('#comment-form').on('submit', (event) => {
+      event.preventDefault();
+      let hasError = false;
+      let comment = $('#comment').val();
+
+      if(!comment || comment.trim().length==0){
+        $("<p/>").addClass( "error" ).text('Comment is empty. Nothing to post').appendTo('#commentDiv');
+        hasError =true;
+      }
+
+      if(!hasError){
+        $('#comment-form').unbind('submit').submit();
+      }
+
+    })
+
 })
 
 

@@ -113,10 +113,10 @@ router.post('/add', async (req, res) => {
               fs.renameSync(folderName, folderNameNew)
               // return res.redirect('/space/'+id);
            
-              return res.json(newSpace);
+              return res.redirect('/space/'+id);
 
           } catch(e) {
-              res.status(500).json({error: e});
+              res.status(500).render('users/error', {error: e});
           }
   })
   
@@ -160,7 +160,7 @@ router.get('/host/:id',async(req,res) =>{
     }
   }
   catch(e){
-    res.status(500).json({ error: e });
+    res.status(500).render('users/error', { error: e });
   }
 
 });
@@ -189,8 +189,7 @@ router.get("/", async (req, res) => {
     // res.status(200).json(spaceList);
   } catch (e) {
     // Something went wrong with the server!
-    console.log(e);
-    res.status(404).send();
+    res.status(500).send();
   }  
 });
 
@@ -256,9 +255,9 @@ router.post('/edit', async (req, res) => {
           }
           try {
             const newSpace = await spaceData.updateSpace(id,newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
-            return res.json(newSpace);
+            return res.redirect('/space/'+id);
         } catch(e) {
-            res.status(500).json({error: e});
+            res.status(500).render('users/error', {error: e});
         }
       
           // try {
@@ -303,7 +302,7 @@ router.get('/remove/:id',async(req,res) => {
     }
 		//res.json({deleted: true, data: toBeDeletedReview});
 	} catch (e) {
-		res.status(500).json({ error: e });
+		res.status(500).render('users/error', { error: e });
 	}
 
 });
@@ -340,7 +339,6 @@ router.post("/search", async (req, res) => {
     res.status(200).render('home/landing', { spaceList});
   } catch (e) {
     // Something went wrong with the server!
-    console.log(e);
     res.status(404).send();
   }  
 });
@@ -425,7 +423,7 @@ router.get('/:id',async(req,res) =>{
       }
     }
     catch(e){
-      res.status(500).json({ error: e });
+      res.status(500).render('users/error', { error: e });
     }
 });
 

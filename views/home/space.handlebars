@@ -147,7 +147,7 @@
                     <div class="col-sm-12">
                         <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
                             <h4 class="sectionTitle">Post A Comment</h4>
-                            <div class="form-group">
+                            <div class="form-group" id='commentDiv'>
                                 <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
                                 placeholder="you can post your queries here."></textarea>
                             </div>
@@ -165,6 +165,11 @@
                     {{#each reviewList}}
                         <div class="row">
                             <div class="col-sm-12">
+                                {{#if hasError}}
+                                    {{#each errors}}
+                                    <h4 class="error">{{this}}.</h4>
+                                    {{/each}}
+                                {{/if}}
                                 <div class="card mt-2 commentCardBody">
                                     <div class="card-header">
                                         <p class="subTitle float-right readRating">Rating: {{this.rating}}</p>
@@ -183,7 +188,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="review">Update your rating:</label>
-                                                            <input type="number" name="rating" class="starRating form-control form-control-lg" value="{{this.rating}}">  
+                                                            <input type="number" name="rating" class="starRating form-control form-control-lg" min="1" max="5" value="{{this.rating}}">  
                                                         </div>
                                                     </div>
                                                 </div>

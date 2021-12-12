@@ -107,10 +107,7 @@ function getStars(rating) {
           $("<p/>").addClass("error").text('latitude cannnot be empty.').appendTo('#latitudeD');
           hasError = true;
       }
-      if (!description || description.trim().length == 0) {
-        $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
-        hasError = true;
-    }
+     
       if(!hasError){
           
       var form = document.getElementById('static-update-form');
@@ -158,6 +155,7 @@ let state = $('#state').val();
 let zip = $('#zip').val();
 let longitude = $('#longitude').val();
 let latitude = $('#latitude').val();
+let description = $('#description').val();
 let hasError = false;
 //firstName validation
 if (!spaceName || spaceName.trim().length == 0) {
@@ -207,6 +205,10 @@ if (!longitude || longitude.trim().length == 0) {
 if (!latitude || latitude.trim().length == 0) {
     $("<p/>").addClass("error").text('latitude cannnot be empty.').appendTo('#latitudeD');
     hasError = true;
+}
+if (!description || description.trim().length == 0) {
+  $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
+  hasError = true;
 }
 if(!hasError){
    

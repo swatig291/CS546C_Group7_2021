@@ -155,6 +155,26 @@
                                 <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
                             </form>
                         </div>
+<<<<<< development
+                    {{/each}}
+                {{else}}
+                    <div class="alert alert-primary" role="alert">
+                        There are no comments yet for this space.
+                    </div>
+                {{/if}}  
+                <div class="row my-5">
+                    <div class="col-sm-12">
+                        <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
+                            <h4 class="sectionTitle">Post A Comment</h4>
+                            <div class="form-group" id='commentDiv'>
+                                <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
+                                placeholder="you can post your queries here."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
+                        </form>
+                    </div>
+======
+>>>>>> Dev2
 
                     </div>
                 </div>
@@ -192,8 +212,9 @@
                                                                     <option value="4">4</option>
                                                                     <option value="5">5</option>
                                                                 </select>
-                                                                {{!-- <input type="number" name="rating" class="starRating form-control form-control-lg" value="{{this.rating}}">   --}}
+                                                               
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                     {{#if this.sameUser}}

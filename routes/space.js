@@ -20,10 +20,18 @@ router.post('/add', async (req, res) => {
     res.status(400).redirect('/user/login');
     return;
   }
-
+  let errors = [];
     var form = new formidable.IncomingForm();
+    const uploadFldr = path.join(__dirname, '../','public/','images/','uploads/')
+    try {
+      if (!fs.existsSync(uploadFldr)) {
+           fs.mkdirSync(uploadFldr)
+      }
+    } catch (err) {
+      errors.push(err);
+    }
     const folderName = path.join(__dirname, '../','public/','images/','uploads/','temp/');
-    let errors = [];
+   
     try {
       if (!fs.existsSync(folderName)) {
            fs.mkdirSync(folderName)

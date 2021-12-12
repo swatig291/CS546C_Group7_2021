@@ -137,7 +137,7 @@ module.exports = {
             throw 'Invaild comment!'
         }
 
-        let existingCommnet = this.getCommentById(id.trim());
+        let existingCommnet = await this.getCommentById(id.trim());
         if(existingCommnet.comment === comment.trim())
         {
             throw 'Nothing to update'

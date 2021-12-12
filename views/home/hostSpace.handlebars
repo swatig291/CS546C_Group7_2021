@@ -1,6 +1,5 @@
 
 <div class="contentBox text-center  my-2 bg-light">
-
     <div class="hostForm" >
         <h2>Add your space here.</h2>
         <form id="static-form" method="POST" enctype="multipart/form-data" action="/space/add" >
@@ -59,38 +58,45 @@
                   <span>Choose photos</span>
                 <input name="upload" id="addImg" type="file" accept="image/jpg, image/png, image/jpeg, image/gif, image/tiff" multiple>
                 </div>  
+                <p style="margin-top: 3px; color:blue" id="images"></p>  
             </div>  
            
             <div class="form-group">
                  {{!-- <input id="addNewPostButton" name="submit" type="button" class="btn AllButton" value="Submit" > --}}
-                <button id="addNewPostButton" name="submit" value="Submit" class="btn btn-primary btn-block" type="submit">Register</button>
-                </div></form>
-            
-    </div>
 
-  <p style="margin-top: 3px; color: #b52818" id="imageCount"></p>
+                <button id="addNewPostButton" name="submit" value="Submit" class="btn btn-primary btn-block" type="button">Add space</button>
+                </div>
+            </form>       
+                  
+
+    </div>
+   
 </div>
   <script>
       
-      var file = document.getElementById('addImg')
-// count for photos user has chosen
+var file = document.getElementById('addImg')
+
 var fileCount = 0;
-$('#imageCount').hide();
-//  when user choose photos
+//$('#images').hide();
+var form = document.getElementById('static-form');
+
+      if(form){
+          var formData = new FormData(form);
+      }
 file.onchange = function () {
+    alert(this.files.length);
     for (let i = 0; i < this.files.length; i++) {
         formData.append('photo' + i, this.files[i]); // add photos' path to formData
         fileCount ++;
     }
-    if(fileCount == 1){
-        $('#imageCount').text('You have chosen '+fileCount+' photo');
-        $('#imageCount').show();
-    } else if(fileCount > 1 && fileCount <=3){
-        $('#pimageCount').text('You have chosen '+fileCount+' photos');
-        $('#imageCount').show();
-    } else {
-        $('#pimageCount').text('You can only upload 4 photos at most');
-        $('#imageCount').show();
+      if(fileCount > 3){
+           e.preventDefault();
+        $('#images').text('You can upload maximum upto 3 images.');
+        $('#images').show();
+    } else if(fileCount === 0){
+        e.preventDefault();
+        $('#images').text('Please upload atleast one image it will help user to book space.');
+        $('#images').show();
     }
 };
   </script>

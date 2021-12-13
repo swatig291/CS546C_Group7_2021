@@ -148,8 +148,8 @@
                         <div class="col-sm-12">
                             <form action="/comments/creatComment/{{spaceDetails._id}}" method="POST" id="comment-form">
                                 <h4 class="sectionTitle">Post A Comment</h4>
-                                <div class="form-group">
-                                    <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
+                                <div class="form-group" id="comment">
+                                    <textarea name="comment" class="form-control form-control-lg" cols="30" rows="2" 
                                     placeholder="you can post your queries here."></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
@@ -230,11 +230,11 @@
                         <div class="col-sm-12">
                             <h4 class="sectionTitle">Post A Review</h4>
                             <form action="/reviews/creatreview/{{spaceDetails._id}}" method="POST" id="review-form">
-                                <div class="form-group">
-                                    <textarea name="review" class="form-control form-control-lg" id="review" cols="30" rows="2"
+                                <div class="form-group" id="review">
+                                    <textarea name="review" class="form-control form-control-lg" cols="30" rows="2"
                                             placeholder="Review here."></textarea>
                                 </div>
-                                <div class="form-group">                               
+                                <div class="form-group" id="rating">                               
                                     <select name="rating" class="form-control form-control-lg">
                                         <option value="0">Select your rating</option>
                                         <option value="1">1</option>

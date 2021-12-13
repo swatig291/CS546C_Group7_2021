@@ -373,16 +373,6 @@ function daysBetween(startDate, endDate) {
     return Math.round((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay);
 }
 
-$('.dropdown-item').click( function(e){
-  let val = e.target.innerText;
-  var requestConfig = {
-    method: 'Get',
-    url: 'space/filter/'+ val,      
-  };
-  $.ajax(requestConfig).then(function(responseMessage) {
-    $("body").html(responseMessage);
-    });
-});
 
 function disableDates(check_in){
 $('.dateDisplay').datepicker({
@@ -624,7 +614,7 @@ $( document ).ready(function() {
     $('.commentCardBody').on('click', '.saveReview',function(){
         var commentId = $(this).data('commentid')
         var parentObj = $(this).parents('.commentCardBody')
-        var commentText = $('.editCommentBox', parentObj).text()
+        var commentText = $.trim($(".editCommentBox", parentObj).val())
         var rating = $('.rating option:selected', parentObj).text()
         var requestConfig = {
             method: 'post',
@@ -637,7 +627,7 @@ $( document ).ready(function() {
             })        
         };
         $.ajax(requestConfig).then(function(responseMessage) {
-            $('readRating',parentObj).text(rating)
+            $('.readRating',parentObj).text('Rating: '+ rating)
             $('.commentText', parentObj).text(commentText)
             $('.editModeBox', parentObj).slideUp(function(){
                 $('.editModeIcons', parentObj).hide()
@@ -657,15 +647,36 @@ $( document ).ready(function() {
     $('#comment-form').on('submit', (event) => {
       event.preventDefault();
       let hasError = false;
-      let comment = $('#comment').val();
+       let comment = $('#comment').find('textarea').val()
 
-      if(!comment || comment.trim().length==0){
-        $("<p/>").addClass( "error" ).text('Comment is empty. Nothing to post').appendTo('#commentDiv');
-        hasError =true;
-      }
+       if (!comment || !comment.trim()) {
+        $("<p/>").addClass("error").text('Invalid comment.').appendTo('#comment');
+        hasError = true;
+    }
 
       if(!hasError){
         $('#comment-form').unbind('submit').submit();
+      }
+
+    })
+
+    $('#review-form').on('submit', (event) => {
+      event.preventDefault();
+      let hasError = false;
+      let review = $('#review').find('textarea').val()
+      let rating = $('#rating').find('select').val();
+
+      if (!review || !review.trim()) {
+        $("<p/>").addClass("error").text('Invalid review.').appendTo('#review');
+        hasError = true;
+      }
+      if (rating == 0) {
+        $("<p/>").addClass("error").text('Invalid rating.').appendTo('#rating');
+        hasError = true;
+    }
+
+      if(!hasError){
+        $('#review-form').unbind('submit').submit();
       }
 
     })

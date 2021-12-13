@@ -194,3 +194,7 @@ background-color: #344b8d;
 }
 .commentTextBox .editCommentBox{width: 100%; height: 100%;}
 .spaceImageCard{max-height: 250px;}
+
+.imgSize{
+  max-height: 250px;
+}

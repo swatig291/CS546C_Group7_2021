@@ -174,11 +174,11 @@ router.get('/host/:id',async(req,res) =>{
 
 //Loading all the spaces data for landing page
 router.get("/", async (req, res) => {
-  if(!req.session.email)
-  {
-    res.status(400).redirect('/user/login');
-    return;
-  }
+  // if(!req.session.email)
+  // {
+  //   res.status(400).redirect('/user/login');
+  //   return;
+  // }
   try {
     let spaceList = await spaceData.getAllSpace();
     spaceList.forEach(space => {
@@ -323,11 +323,7 @@ router.get('/remove/:id',async(req,res) => {
 
 //Search functionality
 router.post("/search", async (req, res) => {
-  if(!req.session.email)
-  {
-    res.status(400).redirect('/user/login');
-    return;
-  }
+  
   let errors = [];
   let search = req.body.name;
   try {
@@ -465,7 +461,7 @@ router.get('/user/action', async (req, res) => {
     // res.status(200).json(spaceList);
   } catch (e) {
     // Something went wrong with the server!
-    console.log(e);
+   
     res.status(404).send();
   }  
 });
@@ -473,11 +469,7 @@ router.get('/user/action', async (req, res) => {
 //Filter space data based on dropdown filter
 router.get('/filter/:filterBy',async(req,res) =>{
   let errors = [];
-  if(!req.session.email)
-  {
-    res.status(400).redirect('/user/login');
-    return;
-  }
+  
   let param = xss(req.params.filterBy);
   if (!verify.validString(param))  errors.push('Filter value must be valid string');
   if (!param) {

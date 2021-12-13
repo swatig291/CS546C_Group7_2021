@@ -81,6 +81,7 @@ router.post('/signup', async (req, res) => {
 router.get('/logout', async (req, res) => {
     try{
         req.session.destroy();
+        res.locals = '';
         res.render('users/logout', {pageTitle: 'logoutPage'});
     }catch(e){
         res.status(500).render('users/logout', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
@@ -369,7 +370,7 @@ router.get('/savedSpaces', async (req, res) => {
 
 router.post('/savedSpaces/:id', async (req, res) => {
     if(!req.session.email){
-        res.status(400).redirect('/user/login');
+        res.status(400).json({login:true});
         return;
     }
     try{

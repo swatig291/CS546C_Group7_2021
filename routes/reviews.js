@@ -14,7 +14,7 @@ router.post('/creatreview/:id', async function(req, res){
     }
     let errors = [];
     const spaceId = req.params.id;
-    console.log(spaceId);
+  
     const userId = req.session.userId;
     const review = xss(req.body.review);
     const rating = Number(xss(req.body.rating));

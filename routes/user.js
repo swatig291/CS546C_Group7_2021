@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
         }
         else res.status(500).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Internal Server Error', isAuthenticated: false});
     }catch(e){
-        res.status(400).render('users/login', {pageTitle: 'error occured', hasError: true, error: e, isAuthenticated: false});
+        res.status(400).render('users/login', {pageTitle: 'error occured', hasError: true, error: 'Either username or password is invalid', isAuthenticated: false});
     }
 })
 
@@ -324,8 +324,10 @@ router.post('/profile/password', async (req, res) => {
 })
 
 router.get('/savedSpaces', async (req, res) => {
+   
     if(!req.session.email){
         res.status(400).redirect('/user/login');
+     
         return;
     }
     try{

@@ -12,7 +12,10 @@ const constructorMethod = (app) => {
   app.get('/', (req, res) => {
     res.redirect('http://localhost:3000/space');
   });
-
+  
+  app.get('/about', (req, res) => {
+    res.render('home/about');
+  });
   app.use('/user', userRoute);
   app.use('/space', spaceData);
   app.use("/comments", commentData);

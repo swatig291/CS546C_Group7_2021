@@ -63,7 +63,7 @@ function validNumber(num)
 function validLocation(num)
 {
     num = parseInt(num);
-    if (isNaN(num) || !num || (typeof num != 'number')) return false;
+    if (isNaN(num) || !num || (typeof num !== 'number')) return false;
     return true;
 }
 function validDate(date)

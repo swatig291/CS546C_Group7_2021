@@ -86,7 +86,7 @@ $(document).ready(function() {
             
         //phoneNumber validation
         if(!phoneNumber || phoneNumber.trim().length==0){
-            $("<p/>").addClass( "error" ).text('Phone Number must be provided').appendTo('#phoneNumber');
+            $("<p/>").addClass( "error" ).text('Phone Number must be 10 digits').appendTo('#phoneNumber');
             hasError =true;
         }
         if(!/[0-9]{10}/.test(phoneNumber)){
@@ -96,7 +96,7 @@ $(document).ready(function() {
         
         //ssn validation
         if(!ssn || ssn.trim().length==0){
-            $("<p/>").addClass( "error" ).text('SSN must be provided').appendTo('#ssn');
+            $("<p/>").addClass( "error" ).text('SSN must be 9 digits').appendTo('#ssn');
             hasError =true;
         }
         if(!/^[0-9]{9}/.test(ssn)){

@@ -32,7 +32,7 @@ router.post('/creatComment/:id', async function(req, res){
     }
     try {
         const newComment = await commentData.createComment(userId, spaceId, comment);
-        return res.redirect('/space');
+        return res.redirect('http://localhost:3000/space/' + spaceId);
     } catch(e) {
         res.status(500).json({error: e});
     }

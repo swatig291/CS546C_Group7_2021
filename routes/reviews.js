@@ -47,7 +47,7 @@ router.post('/creatreview/:id', async function(req, res){
             sumRating += reviewList[i].rating;
         }
         let newSumRating = sumRating + rating;
-        let avgRating = Math.round((newSumRating / (reviewList.length + 1)));
+        let avgRating = Math.round((newSumRating / (reviewList.length + 1)) * 10) / 10;
         const newSpace = await spaceData.updateSpaceRating(spaceId,avgRating);
         const newreview = await reviewData.createreview(userId, spaceId, review, rating);
         res.redirect('http://localhost:3000/space/' + spaceId);
@@ -197,7 +197,7 @@ router.post('/edit/:id', async function(req, res){
             sumRating += reviewList[i].rating
         }
         let newSumRating = sumRating - thisReview.rating + rating;
-        let avgRating = Math.round((newSumRating / reviewList.length));
+        let avgRating = Math.round((newSumRating / reviewList.length) * 10) / 10;
         let space = await spaceData.getSpaceById(thisReview.spaceId.toString())
         const newSpace = await spaceData.updateSpaceRating(space._id,avgRating);
         const newreview = await reviewData.updatereview(id, review, rating);

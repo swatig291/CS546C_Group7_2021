@@ -96,13 +96,13 @@ router.get('/delete', async (req, res) => {
     try{
         let accountDelete = await userData.deleteUser(req.session.userId);
         if(accountDelete.userDeleted == true) {
-            req.session.destroy();
-            res.json('account deleted');
+            // req.session.destroy();
+            res.redirect('/user/logout');
         }
-        else res.status(500).json('server error');
+        else res.status(500).render('users/error', {error: 'server error'});
         
     }catch(e){
-        res.json(e);
+        res.render('users/error', {error: e});
     }
 })
 
@@ -290,6 +290,7 @@ router.post('/profile/password', async (req, res) => {
         if(newPassword.trim().length<6 || newPassword.indexOf(' ')>=0) throw 'The password is invalid';
         
         let authentication = await userData.updateUserPassword(req.session.userId, oldPassword, newPassword);
+        
         if(authentication.userPasswordModified == true) {
             let userDetails = await userData.getUser(req.session.userId);
             res.render('users/profile', {
@@ -303,15 +304,22 @@ router.post('/profile/password', async (req, res) => {
         }
     }catch(e){
         let userDetails = await userData.getUser(req.session.userId);
-        res.status(400).render('users/profile', {
-            pageTitle: 'error occured', 
-            hasErrorPassword: true, 
-            error: e,
-            firstName: userDetails.firstName,
-            lastName: userDetails.lastName,
-            email: userDetails.email,
-            phoneNumber: userDetails.phoneNumber
-        });
+        console.log(userDetails);
+        res.status(400).json ({
+            errors: e,
+             hasErrors : true,
+             
+                            
+           });
+        // res.status(400).json ({
+        //     pageTitle: 'error occured', 
+        //     hasErrorPassword: true, 
+        //     error: e,
+        //     firstName: userDetails.firstName,
+        //     lastName: userDetails.lastName,
+        //     email: userDetails.email,
+        //     phoneNumber: userDetails.phoneNumber
+        // });
     }
 })
 
@@ -331,8 +339,17 @@ router.get('/savedSpaces', async (req, res) => {
 
             for(let i = 0 ; i < savedStorage.length ; i++){
                 if(savedStorage[i] == null) throw 'The space id is invalid';
-                let spaceDetails = await spaceData.getSpaceById(savedStorage[i]);
-                savedSpaces.push(spaceDetails);
+                
+                try{
+                  let  spaceDetails  = await spaceData.getSpaceById(savedStorage[i]);
+                      savedSpaces.push(spaceDetails);
+                 }
+                 catch(e)
+                 {
+                     'spaces deleted.'
+                 }
+                
+               
             }
             savedSpaces.forEach(space => {
                 let folder  = path.join(__dirname, '../','public/','images/','uploads/',space._id);

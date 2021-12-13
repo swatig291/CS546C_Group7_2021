@@ -96,7 +96,7 @@ function getStars(rating) {
           $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
           hasError = true;
       }
-      if (!description) {
+      if (!description ||description.trim().length == 0) {
           $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
           hasError = true;
       }
@@ -202,10 +202,6 @@ if (!zip || zip.trim().length == 0) {
     $("<p/>").addClass("error").text('zip cannnot be empty.').appendTo('#zipD');
     hasError = true;
 }
-if (!description) {
-    $("<p/>").addClass("error").text('description cannnot be empty.').appendTo('#descriptionD');
-    hasError = true;
-}
 if (!longitude || longitude.trim().length == 0) {
     $("<p/>").addClass("error").text('longitude cannnot be empty.').appendTo('#longitudeD');
     hasError = true;
@@ -252,7 +248,13 @@ if(!hasError){
             $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
           });
          }
-        
+         else if (data.newSpace._id !== null){
+              window.location = 'http://localhost:3000/space/' + data.newSpace._id 
+         }
+         else{
+          $("<p/>").addClass("error").text('some error occured while adding space. Please refresh page and try again').appendTo('.error-apend');
+         }
+
        
       }
     }   
@@ -437,7 +439,14 @@ $('#passwordForm').on('submit',function(event){
     };
   
   $.ajax(requestConfig).then(function(responseMessage){
-    
+    var data = JSON.parse(this.responseMessage);
+    if(data.hasErrorPassword)
+        {
+          console.log(data.error);
+         $.each(data.error, function( k, v ) {
+           $("<p/>").addClass("error").text(data.error).appendTo('.error-append');
+         });
+        }
   });
 }
 });
@@ -644,15 +653,36 @@ $( document ).ready(function() {
       $('.error').empty();
       event.preventDefault();
       let hasError = false;
-      let comment = $('#comment').val();
+       let comment = $('#comment').find('textarea').val()
 
-      if(!comment || comment.trim().length==0){
-        $("<p/>").addClass( "error" ).text('Comment is empty. Nothing to post').appendTo('#commentDiv');
-        hasError =true;
-      }
+       if (!comment || !comment.trim()) {
+        $("<p/>").addClass("error").text('Invalid comment.').appendTo('#comment');
+        hasError = true;
+    }
 
       if(!hasError){
         $('#comment-form').unbind('submit').submit();
+      }
+
+    })
+
+    $('#review-form').on('submit', (event) => {
+      event.preventDefault();
+      let hasError = false;
+      let review = $('#review').find('textarea').val()
+      let rating = $('#rating').find('select').val();
+
+      if (!review || !review.trim()) {
+        $("<p/>").addClass("error").text('Invalid review.').appendTo('#review');
+        hasError = true;
+      }
+      if (rating == 0) {
+        $("<p/>").addClass("error").text('Invalid rating.').appendTo('#rating');
+        hasError = true;
+    }
+
+      if(!hasError){
+        $('#review-form').unbind('submit').submit();
       }
 
     })

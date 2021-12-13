@@ -86,7 +86,9 @@ let getSavedSpaces = async function getUser(id){
     let parseId = ObjectId(id);
 
     const finder = await userData.findOne({_id: parseId});
+
     if(finder == null) throw 'There is no user with the given ID';
+    
     return finder['savedStorages'];
 }
 
@@ -336,12 +338,20 @@ let deleteUser = async function deleteUser(id){
     let parseId = ObjectId(id);
 
     const delUser = await userData.deleteOne({_id: parseId});
-    const delUserSpaces = await spaceData.deleteMany({UserId: id});
-    const delUserComments = await commentData.deleteMany({UserId: parseId});
-    const delUserReviews = await reviewData.deleteMany({UserId: parseId});
-    const delUserBookings = await bookingData.deleteMany({UserId: id});
 
-   
+    const userSpaces = await spaceData.find({hostId: id}).toArray();
+    console.log(userSpaces);
+    for(let i=0; i<userSpaces.length; i++){
+        const delUserSpaceComments = await commentData.deleteMany({spaceId: userSpaces[i]._id});
+        const delUserSpaceReviews = await reviewData.deleteMany({spaceId: userSpaces[i]._id});
+        const delUserSpaceBookings = await bookingData.deleteMany({spaceId: userSpaces[i]._id.toString()});
+    }
+    const delUserSpaces = await spaceData.deleteMany({hostId: id});
+    const delUserComments = await commentData.deleteMany({userId: parseId});
+    const delUserReviews = await reviewData.deleteMany({userId: parseId});
+    const delUserBookings = await bookingData.deleteMany({userId: id});
+
+
     if(delUser.deletedCount == 0) throw 'unable to delete user with the given ID';
 
     return {userDeleted: true};

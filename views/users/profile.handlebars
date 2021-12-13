@@ -109,23 +109,27 @@
                 
             </div>
             <div id='passwordDiv' hidden>
-                {{#if userPasswordModified}}
-                    <div class="alert alert-success">User's Password is successfully changed.</div>
-                {{/if}}
-                {{#if hasErrorPassword}}
-                    <div class="alert alert-danger">{{error}}</div>
-                {{/if}}
                 <form id='passwordForm' action='POST'>
-                    <div class="col-sm-10 p-0">
-                        <div class="form-group">
+                    <div>
+                        {{#if userPasswordModified}}
+                            <h4>User's Password is successfully changed.</h4>
+                        {{/if}}
+                    </div>
+                    <div>
+                        {{#if hasErrorPassword}}
+                            <h4 class="error">{{error}}.</h4>
+                        {{/if}}
+                    </div>
+                    <div class="col-sm-10 p-0" id='error-append'>
+                        <div class="form-group" id='oldPasswordDiv'>
                             <label class="form-label">Old Password:</label>
                             <input type='password' name='oldPassword' placeholder="Old Password" class="form-control full-width-input" id='oldPassword'/>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id='newPasswordDiv'>
                             <label class="form-label">New Password:</label>
                             <input type='password' name='newPassword' placeholder="New Password" class="form-control full-width-input" id='newPassword'/>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id='newPassword1Div'>
                             <label class="form-label">Confirm New Password:</label>
                             <input type='password' name='newPassword' placeholder="New Password" class="form-control full-width-input" id='newPassword1'/>
                         </div>

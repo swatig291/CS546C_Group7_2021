@@ -2,10 +2,11 @@
 <div class="contentBox">
 
     <section class="py-2">
-        <h4>Spaces booked by you</h4>
-
+       
+       {{#if bookingInfo}}
         <div class="row"></div>
            {{#each bookingInfo}}
+            <h4>Spaces booked by you</h4>
                <div class='col-sm-6'>
                   <div class='panel my-2 px-4 py-4'>
                         <p>{{this.SpaceName}}</p>
@@ -19,6 +20,12 @@
                </div>
            {{/each}}
             </div>
+            {{else}}
+            <div>
+                 <h4>No spaces booked by you</h4>
+                 <p>Host space to earn from extra space you have.</p>
+            </div>
+            {{/if}}
        </section>
       
 </div>

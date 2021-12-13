@@ -397,6 +397,8 @@ router.post('/savedSpacesDelete/:id', async (req, res) => {
         let unFavorite = await userData.deleteSavedSpaces(req.session.userId, spaceId);
         if(unFavorite.userSavedSpacesDeleted != true) throw "space cannot be unfavorited";
 
+        res.json({deleted : true});
+
     }catch(e){
         res.status(400).render('users/error', {hasError: true, error: e});
     }

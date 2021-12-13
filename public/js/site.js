@@ -488,6 +488,7 @@ $('.unfavorite').on('click',function () {
   }
 
     $.ajax(requestConfig).then(function(responseMessage){
+      window.location = 'http://localhost:3000/user/savedSpaces' ;  
      
     });
 });

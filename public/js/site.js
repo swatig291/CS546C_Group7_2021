@@ -247,7 +247,13 @@ if(!hasError){
             $("<p/>").addClass("error").text(data.errors).appendTo('.error-apend');
           });
          }
-        
+         else if (data.newSpace._id !== null){
+              window.location = 'http://localhost:3000/space/' + data.newSpace._id 
+         }
+         else{
+          $("<p/>").addClass("error").text('some error occured while adding space. Please refresh page and try again').appendTo('.error-apend');
+         }
+
        
       }
     }   
@@ -432,7 +438,14 @@ $('#passwordForm').on('submit',function(event){
     };
   
   $.ajax(requestConfig).then(function(responseMessage){
-    
+    var data = JSON.parse(this.responseMessage);
+    if(data.hasErrorPassword)
+        {
+          console.log(data.error);
+         $.each(data.error, function( k, v ) {
+           $("<p/>").addClass("error").text(data.error).appendTo('.error-append');
+         });
+        }
   });
 }
 });

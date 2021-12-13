@@ -1,6 +1,7 @@
 
 
 document.addEventListener("DOMContentLoaded", function(){
+  $('.error').empty();
 
      let val= document.getElementsByClassName('starRate')
      for(let i = 0; i < val.length ; i++){
@@ -43,7 +44,7 @@ function getStars(rating) {
     // if(form){
     //   var formData = new FormData(form);
     $('#updateSpace').click(function () {
-     
+      $('.error').empty();
       let spaceName = $('#spaceName').val();
       let length = $('#length').val();
       let width = $('#width').val();
@@ -149,7 +150,7 @@ function getStars(rating) {
 
 $('#addNewPostButton').on('click',function () {
 //validation
-
+$('.error').empty();
 // event.preventDefault();
 let spaceName = $('#spaceName').val();
 let length = $('#length').val();
@@ -458,7 +459,12 @@ $('.favorites').on('click',function () {
   }
 
     $.ajax(requestConfig).then(function(responseMessage){
-    
+    alert('here');
+      var data = JSON.parse(this.responseMessage);
+        if(data.login)
+        {
+          window.location = 'http://localhost:3000/user/login' ;   
+        }       
     });
 });
 
@@ -473,7 +479,7 @@ $('.unfavorite').on('click',function () {
   }
 
     $.ajax(requestConfig).then(function(responseMessage){
-    
+     
     });
 });
 
@@ -517,7 +523,6 @@ $(".editable").each(function(i) {
 
   });
 
- 
  
 })
 $( document ).ready(function() {
@@ -636,6 +641,7 @@ $( document ).ready(function() {
 
     //comments and review validation
     $('#comment-form').on('submit', (event) => {
+      $('.error').empty();
       event.preventDefault();
       let hasError = false;
       let comment = $('#comment').val();
@@ -661,6 +667,26 @@ $( document ).ready(function() {
       $('.readModeBox', parentObj).slideDown(function(){
           $('.readModeIcons', parentObj).show()
       })
+
+     
+    $('#review-form').on('submit', (event) => {
+      $('.error').empty();
+        event.preventDefault();
+        let review = $('#postReview').find('textarea').val();
+        let rating = $('#postRating').find('select').val();
+        let hasError = false;
+        if (!review || review.match(/^[ ]*$/)) {
+            $("<p/>").addClass("error").text('Invalid review.').appendTo('#postReview');
+            hasError = true;
+        }
+        if (rating == 0) {
+            $("<p/>").addClass("error").text('Invalid rating.').appendTo('#postRating');
+            hasError = true;
+        }
+        if(!hasError){
+            $('#review-form').unbind('submit').submit();
+         }
+    });
   
 })
 

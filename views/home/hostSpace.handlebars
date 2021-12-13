@@ -77,33 +77,4 @@
     </div>
     
 </div>
-  <script>
-      
-var file = document.getElementById('addImg')
-
-var fileCount = 0;
-//$('#images').hide();
-var form = document.getElementById('static-form');
-
-      if(form){
-          var formData = new FormData(form);
-      }
-file.onchange = function () {
-    alert(this.files.length);
-    for (let i = 0; i < this.files.length; i++) {
-        formData.append('photo' + i, this.files[i]); // add photos' path to formData
-        fileCount ++;
-    }
-      if(fileCount > 3){
-           e.preventDefault();
-        $('#images').text('You can upload maximum upto 3 images.');
-        $('#images').show();
-    } else if(fileCount === 0){
-        e.preventDefault();
-        $('#images').text('Please upload atleast one image it will help user to book space.');
-        $('#images').show();
-    }
-};
-  </script>
-
-            
+  

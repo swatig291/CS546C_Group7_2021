@@ -293,12 +293,12 @@ let updateSavedSpaces = async function updateSavedSpaces(id, spaceId){
     }
 
     updated = finder['savedStorages'].push(spaceId);
-    console.log(finder);
+    
     const updatedUser = await userData.updateOne(
         { _id: parseId },
         { $set: finder }
     );
-    console.log(updatedUser);
+    
     if (updatedUser.modifiedCount === 0) {
         throw "could not update user's spaces successfully";
     }
@@ -341,11 +341,7 @@ let deleteUser = async function deleteUser(id){
     const delUserReviews = await reviewData.deleteMany({UserId: parseId});
     const delUserBookings = await bookingData.deleteMany({UserId: id});
 
-    // console.log(delUserSpaces);
-    // console.log(delUserSpaces);
-    // console.log(delUserComments);
-    // console.log(delUserReviews);
-    // console.log(delUserBookings);
+   
     if(delUser.deletedCount == 0) throw 'unable to delete user with the given ID';
 
     return {userDeleted: true};
@@ -369,12 +365,11 @@ let deleteSavedSpaces = async function deleteSavedSpaces(id, spaceId){
         }
     }
 
-    console.log(finder);
     const updatedUser = await userData.updateOne(
         { _id: parseId },
         { $set: finder }
     );
-    console.log(updatedUser);
+   
     if (updatedUser.modifiedCount === 0) {
         throw "could not update user's spaces successfully";
     }

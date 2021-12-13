@@ -42,11 +42,11 @@
                                                     {{#each photoArray}}
                                                         {{#if @first}}
                                                                 <div class="carousel-item active">
-                                                                <img class="img-fluid" src={{this}} alt="First slide">
+                                                                <img class="img-fluid imgSize" src={{this}} alt="First slide">
                                                                 </div>
                                                         {{else}}
                                                                 <div class="carousel-item">
-                                                                <img class="img-fluid" src={{this}} alt="Second slide">
+                                                                <img class="img-fluid imgSize" src={{this}} alt="Second slide">
                                                                 </div>
                                                         {{/if}}
                                                     {{/each}} 
@@ -62,7 +62,7 @@
                                             </div> 
                                         {{else}} 
                                             
-                                            <img class="img-fluid img-thumbnail" src='/public/images/noImg.png' alt="First slide">
+                                            <img class="img-fluid img-thumbnail imgSize" src='/public/images/noImg.png' alt="First slide">
                                             
                                         {{/if}}                      
                                     </div>
@@ -85,7 +85,9 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="row">
+                                      
                                         <div class="col-md-3"><a href='javascript:void(0)' type='submit' data-href='/user/savedSpaces/{{this._id}}' class='favorites'>fav</a></div>
+                                        
                                         <div class="col-md-5" style="text-align:right;">
                                             <p hidden class="spaceId">{{this._id}}</p>
                                             <p class="starRate" hidden>{{this.rating}}</p>                   

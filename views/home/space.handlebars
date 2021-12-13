@@ -152,7 +152,7 @@
                                     <textarea name="comment" class="form-control form-control-lg" id="comment" cols="30" rows="2" 
                                     placeholder="you can post your queries here."></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" onclick="confirmPostComment()">Post</button>
+                                <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton" >Post</button>
                             </form>
                         </div>
 
@@ -270,8 +270,10 @@
 
         <div id='bookings' hidden>{{booking}}</div>
         <script src="/public/js/map.js" latitude={{spaceDetails.location.latitude}} longitude={{spaceDetails.location.longitude}}></script>
-        {{!-- <script src="/public/javascript/forms.js"></script> --}}
+        
+
 </div> 
+ 
 <script>
     $( document ).ready(function() {
         var check_in = {{{booking}}}

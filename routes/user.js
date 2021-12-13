@@ -338,8 +338,17 @@ router.get('/savedSpaces', async (req, res) => {
 
             for(let i = 0 ; i < savedStorage.length ; i++){
                 if(savedStorage[i] == null) throw 'The space id is invalid';
-                let spaceDetails = await spaceData.getSpaceById(savedStorage[i]);
-                savedSpaces.push(spaceDetails);
+                
+                try{
+                  let  spaceDetails  = await spaceData.getSpaceById(savedStorage[i]);
+                      savedSpaces.push(spaceDetails);
+                 }
+                 catch(e)
+                 {
+                     'spaces deleted.'
+                 }
+                
+               
             }
             savedSpaces.forEach(space => {
                 let folder  = path.join(__dirname, '../','public/','images/','uploads/',space._id);

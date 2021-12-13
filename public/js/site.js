@@ -458,19 +458,16 @@ function userSpace(){
 }
 
 $('.favorites').on('click',function () {
-
-  let id = $('.spaceId').text();
-  {
+  
     var requestConfig = {
       method: 'POST',
       url: $(this).data('href')
     };
-  }
+  
 
     $.ajax(requestConfig).then(function(responseMessage){
-    alert('here');
       var data = JSON.parse(this.responseMessage);
-        if(data.login)
+        if(!data.login)
         {
           window.location = 'http://localhost:3000/user/login' ;   
         }       
@@ -478,8 +475,6 @@ $('.favorites').on('click',function () {
 });
 
 $('.unfavorite').on('click',function () {
-
-  let id = $('.spaceId').text();
   {
     var requestConfig = {
       method: 'POST',

@@ -372,7 +372,7 @@ router.get('/savedSpaces', async (req, res) => {
 
 router.post('/savedSpaces/:id', async (req, res) => {
     if(!req.session.email){
-        res.status(400).json({login:true});
+        res.status(400).json({login:false});
         return;
     }
     try{

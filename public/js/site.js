@@ -634,15 +634,36 @@ $( document ).ready(function() {
     $('#comment-form').on('submit', (event) => {
       event.preventDefault();
       let hasError = false;
-      let comment = $('#comment').val();
+       let comment = $('#comment').find('textarea').val()
 
-      if(!comment || comment.trim().length==0){
-        $("<p/>").addClass( "error" ).text('Comment is empty. Nothing to post').appendTo('#commentDiv');
-        hasError =true;
-      }
+       if (!comment || !comment.trim()) {
+        $("<p/>").addClass("error").text('Invalid comment.').appendTo('#comment');
+        hasError = true;
+    }
 
       if(!hasError){
         $('#comment-form').unbind('submit').submit();
+      }
+
+    })
+
+    $('#review-form').on('submit', (event) => {
+      event.preventDefault();
+      let hasError = false;
+      let review = $('#review').find('textarea').val()
+      let rating = $('#rating').find('select').val();
+
+      if (!review || !review.trim()) {
+        $("<p/>").addClass("error").text('Invalid review.').appendTo('#review');
+        hasError = true;
+      }
+      if (rating == 0) {
+        $("<p/>").addClass("error").text('Invalid rating.').appendTo('#rating');
+        hasError = true;
+    }
+
+      if(!hasError){
+        $('#review-form').unbind('submit').submit();
       }
 
     })

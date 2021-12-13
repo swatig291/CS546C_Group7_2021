@@ -134,7 +134,7 @@ router.get('/remove/:id', async (req, res) => {
     }
     try {
         const spaceById = await bookingData.removebooking(idInfo);
-        res.json(spaceById);
+        res.redirect('/bookings/user/action');
     } catch (error) {
         //console.log(error);
         res.status(404).render('users/error', { error: 'booking not found' });

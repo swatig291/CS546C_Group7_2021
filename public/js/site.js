@@ -488,7 +488,6 @@ $('.unfavorite').on('click',function () {
   }
 
     $.ajax(requestConfig).then(function(responseMessage){
-     
     });
 });
 

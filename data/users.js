@@ -340,7 +340,7 @@ let deleteUser = async function deleteUser(id){
     const delUser = await userData.deleteOne({_id: parseId});
 
     const userSpaces = await spaceData.find({hostId: id}).toArray();
-    console.log(userSpaces);
+    
     for(let i=0; i<userSpaces.length; i++){
         const delUserSpaceComments = await commentData.deleteMany({spaceId: userSpaces[i]._id});
         const delUserSpaceReviews = await reviewData.deleteMany({spaceId: userSpaces[i]._id});

@@ -310,7 +310,7 @@ router.get('/remove/:id',async(req,res) => {
     if(deleteSpace){
       // res.status(200).json(deleteSpace);
      
-       return res.status(200).redirect("/user/action");
+       return res.status(200).redirect("/space/user/action");
     } else {
       return res.status(404).send();
     }

@@ -57,7 +57,9 @@
                                                 <div><P>Dimension: {{spaceDim.length}} x {{spaceDim.width}} x {{spaceDim.height}}</P></div>
                                                 <div ><p>{{this.address.city}}, {{this.address.state}}</p></div>
                                             </div>
-                                           
+                                           <div class="col-sm-4 unfavorite">
+                                              <a href='javascript:void(0)'  class='unfavorite' data-href='/user/savedSpacesDelete/{{this._id}}'>remove</a>
+                                            </div>
                                         </div>
                                          
                                 </div>

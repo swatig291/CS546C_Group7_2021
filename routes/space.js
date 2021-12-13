@@ -120,8 +120,7 @@ router.post('/add', async (req, res) => {
               let folderNameNew = path.join(folderName,'../',id);
               fs.renameSync(folderName, folderNameNew)
               // return res.redirect('/space/'+id);
-           
-              return res.redirect('/space/'+id);
+              return res.json({newSpace});
 
           } catch(e) {
               res.status(500).render('users/error', {error: e});
@@ -229,7 +228,9 @@ router.post('/edit', async (req, res) => {
           let newHostId = xss(req.session.userId);
           let newName = xss(fields.spaceName);
           let newDesc = xss(fields.description);
-          // let newImagePath = xss(req.body.imagePath)
+          let location = {};    
+           location['longitude'] = xss(fields.longitude);
+           location['latitude'] = xss(fields.latitude);
 
           let errors = [];
           if (!verify.validString(id))  errors.push('Space name must be a valid string.');
@@ -267,7 +268,7 @@ router.post('/edit', async (req, res) => {
              });
           }
           try {
-            const newSpace = await spaceData.updateSpace(id,newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc);
+            const newSpace = await spaceData.updateSpace(id,newName, newAddress, newSpaceDim, newPrice,newHostId,newDesc,location);
             return res.redirect('/space/'+id);
         } catch(e) {
             res.status(500).render('users/error', {error: e});
@@ -309,7 +310,7 @@ router.get('/remove/:id',async(req,res) => {
     if(deleteSpace){
       // res.status(200).json(deleteSpace);
      
-       return res.status(200).redirect("/");
+       return res.status(200).redirect("/user/action");
     } else {
       return res.status(404).send();
     }
